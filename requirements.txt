@@ -1,0 +1,5 @@
+mplfinance
+numpy
+tensorflow
+jupyterlab
+tensorboard
