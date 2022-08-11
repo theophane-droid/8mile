@@ -11,7 +11,6 @@ setup(
         "mplfinance",
         "numpy",
         "tensorflow",
-        "jupyterlab",
         "tensorboard",
         "yfinance"
     ]

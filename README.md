@@ -6,14 +6,12 @@ Actual version : 0.1.0
 
 ## Installation
 
-```bash
-conda create -n renderer
-conda activate renderer
-```
-
-## Disable banner
 
 ```bash
-export HMILE_BANNER=disable
+pip3 install git+https://github.com/theophane-droid/8miles-render
 ```
 
+## Exemple of use
+
+
+TODO
