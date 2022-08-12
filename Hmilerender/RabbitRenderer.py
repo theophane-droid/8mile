@@ -26,12 +26,23 @@ DATE_FORMAT = '%Y-%m-%d_%H:%M:%S'
 # ajouter légende
 # ajouter nom de la paire
 class RabbitRenderer(Renderer):
+    """Render in tensorboard
+    """
     def __init__(self, 
                  logdir, 
                  name='Rabbit_render', 
                  tags=['rabbit'],
                  activate_volume=False,
                  date_in_name=True):
+        """Create a rabbitrenderer
+
+        Args:
+            logdir (str): directory to store tensorboard data
+            name (str, optional): tensorboard data's name. Defaults to 'Rabbit_render'.
+            tags (list, optional): tensorboard tags list. Defaults to ['rabbit'].
+            activate_volume (bool, optional): should volume be shown. Defaults to False.
+            date_in_name (bool, optional): should the name be shown in tensorboard data's name. Defaults to True.
+        """
         super().__init__(
             ['open', 'close', 'low', 'high', 'volume', 'long', 'short', 'exit', 'money'] ,
             threaded=False
@@ -72,5 +83,7 @@ class RabbitRenderer(Renderer):
                 writer.flush()
     
     def next_step(self):
+        """Increment the tensorboard step data and reinitialize all column's data
+        """
         self.render_params['step'] += 1
         self.init_columns()

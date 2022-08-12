@@ -10,7 +10,32 @@ Welcome to 8mile-render's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+
+8mile allow users to renderer time series data and especially financial ones.
+
+Implemented Renderer
+--------------------
+
+.. autoclass:: Hmilerender.RabbitRenderer.RabbitRenderer
+   :members:
+   :inherited-members:
+
+
+
+Core classes
+------------
+
 .. autoclass:: Hmilerender.Renderer.Renderer
+   :members:
+   :inherited-members:
+
+.. autoclass:: Hmilerender.Renderer.RenderTask
+   :members:
+   :inherited-members:
+
+Exceptions
+----------
+.. autoclass:: Hmilerender.Exception.ColumnNameDoesNotExists
    :members:
    :inherited-members:
 

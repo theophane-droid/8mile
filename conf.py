@@ -19,14 +19,22 @@
 
 # -- Project information -----------------------------------------------------
 
-project = '8mile-render'
+import os
+import sys
+
+sys.path.insert(0, os.path.abspath('.'))
+
+from Hmilerender.__version__ import __version__, __author__
+
+project = '8miles-render'
 copyright = '2022, theophanedroid'
-author = 'theophanedroid'
+author = __author__
+
 
 # The short X.Y version
-version = ''
+version = __version__
 # The full version, including alpha/beta/rc tags
-release = '0.1.0'
+release = version
 
 
 # -- General configuration ---------------------------------------------------
@@ -57,7 +65,7 @@ master_doc = 'index'
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = 'en'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -171,9 +179,22 @@ epub_title = project
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ['search.html']
 
-import os
-import sys
 
-sys.path.insert(0, os.path.abspath('.'))
-
-autodoc_mock_imports = ["RPi", 'serial']
+autodoc_mock_imports = ['dateutil',
+                        'descartes',
+                        'fiona',
+                        'geopandas',
+                        'matplotlib.cm',
+                        'matplotlib.collections',
+                        'matplotlib.pyplot',
+                        'networkx',
+                        'numpy',
+                        'pandas',
+                        'requests',
+                        'shapely',
+                        'shapely.geometry',
+                        'shapely.ops',
+                        'mplfinance',
+                        'matplotlib',
+                        'IPython',
+                        'tensorflow']

@@ -9,6 +9,12 @@ class RenderTask(Thread):
     """Render in a Thread
     """
     def __init__(self, func, render_params):
+        """Create a render task
+
+        Args:
+            func (function): the function to start in thread
+            render_params (dict): data to be passed as arguments of func
+        """
         Thread.__init__(self)
         self.func = func
         self.render_params = render_params
@@ -18,18 +24,18 @@ class RenderTask(Thread):
 
 class Renderer:
     """
-    Abstract class to guide the construction of a renderer
+    Abstract class to guide the construction of a Renderer. To renderer multi-column, time series data.
     """
     def __init__(
         self,
         data_column_names : list,
         threaded=True
     ) -> None:
-        """Create a Renderer
+        """Create a renderer
 
         Args:
-            data_column_names (dict): data used to render
-            threaded (bool, optional): launch in thread. Defaults to True.
+            data_column_names (list): the attributes name of time series data
+            threaded (bool, optional): should the render method be started in a thread. Defaults to True.
         """
         self.columns_names = data_column_names
         self.threaded = threaded
@@ -38,6 +44,8 @@ class Renderer:
         self.render_params = {}
         
     def init_columns(self):
+        """Initialize column as empty pd.Series
+        """
         self.columns = {
             col : pd.Series(dtype='float') for col in self.columns_names
         }
@@ -49,12 +57,12 @@ class Renderer:
         """Append a value to a column
 
         Args:
-            column_name (str): column name
-            value (object): the value to add
-            date (datetime): date of the observation
+            column_name (str): column to select
+            value (object): value to append
+            date (datetime, optional): date for value. Defaults to None.
 
         Raises:
-            ColumnNameDoesNotExists: if column_name was not been declared when creating Renderer 
+            ColumnNameDoesNotExists: raised if column_name does not exists in renderer
         """
         if date == None:
             date = datetime(2000, 8, 3) + timedelta(days=self.columns[column_name].shape[0])
@@ -66,16 +74,18 @@ class Renderer:
             raise ColumnNameDoesNotExists(column_name)
     
     def render_func(self, render_params : dict) -> None:
-        """Abstact method which should contains the render 
+        """Implement here the rendering method. This method should not be called. Use render method
+
+        Args:
+            render_params (dict): parameters that should be passed to the thread
 
         Raises:
-            NotImplemented: raise if not overwrided
+            NotImplemented: the function should be implemented
         """
         raise NotImplemented()
     
     def render(self):
-        """
-        To call to launch the render phase
+        """Launch the rendering of all appended data
         """
         if self.threaded :
             if self.render_task:
