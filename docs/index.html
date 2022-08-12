@@ -34,6 +34,58 @@
 <div class="toctree-wrapper compound">
 </div>
 <p>8mile allow users to renderer time series data and especially financial ones.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">EXT:installation</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3 install git+https://github.com/theophane-droid/8miles-render
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Use a RabbitRenderer to print time series in tensorboard :</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">EXT:rabbit_renderer.py</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">Hmilerender.RabbitRenderer</span> <span class="k">import</span> <span class="n">RabbitRenderer</span>
+
+<span class="k">def</span> <span class="nf">fill_renderer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">renderer</span><span class="p">):</span>
+ <span class="c1"># we fill the renderer with data rows</span>
+   <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+      <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Date&quot;</span><span class="p">],</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+      <span class="n">renderer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;open&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;open&quot;</span><span class="p">],</span> <span class="n">date</span><span class="p">)</span>
+      <span class="n">renderer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;close&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;close&quot;</span><span class="p">],</span> <span class="n">date</span><span class="p">)</span>
+      <span class="n">renderer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;high&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;high&quot;</span><span class="p">],</span> <span class="n">date</span><span class="p">)</span>
+      <span class="n">renderer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;low&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;low&quot;</span><span class="p">],</span> <span class="n">date</span><span class="p">)</span>
+      <span class="n">renderer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;volume&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">],</span> <span class="n">date</span><span class="p">)</span>
+      <span class="n">renderer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;exit&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;exit&quot;</span><span class="p">],</span> <span class="n">date</span><span class="p">)</span>
+      <span class="n">renderer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;long&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;long&quot;</span><span class="p">],</span> <span class="n">date</span><span class="p">)</span>
+      <span class="n">renderer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;short&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;short&quot;</span><span class="p">],</span> <span class="n">date</span><span class="p">)</span>
+      <span class="n">renderer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;money&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;money&quot;</span><span class="p">],</span> <span class="n">date</span><span class="p">)</span>
+
+<span class="c1"># we create a renderer object</span>
+<span class="n">renderer</span> <span class="o">=</span> <span class="n">RabbitRenderer</span><span class="p">(</span><span class="s1">&#39;logs/&#39;</span><span class="p">)</span>
+<span class="c1"># we read data</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/data.csv&#39;</span><span class="p">)</span>
+<span class="c1"># we fill renderer</span>
+<span class="n">fill_renderer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">renderer</span><span class="p">)</span>
+<span class="c1"># we launch renderer</span>
+<span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+<span class="c1"># then we increment tensorboard step</span>
+<span class="n">renderer</span><span class="o">.</span><span class="n">next_step</span><span class="p">()</span>
+<span class="c1"># we refill the renderer</span>
+<span class="n">fill_renderer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">renderer</span><span class="p">)</span>
+<span class="c1"># we launch renderer</span>
+<span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>Result in tensorboard :</p>
+<a class="reference internal image-reference" href="_images/tensorboard01.PNG"><img alt="Alternative text" src="_images/tensorboard01.PNG" style="width: 600px;" /></a>
+</div>
 <div class="section" id="implemented-renderer">
 <h2>Implemented Renderer<a class="headerlink" href="#implemented-renderer" title="Permalink to this headline">¶</a></h2>
 <dl class="class">

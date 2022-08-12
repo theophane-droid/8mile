@@ -6,7 +6,7 @@ Actual version : 0.1.0
 
 ## Documentation
 
-Find doc here : [doc](https://google.com)
+[Find doc here](https://google.com)
 
 
 ![](img/8mile.jpg)
