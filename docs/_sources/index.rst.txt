@@ -64,12 +64,10 @@ Use a RabbitRenderer to print time series in tensorboard :
 
 Result in tensorboard :
 
-.. image:: img/tensorboard01.PNG
+.. image:: docs/_images/tensorboard01.PNG
   :width: 600
   :alt: Alternative text   
    
-
-
 
 Implemented Renderer
 --------------------
