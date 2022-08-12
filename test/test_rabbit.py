@@ -6,7 +6,6 @@ import pandas as pd
 
 from datetime import datetime
 
-sys.path.insert(0, '/mnt/share')
 from Hmilerender.RabbitRenderer import RabbitRenderer
 
 
