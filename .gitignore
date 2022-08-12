@@ -165,3 +165,8 @@ TODO
 .vscode/
 dist/
 launch.json
+_build/json
+_build/text
+_templates
+_build/doctrees/
+_build

@@ -1,17 +1,12 @@
-# HMILE RENDER
+# 8 MILE RENDER
 
-Python 3.x module to render financial results in tensorboard.
+Python 3.x module to render time series data espacially finantial ones.
 
 Actual version : 0.1.0
 
-## Installation
+## Documentation
+
+[Find doc here](https://google.com)
 
 
-```bash
-pip3 install git+https://github.com/theophane-droid/8miles-render
-```
-
-## Exemple of use
-
-
-TODO
+![](img/8mile.jpg)

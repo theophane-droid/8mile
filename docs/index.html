@@ -1,0 +1,363 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Welcome to 8mile-render’s documentation! &#8212; 8miles-render 0.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-8mile-render-s-documentation">
+<h1>Welcome to 8mile-render’s documentation!<a class="headerlink" href="#welcome-to-8mile-render-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p>8mile allow users to renderer time series data and especially financial ones.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">EXT:installation</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3 install git+https://github.com/theophane-droid/8miles-render
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Use a RabbitRenderer to print time series in tensorboard :</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">EXT:rabbit_renderer.py</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">Hmilerender.RabbitRenderer</span> <span class="k">import</span> <span class="n">RabbitRenderer</span>
+
+<span class="k">def</span> <span class="nf">fill_renderer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">renderer</span><span class="p">):</span>
+ <span class="c1"># we fill the renderer with data rows</span>
+   <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+      <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Date&quot;</span><span class="p">],</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+      <span class="n">renderer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;open&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;open&quot;</span><span class="p">],</span> <span class="n">date</span><span class="p">)</span>
+      <span class="n">renderer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;close&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;close&quot;</span><span class="p">],</span> <span class="n">date</span><span class="p">)</span>
+      <span class="n">renderer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;high&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;high&quot;</span><span class="p">],</span> <span class="n">date</span><span class="p">)</span>
+      <span class="n">renderer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;low&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;low&quot;</span><span class="p">],</span> <span class="n">date</span><span class="p">)</span>
+      <span class="n">renderer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;volume&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">],</span> <span class="n">date</span><span class="p">)</span>
+      <span class="n">renderer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;exit&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;exit&quot;</span><span class="p">],</span> <span class="n">date</span><span class="p">)</span>
+      <span class="n">renderer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;long&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;long&quot;</span><span class="p">],</span> <span class="n">date</span><span class="p">)</span>
+      <span class="n">renderer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;short&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;short&quot;</span><span class="p">],</span> <span class="n">date</span><span class="p">)</span>
+      <span class="n">renderer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;money&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;money&quot;</span><span class="p">],</span> <span class="n">date</span><span class="p">)</span>
+
+<span class="c1"># we create a renderer object</span>
+<span class="n">renderer</span> <span class="o">=</span> <span class="n">RabbitRenderer</span><span class="p">(</span><span class="s1">&#39;logs/&#39;</span><span class="p">)</span>
+<span class="c1"># we read data</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/data.csv&#39;</span><span class="p">)</span>
+<span class="c1"># we fill renderer</span>
+<span class="n">fill_renderer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">renderer</span><span class="p">)</span>
+<span class="c1"># we launch renderer</span>
+<span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+<span class="c1"># then we increment tensorboard step</span>
+<span class="n">renderer</span><span class="o">.</span><span class="n">next_step</span><span class="p">()</span>
+<span class="c1"># we refill the renderer</span>
+<span class="n">fill_renderer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">renderer</span><span class="p">)</span>
+<span class="c1"># we launch renderer</span>
+<span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>Result in tensorboard :</p>
+<a class="reference internal image-reference" href="_images/tensorboard01.PNG"><img alt="Alternative text" src="_images/tensorboard01.PNG" style="width: 600px;" /></a>
+</div>
+<div class="section" id="implemented-renderer">
+<h2>Implemented Renderer<a class="headerlink" href="#implemented-renderer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Hmilerender.RabbitRenderer.RabbitRenderer">
+<em class="property">class </em><code class="descclassname">Hmilerender.RabbitRenderer.</code><code class="descname">RabbitRenderer</code><span class="sig-paren">(</span><em>logdir, name='Rabbit_render', tags=['rabbit'], activate_volume=False, date_in_name=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.RabbitRenderer.RabbitRenderer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render in tensorboard</p>
+<dl class="method">
+<dt id="Hmilerender.RabbitRenderer.RabbitRenderer.append">
+<code class="descname">append</code><span class="sig-paren">(</span><em>column_name: str</em>, <em>value: object</em>, <em>date: datetime.datetime = None</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#Hmilerender.RabbitRenderer.RabbitRenderer.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append a value to a column</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>column_name (str): column to select
+value (object): value to append
+date (datetime, optional): date for value. Defaults to None.</dd>
+<dt>Raises:</dt>
+<dd>ColumnNameDoesNotExists: raised if column_name does not exists in renderer</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Hmilerender.RabbitRenderer.RabbitRenderer.init_columns">
+<code class="descname">init_columns</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.RabbitRenderer.RabbitRenderer.init_columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize column as empty pd.Series</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Hmilerender.RabbitRenderer.RabbitRenderer.next_step">
+<code class="descname">next_step</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.RabbitRenderer.RabbitRenderer.next_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Increment the tensorboard step data and reinitialize all column’s data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Hmilerender.RabbitRenderer.RabbitRenderer.render">
+<code class="descname">render</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.RabbitRenderer.RabbitRenderer.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Launch the rendering of all appended data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Hmilerender.RabbitRenderer.RabbitRenderer.render_func">
+<code class="descname">render_func</code><span class="sig-paren">(</span><em>render_params: dict</em><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.RabbitRenderer.RabbitRenderer.render_func" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implement here the rendering method. This method should not be called. Use render method</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>render_params (dict): parameters that should be passed to the thread</dd>
+<dt>Raises:</dt>
+<dd>NotImplemented: the function should be implemented</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="core-classes">
+<h2>Core classes<a class="headerlink" href="#core-classes" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Hmilerender.Renderer.Renderer">
+<em class="property">class </em><code class="descclassname">Hmilerender.Renderer.</code><code class="descname">Renderer</code><span class="sig-paren">(</span><em>data_column_names: list</em>, <em>threaded=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Renderer.Renderer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract class to guide the construction of a Renderer. To renderer multi-column, time series data.</p>
+<dl class="method">
+<dt id="Hmilerender.Renderer.Renderer.append">
+<code class="descname">append</code><span class="sig-paren">(</span><em>column_name: str</em>, <em>value: object</em>, <em>date: datetime.datetime = None</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#Hmilerender.Renderer.Renderer.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append a value to a column</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>column_name (str): column to select
+value (object): value to append
+date (datetime, optional): date for value. Defaults to None.</dd>
+<dt>Raises:</dt>
+<dd>ColumnNameDoesNotExists: raised if column_name does not exists in renderer</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Hmilerender.Renderer.Renderer.init_columns">
+<code class="descname">init_columns</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Renderer.Renderer.init_columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize column as empty pd.Series</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Hmilerender.Renderer.Renderer.render">
+<code class="descname">render</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Renderer.Renderer.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Launch the rendering of all appended data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Hmilerender.Renderer.Renderer.render_func">
+<code class="descname">render_func</code><span class="sig-paren">(</span><em>render_params: dict</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#Hmilerender.Renderer.Renderer.render_func" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implement here the rendering method. This method should not be called. Use render method</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>render_params (dict): parameters that should be passed to the thread</dd>
+<dt>Raises:</dt>
+<dd>NotImplemented: the function should be implemented</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Hmilerender.Renderer.RenderTask">
+<em class="property">class </em><code class="descclassname">Hmilerender.Renderer.</code><code class="descname">RenderTask</code><span class="sig-paren">(</span><em>func</em>, <em>render_params</em><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Renderer.RenderTask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render in a Thread</p>
+<dl class="attribute">
+<dt id="Hmilerender.Renderer.RenderTask.daemon">
+<code class="descname">daemon</code><a class="headerlink" href="#Hmilerender.Renderer.RenderTask.daemon" title="Permalink to this definition">¶</a></dt>
+<dd><p>A boolean value indicating whether this thread is a daemon thread.</p>
+<p>This must be set before start() is called, otherwise RuntimeError is
+raised. Its initial value is inherited from the creating thread; the
+main thread is not a daemon thread and therefore all threads created in
+the main thread default to daemon = False.</p>
+<p>The entire Python program exits when no alive non-daemon threads are
+left.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Hmilerender.Renderer.RenderTask.ident">
+<code class="descname">ident</code><a class="headerlink" href="#Hmilerender.Renderer.RenderTask.ident" title="Permalink to this definition">¶</a></dt>
+<dd><p>Thread identifier of this thread or None if it has not been started.</p>
+<p>This is a nonzero integer. See the get_ident() function. Thread
+identifiers may be recycled when a thread exits and another thread is
+created. The identifier is available even after the thread has exited.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Hmilerender.Renderer.RenderTask.isAlive">
+<code class="descname">isAlive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Renderer.RenderTask.isAlive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether the thread is alive.</p>
+<p>This method is deprecated, use is_alive() instead.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Hmilerender.Renderer.RenderTask.is_alive">
+<code class="descname">is_alive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Renderer.RenderTask.is_alive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether the thread is alive.</p>
+<p>This method returns True just before the run() method starts until just
+after the run() method terminates. The module function enumerate()
+returns a list of all alive threads.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Hmilerender.Renderer.RenderTask.join">
+<code class="descname">join</code><span class="sig-paren">(</span><em>timeout=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Renderer.RenderTask.join" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait until the thread terminates.</p>
+<p>This blocks the calling thread until the thread whose join() method is
+called terminates – either normally or through an unhandled exception
+or until the optional timeout occurs.</p>
+<p>When the timeout argument is present and not None, it should be a
+floating point number specifying a timeout for the operation in seconds
+(or fractions thereof). As join() always returns None, you must call
+is_alive() after join() to decide whether a timeout happened – if the
+thread is still alive, the join() call timed out.</p>
+<p>When the timeout argument is not present or None, the operation will
+block until the thread terminates.</p>
+<p>A thread can be join()ed many times.</p>
+<p>join() raises a RuntimeError if an attempt is made to join the current
+thread as that would cause a deadlock. It is also an error to join() a
+thread before it has been started and attempts to do so raises the same
+exception.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Hmilerender.Renderer.RenderTask.name">
+<code class="descname">name</code><a class="headerlink" href="#Hmilerender.Renderer.RenderTask.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>A string used for identification purposes only.</p>
+<p>It has no semantics. Multiple threads may be given the same name. The
+initial name is set by the constructor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Hmilerender.Renderer.RenderTask.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Renderer.RenderTask.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method representing the thread’s activity.</p>
+<p>You may override this method in a subclass. The standard run() method
+invokes the callable object passed to the object’s constructor as the
+target argument, if any, with sequential and keyword arguments taken
+from the args and kwargs arguments, respectively.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Hmilerender.Renderer.RenderTask.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Renderer.RenderTask.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the thread’s activity.</p>
+<p>It must be called at most once per thread object. It arranges for the
+object’s run() method to be invoked in a separate thread of control.</p>
+<p>This method will raise a RuntimeError if called more than once on the
+same thread object.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Hmilerender.Exception.ColumnNameDoesNotExists">
+<em class="property">class </em><code class="descclassname">Hmilerender.Exception.</code><code class="descname">ColumnNameDoesNotExists</code><span class="sig-paren">(</span><em>column_name</em><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Exception.ColumnNameDoesNotExists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised if user try to access to a not existing column in Hmilerender.Renderer.Renderer</p>
+<dl class="method">
+<dt id="Hmilerender.Exception.ColumnNameDoesNotExists.with_traceback">
+<code class="descname">with_traceback</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Exception.ColumnNameDoesNotExists.with_traceback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception.with_traceback(tb) –
+set self.__traceback__ to tb and return self.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">8miles-render</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, theophanedroid.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
