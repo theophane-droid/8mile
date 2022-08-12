@@ -6,7 +6,6 @@ Actual version : 0.1.0
 
 ## Documentation
 
-[Find doc here](https://google.com)
-
+[Find doc here](https://theophane-droid.github.io/8miles-render/)
 
 ![](img/8mile.jpg)
