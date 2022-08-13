@@ -170,3 +170,4 @@ _build/text
 _templates
 _build/doctrees/
 _build
+notebooks/

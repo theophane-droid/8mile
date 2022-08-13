@@ -69,7 +69,6 @@ class RabbitRenderer(Renderer):
                     additional_params[key]['panel'] -=1
                 a = mpf.make_addplot(col, **additional_params[key])
                 apd.append(a)
-        fig = mpf.figure(style='yahoo',figsize=(10,7))
         if not(self.logdir):
             mpf.plot(ohlcv, type='line', addplot=apd, volume=True, figsize=(10,7))
         else:
