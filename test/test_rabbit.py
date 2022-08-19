@@ -6,7 +6,10 @@ import pandas as pd
 
 from datetime import datetime
 
+import sys
+sys.path.insert(0, '/home/deemel/Workspace/droid/8miles-render')
 from Hmilerender.RabbitRenderer import RabbitRenderer
+from random import randint
 
 
 def fill_renderer(data, renderer, activate_date=True):
@@ -25,6 +28,7 @@ def fill_renderer(data, renderer, activate_date=True):
         renderer.append("long", row["long"], date)
         renderer.append("short", row["short"], date)
         renderer.append("money", row["money"], date)
+        renderer.append("rew", randint(1,100), date)
 
 if __name__ == "__main__":
     # parse args to get data_path and logs_dir
@@ -38,7 +42,8 @@ if __name__ == "__main__":
 
     # create renderer
     renderer = RabbitRenderer(
-        args.logs_dir
+        args.logs_dir,
+        activate_rew=True
     )
     # fill renderer with data
     fill_renderer(data, renderer)

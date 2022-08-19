@@ -18,7 +18,8 @@ additional_params = {
     'short' : {'marker' : 'v', 'color' :'g', 'panel' : 0, 'type' : 'scatter', 'markersize' : 100},
     'long' :  {'marker' : '^', 'color' :'b', 'panel' : 0, 'type' : 'scatter', 'markersize' : 100},
     'exit' :  {'marker' : 'x', 'color' :'r', 'panel' : 0, 'type' : 'scatter', 'markersize' : 100},
-    'money' :  {'marker' : 'x', 'color' :'r', 'panel' : 2, 'type' : 'line', 'markersize' : 100, 'ylabel' : '\$\$'},
+    'money' :  {'marker' : 'x', 'color' :'r', 'panel' : 3, 'type' : 'line', 'markersize' : 10, 'ylabel' : '\$\$ (red)'},
+    'rew' :  {'color' :'b', 'panel' : 2, 'type' : 'line', 'ylabel' : 'rew (blue)'}
 }
 
 
@@ -33,6 +34,7 @@ class RabbitRenderer(Renderer):
                  name='Rabbit_render', 
                  tags=['rabbit'],
                  activate_volume=False,
+                 activate_rew=False,
                  date_in_name=True):
         """Create a rabbitrenderer
 
@@ -41,10 +43,11 @@ class RabbitRenderer(Renderer):
             name (str, optional): tensorboard data's name. Defaults to 'Rabbit_render'.
             tags (list, optional): tensorboard tags list. Defaults to ['rabbit'].
             activate_volume (bool, optional): should volume be shown. Defaults to False.
+            activate_rew (bool, optional): should reward be shown. Defaults to False.
             date_in_name (bool, optional): should the name be shown in tensorboard data's name. Defaults to True.
         """
         super().__init__(
-            ['open', 'close', 'low', 'high', 'volume', 'long', 'short', 'exit', 'money'] ,
+            ['open', 'close', 'low', 'high', 'volume', 'long', 'short', 'exit', 'money', 'rew'] ,
             threaded=False
         )
         self.logdir = logdir
