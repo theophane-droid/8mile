@@ -12,9 +12,9 @@ PAIR = "BTCUSD"
 START = "2021-12-01"
 END = "2022-05-24"
 INTERVAL = "hour"
-ES_URL = "https://deemel.ovh:9200"
+ES_URL = "https://elastic:9200"
 ES_USER = "elastic"
-ES_PASS = "odKJfmCJDNt17hF=WtxG"
+ES_PASS = "changeme"
 
 PATH = '/output/csvdataexporter'
 

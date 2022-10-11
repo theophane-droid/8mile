@@ -2,7 +2,10 @@
 
 Python 3.x module to treat time series data espacially financial ones.
 
-Actual version : 0.1.0
+Actual version : 0.2.0
+
+![](img/8mile.jpg)
+
 
 ## Installation 🔥
 
@@ -28,7 +31,6 @@ rm -rf _build
 
 [Find doc here](https://theophane-droid.github.io/8miles-render/)
 
-![](img/8mile.jpg)
 
 ## Launch tests 🧪
 
@@ -49,5 +51,7 @@ docker compose up -d
 Then run the tests :
 
 ```bash
-docker compose run --rm tester python3 /app/scripts/test_dataexporter.py
+docker compose run --rm tester python3 /app/test/test_dataexporter.py
+docker compose run --rm tester python3 /app/test/test_dataprovider.py
+docker compose run --rm tester python3 /app/test/test_datatransformer.py
 ```
