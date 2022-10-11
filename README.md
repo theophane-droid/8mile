@@ -18,7 +18,9 @@ Pre-requisites:
 pip3 install git+https://github.com/theophane-droid/8miles-render
 ```
 
-## Build doc 📚
+## Build doc 🛠️
+
+You can rebuild the doc with the following commands:
 
 ```bash
 make html
@@ -34,7 +36,7 @@ rm -rf _build
 
 ## Launch tests 🧪
 
-Please ensure to have installer [docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/).
+Please ensure you have installed [docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/).
 
 First build the docker image:
 
