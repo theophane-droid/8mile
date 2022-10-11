@@ -12,7 +12,7 @@ Welcome to 8mile-render's documentation!
 
 8mile allow users to renderer time series data and especially financial ones.
 
-Installation
+1. Installation
 ------------
 
 .. code-block:: bash
@@ -21,7 +21,7 @@ Installation
    pip3 install git+https://github.com/theophane-droid/8miles-render
 
 
-Example 
+2. Examples 
 -------
 
 Use a RabbitRenderer to print time series in tensorboard :
@@ -69,29 +69,60 @@ Result in tensorboard :
   :alt: Alternative text   
    
 
-Implemented Renderer
---------------------
 
-.. autoclass:: Hmilerender.RabbitRenderer.RabbitRenderer
-   :members:
-   :inherited-members:
-
-
-
-Core classes
+3. Core classes
 ------------
 
-.. autoclass:: Hmilerender.Renderer.Renderer
+3.1 Dataprovider
+~~~~~~~~~~~~
+
+.. autoclass:: Hmile.DataProvider.YahooDataProvider
    :members:
    :inherited-members:
 
-.. autoclass:: Hmilerender.Renderer.RenderTask
+.. autoclass:: Hmile.DataProvider.CSVDataProvider
+   :members:
+   :inherited-members:
+
+.. autoclass:: Hmile.DataProvider.ElasticDataProvider
+   :members:
+   :inherited-members:
+
+3.2 Dataexporter
+~~~~~~~~~~~~~~~~
+
+.. autoclass:: Hmile.DataExporter.CSVDataExporter
+   :members:
+   :inherited-members:
+
+.. autoclass:: Hmile.DataExporter.ElasticDataExporter
+   :members:
+   :inherited-members:
+
+3.3 DataTransformer
+~~~~~~~~~~~~~~~~~~~	
+
+.. autoclass:: Hmile.DataTransformer.TaFeaturesTransformer
+   :members:
+   :inherited-members:
+
+3.4 Renderer
+~~~~~~~~~~~~
+
+.. autoclass:: Hmile.RabbitRenderer import RabbitRenderer
+   :members:
+   :inherited-members:
+
+3.5 Utils
+~~~~~~~~~
+
+.. autoclass:: Hmile.utils.DataTensorer
    :members:
    :inherited-members:
 
 Exceptions
 ----------
-.. autoclass:: Hmilerender.Exception.ColumnNameDoesNotExists
+.. autoclass:: Hmile.Exception.ColumnNameDoesNotExists
    :members:
    :inherited-members:
 

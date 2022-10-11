@@ -24,9 +24,9 @@ import sys
 
 sys.path.insert(0, os.path.abspath('.'))
 
-from Hmilerender.__version__ import __version__, __author__
+from Hmile.__version__ import __version__, __author__
 
-project = '8miles-render'
+project = '8miles'
 copyright = '2022, theophanedroid'
 author = __author__
 
@@ -195,6 +195,9 @@ autodoc_mock_imports = ['dateutil',
                         'shapely.geometry',
                         'shapely.ops',
                         'mplfinance',
+                        'yfinance',
+                        'torch',
                         'matplotlib',
                         'IPython',
-                        'tensorflow']
+                        'tensorflow',
+                        'pandas_ta']

@@ -101,6 +101,9 @@ class YahooDataProvider(DataProvider):
             'Close': 'close', 
             'Volume': 'volume'
             }, inplace=True)
+        data['date'] = data.index
+        data.index = data['date']
+        data.drop(columns=['date'], inplace=True)
         return data
 
 class CSVDataProvider(DataProvider):
@@ -137,8 +140,9 @@ class CSVDataProvider(DataProvider):
                                 'Low': 'low', 
                                 'Close': 'close', 
                                 'Volume': 'volume'})
-        df.index = pd.to_datetime(df['Unnamed: 0'])
-        df.drop(columns=['Unnamed: 0'], inplace=True)
+        df.rename({'Unnamed: 0': 'date'}, axis=1, inplace=True)
+        df.index = pd.to_datetime(df['date'])
+        df.drop(columns=['date'], inplace=True)
         df = df[np.logical_and(df.index >= self.start_date, df.index <= self.end_date)]
         return df
 
@@ -167,8 +171,8 @@ class ElasticDataProvider:
             interval (str, optional): Can be day, hour, or minute.
         """
         self.pair = pair
-        self.start_date = start_date
-        self.end_date = end_date
+        self.start_date = datetime.strptime(start_date,  '%Y-%m-%d')
+        self.end_date =  datetime.strptime(end_date,  '%Y-%m-%d')
         self.es_url = es_url
         self.es_user = es_user
         self.es_pass = es_pass
@@ -224,4 +228,10 @@ class ElasticDataProvider:
             end += step[interval] * 10000
         data = pd.DataFrame(data)
         data.dropna(axis=1)
+        data.rename({'@timestamp': 'date'}, axis=1, inplace=True)
+        data.index = pd.to_datetime(data['date'])
+        data.drop(columns=['date'], inplace=True)
         return data
+
+    def getData(self):
+        return self.download_data(self.pair, self.interval, self.start_date, self.end_date)

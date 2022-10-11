@@ -8,3 +8,5 @@ numpy
 tensorflow
 tensorboard
 yfinance
+ta-lib
+pandas-ta

@@ -1,23 +1,23 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html lang="en">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Welcome to 8mile-render’s documentation! &#8212; 8miles-render 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Welcome to 8mile-render’s documentation! &#8212; 8miles 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -27,30 +27,32 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
-  <div class="section" id="welcome-to-8mile-render-s-documentation">
+  <section id="welcome-to-8mile-render-s-documentation">
 <h1>Welcome to 8mile-render’s documentation!<a class="headerlink" href="#welcome-to-8mile-render-s-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
 <p>8mile allow users to renderer time series data and especially financial ones.</p>
-<div class="section" id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<section id="installation">
+<h2>1. Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">EXT:installation</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3 install git+https://github.com/theophane-droid/8miles-render
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="examples">
+<h2>2. Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
 <p>Use a RabbitRenderer to print time series in tensorboard :</p>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">EXT:rabbit_renderer.py</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">Hmilerender.RabbitRenderer</span> <span class="k">import</span> <span class="n">RabbitRenderer</span>
+<span class="kn">from</span> <span class="nn">Hmilerender.RabbitRenderer</span> <span class="kn">import</span> <span class="n">RabbitRenderer</span>
 
 <span class="k">def</span> <span class="nf">fill_renderer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">renderer</span><span class="p">):</span>
  <span class="c1"># we fill the renderer with data rows</span>
@@ -85,232 +87,190 @@
 </div>
 <p>Result in tensorboard :</p>
 <a class="reference internal image-reference" href="_images/tensorboard01.PNG"><img alt="Alternative text" src="_images/tensorboard01.PNG" style="width: 600px;" /></a>
-</div>
-<div class="section" id="implemented-renderer">
-<h2>Implemented Renderer<a class="headerlink" href="#implemented-renderer" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="Hmilerender.RabbitRenderer.RabbitRenderer">
-<em class="property">class </em><code class="descclassname">Hmilerender.RabbitRenderer.</code><code class="descname">RabbitRenderer</code><span class="sig-paren">(</span><em>logdir, name='Rabbit_render', tags=['rabbit'], activate_volume=False, date_in_name=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.RabbitRenderer.RabbitRenderer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Render in tensorboard</p>
-<dl class="method">
-<dt id="Hmilerender.RabbitRenderer.RabbitRenderer.append">
-<code class="descname">append</code><span class="sig-paren">(</span><em>column_name: str</em>, <em>value: object</em>, <em>date: datetime.datetime = None</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#Hmilerender.RabbitRenderer.RabbitRenderer.append" title="Permalink to this definition">¶</a></dt>
-<dd><p>Append a value to a column</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>column_name (str): column to select
-value (object): value to append
-date (datetime, optional): date for value. Defaults to None.</dd>
-<dt>Raises:</dt>
-<dd>ColumnNameDoesNotExists: raised if column_name does not exists in renderer</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="Hmilerender.RabbitRenderer.RabbitRenderer.init_columns">
-<code class="descname">init_columns</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.RabbitRenderer.RabbitRenderer.init_columns" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize column as empty pd.Series</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Hmilerender.RabbitRenderer.RabbitRenderer.next_step">
-<code class="descname">next_step</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.RabbitRenderer.RabbitRenderer.next_step" title="Permalink to this definition">¶</a></dt>
-<dd><p>Increment the tensorboard step data and reinitialize all column’s data</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Hmilerender.RabbitRenderer.RabbitRenderer.render">
-<code class="descname">render</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.RabbitRenderer.RabbitRenderer.render" title="Permalink to this definition">¶</a></dt>
-<dd><p>Launch the rendering of all appended data</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Hmilerender.RabbitRenderer.RabbitRenderer.render_func">
-<code class="descname">render_func</code><span class="sig-paren">(</span><em>render_params: dict</em><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.RabbitRenderer.RabbitRenderer.render_func" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implement here the rendering method. This method should not be called. Use render method</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>render_params (dict): parameters that should be passed to the thread</dd>
-<dt>Raises:</dt>
-<dd>NotImplemented: the function should be implemented</dd>
+</section>
+<section id="core-classes">
+<h2>3. Core classes<a class="headerlink" href="#core-classes" title="Permalink to this headline">¶</a></h2>
+<section id="dataprovider">
+<h3>3.1 Dataprovider<a class="headerlink" href="#dataprovider" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="Hmile.DataProvider.YahooDataProvider">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Hmile.DataProvider.</span></span><span class="sig-name descname"><span class="pre">YahooDataProvider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pair</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hour'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.DataProvider.YahooDataProvider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get data from Yahoo Finance</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="Hmile.DataProvider.YahooDataProvider.getData">
+<span class="sig-name descname"><span class="pre">getData</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#Hmile.DataProvider.YahooDataProvider.getData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a pandas dataframe with the data.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>pd.DataFrame: _description_</p>
+</dd>
 </dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="core-classes">
-<h2>Core classes<a class="headerlink" href="#core-classes" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="Hmilerender.Renderer.Renderer">
-<em class="property">class </em><code class="descclassname">Hmilerender.Renderer.</code><code class="descname">Renderer</code><span class="sig-paren">(</span><em>data_column_names: list</em>, <em>threaded=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Renderer.Renderer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract class to guide the construction of a Renderer. To renderer multi-column, time series data.</p>
-<dl class="method">
-<dt id="Hmilerender.Renderer.Renderer.append">
-<code class="descname">append</code><span class="sig-paren">(</span><em>column_name: str</em>, <em>value: object</em>, <em>date: datetime.datetime = None</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#Hmilerender.Renderer.Renderer.append" title="Permalink to this definition">¶</a></dt>
-<dd><p>Append a value to a column</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>column_name (str): column to select
-value (object): value to append
-date (datetime, optional): date for value. Defaults to None.</dd>
-<dt>Raises:</dt>
-<dd>ColumnNameDoesNotExists: raised if column_name does not exists in renderer</dd>
+<dl class="py class">
+<dt class="sig sig-object py" id="Hmile.DataProvider.CSVDataProvider">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Hmile.DataProvider.</span></span><span class="sig-name descname"><span class="pre">CSVDataProvider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pair</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hour'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.DataProvider.CSVDataProvider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get data from CSV file. The file name must be in the format {pair}-{interval}.csv</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="Hmile.DataProvider.CSVDataProvider.getData">
+<span class="sig-name descname"><span class="pre">getData</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#Hmile.DataProvider.CSVDataProvider.getData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a pandas dataframe with the data.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="Hmile.DataProvider.ElasticDataProvider">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Hmile.DataProvider.</span></span><span class="sig-name descname"><span class="pre">ElasticDataProvider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pair</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_pass</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hour'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.DataProvider.ElasticDataProvider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get data from Elasticsearch. Index name must be in the format f-{pair}-{interval}.
+Main columns must be open, high, low, close, volume. And the date must be in the field &#64;timestamp.</p>
+</dd></dl>
+
+</section>
+<section id="dataexporter">
+<h3>3.2 Dataexporter<a class="headerlink" href="#dataexporter" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="Hmile.DataExporter.CSVDataExporter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Hmile.DataExporter.</span></span><span class="sig-name descname"><span class="pre">CSVDataExporter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataprovider</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Hmile.DataProvider.DataProvider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.DataExporter.CSVDataExporter" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="Hmile.DataExporter.CSVDataExporter.export">
+<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.DataExporter.CSVDataExporter.export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do export</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="Hmile.DataExporter.ElasticDataExporter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Hmile.DataExporter.</span></span><span class="sig-name descname"><span class="pre">ElasticDataExporter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataprovider</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Hmile.DataProvider.DataProvider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_pass</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.DataExporter.ElasticDataExporter" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="Hmile.DataExporter.ElasticDataExporter.export">
+<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.DataExporter.ElasticDataExporter.export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do export</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="datatransformer">
+<h3>3.3 DataTransformer<a class="headerlink" href="#datatransformer" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="Hmile.DataTransformer.TaFeaturesTransformer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Hmile.DataTransformer.</span></span><span class="sig-name descname"><span class="pre">TaFeaturesTransformer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataprovider</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Hmile.DataProvider.DataProvider</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.DataTransformer.TaFeaturesTransformer" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="Hmile.DataTransformer.TaFeaturesTransformer.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.DataTransformer.TaFeaturesTransformer.transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply transformation</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="renderer">
+<h3>3.4 Renderer<a class="headerlink" href="#renderer" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="utils">
+<h3>3.5 Utils<a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="Hmile.utils.DataTensorer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Hmile.utils.</span></span><span class="sig-name descname"><span class="pre">DataTensorer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataprovider</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Hmile.DataProvider.DataProvider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_data_per_session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean_window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.utils.DataTensorer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Can be used to transform data into pytorch tensor</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="Hmile.utils.DataTensorer.get_indicators">
+<span class="sig-name descname"><span class="pre">get_indicators</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.utils.DataTensorer.get_indicators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns normalized and unnormalized data</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>tuple: (unnormalized data : torch.Tensor, normalized data : torch.Tensor)</p>
+</dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="Hmilerender.Renderer.Renderer.init_columns">
-<code class="descname">init_columns</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Renderer.Renderer.init_columns" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize column as empty pd.Series</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="Hmile.utils.DataTensorer.get_max_indices">
+<span class="sig-name descname"><span class="pre">get_max_indices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#Hmile.utils.DataTensorer.get_max_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the max for each feature</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list: result</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="Hmilerender.Renderer.Renderer.render">
-<code class="descname">render</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Renderer.Renderer.render" title="Permalink to this definition">¶</a></dt>
-<dd><p>Launch the rendering of all appended data</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="Hmile.utils.DataTensorer.get_min_indices">
+<span class="sig-name descname"><span class="pre">get_min_indices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#Hmile.utils.DataTensorer.get_min_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the min for each feature</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list: result</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="Hmilerender.Renderer.Renderer.render_func">
-<code class="descname">render_func</code><span class="sig-paren">(</span><em>render_params: dict</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#Hmilerender.Renderer.Renderer.render_func" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implement here the rendering method. This method should not be called. Use render method</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd>render_params (dict): parameters that should be passed to the thread</dd>
-<dt>Raises:</dt>
-<dd>NotImplemented: the function should be implemented</dd>
+<dl class="py method">
+<dt class="sig sig-object py" id="Hmile.utils.DataTensorer.normalize">
+<span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.utils.DataTensorer.normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply rolling mean and variance normalization. 
+The result is clipped between -10 and 10</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>data (torch.tensor): tensor to normalize</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Hmile.utils.DataTensorer.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.utils.DataTensorer.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the current step for all indices</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Hmile.utils.DataTensorer.reset_by_id">
+<span class="sig-name descname"><span class="pre">reset_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indices</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.utils.DataTensorer.reset_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the current step for the given indices</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>indices (list): list of indices to reset</p>
+</dd>
 </dl>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
-<dt id="Hmilerender.Renderer.RenderTask">
-<em class="property">class </em><code class="descclassname">Hmilerender.Renderer.</code><code class="descname">RenderTask</code><span class="sig-paren">(</span><em>func</em>, <em>render_params</em><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Renderer.RenderTask" title="Permalink to this definition">¶</a></dt>
-<dd><p>Render in a Thread</p>
-<dl class="attribute">
-<dt id="Hmilerender.Renderer.RenderTask.daemon">
-<code class="descname">daemon</code><a class="headerlink" href="#Hmilerender.Renderer.RenderTask.daemon" title="Permalink to this definition">¶</a></dt>
-<dd><p>A boolean value indicating whether this thread is a daemon thread.</p>
-<p>This must be set before start() is called, otherwise RuntimeError is
-raised. Its initial value is inherited from the creating thread; the
-main thread is not a daemon thread and therefore all threads created in
-the main thread default to daemon = False.</p>
-<p>The entire Python program exits when no alive non-daemon threads are
-left.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Hmilerender.Renderer.RenderTask.ident">
-<code class="descname">ident</code><a class="headerlink" href="#Hmilerender.Renderer.RenderTask.ident" title="Permalink to this definition">¶</a></dt>
-<dd><p>Thread identifier of this thread or None if it has not been started.</p>
-<p>This is a nonzero integer. See the get_ident() function. Thread
-identifiers may be recycled when a thread exits and another thread is
-created. The identifier is available even after the thread has exited.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Hmilerender.Renderer.RenderTask.isAlive">
-<code class="descname">isAlive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Renderer.RenderTask.isAlive" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return whether the thread is alive.</p>
-<p>This method is deprecated, use is_alive() instead.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Hmilerender.Renderer.RenderTask.is_alive">
-<code class="descname">is_alive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Renderer.RenderTask.is_alive" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return whether the thread is alive.</p>
-<p>This method returns True just before the run() method starts until just
-after the run() method terminates. The module function enumerate()
-returns a list of all alive threads.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Hmilerender.Renderer.RenderTask.join">
-<code class="descname">join</code><span class="sig-paren">(</span><em>timeout=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Renderer.RenderTask.join" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wait until the thread terminates.</p>
-<p>This blocks the calling thread until the thread whose join() method is
-called terminates – either normally or through an unhandled exception
-or until the optional timeout occurs.</p>
-<p>When the timeout argument is present and not None, it should be a
-floating point number specifying a timeout for the operation in seconds
-(or fractions thereof). As join() always returns None, you must call
-is_alive() after join() to decide whether a timeout happened – if the
-thread is still alive, the join() call timed out.</p>
-<p>When the timeout argument is not present or None, the operation will
-block until the thread terminates.</p>
-<p>A thread can be join()ed many times.</p>
-<p>join() raises a RuntimeError if an attempt is made to join the current
-thread as that would cause a deadlock. It is also an error to join() a
-thread before it has been started and attempts to do so raises the same
-exception.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Hmilerender.Renderer.RenderTask.name">
-<code class="descname">name</code><a class="headerlink" href="#Hmilerender.Renderer.RenderTask.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>A string used for identification purposes only.</p>
-<p>It has no semantics. Multiple threads may be given the same name. The
-initial name is set by the constructor.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Hmilerender.Renderer.RenderTask.run">
-<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Renderer.RenderTask.run" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method representing the thread’s activity.</p>
-<p>You may override this method in a subclass. The standard run() method
-invokes the callable object passed to the object’s constructor as the
-target argument, if any, with sequential and keyword arguments taken
-from the args and kwargs arguments, respectively.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Hmilerender.Renderer.RenderTask.start">
-<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Renderer.RenderTask.start" title="Permalink to this definition">¶</a></dt>
-<dd><p>Start the thread’s activity.</p>
-<p>It must be called at most once per thread object. It arranges for the
-object’s run() method to be invoked in a separate thread of control.</p>
-<p>This method will raise a RuntimeError if called more than once on the
-same thread object.</p>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="exceptions">
+</section>
+</section>
+<section id="exceptions">
 <h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="Hmilerender.Exception.ColumnNameDoesNotExists">
-<em class="property">class </em><code class="descclassname">Hmilerender.Exception.</code><code class="descname">ColumnNameDoesNotExists</code><span class="sig-paren">(</span><em>column_name</em><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Exception.ColumnNameDoesNotExists" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="Hmile.Exception.ColumnNameDoesNotExists">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Hmile.Exception.</span></span><span class="sig-name descname"><span class="pre">ColumnNameDoesNotExists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.Exception.ColumnNameDoesNotExists" title="Permalink to this definition">¶</a></dt>
 <dd><p>Raised if user try to access to a not existing column in Hmilerender.Renderer.Renderer</p>
-<dl class="method">
-<dt id="Hmilerender.Exception.ColumnNameDoesNotExists.with_traceback">
-<code class="descname">with_traceback</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmilerender.Exception.ColumnNameDoesNotExists.with_traceback" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="Hmile.Exception.ColumnNameDoesNotExists.with_traceback">
+<span class="sig-name descname"><span class="pre">with_traceback</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.Exception.ColumnNameDoesNotExists.with_traceback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exception.with_traceback(tb) –
 set self.__traceback__ to tb and return self.</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
-<div class="section" id="indices-and-tables">
+</section>
+</section>
+<section id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
-</div>
+</section>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="#">8miles-render</a></h1>
+<h1 class="logo"><a href="#">8miles</a></h1>
 
 
 
@@ -329,17 +289,23 @@ set self.__traceback__ to tb and return self.</p>
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
@@ -348,8 +314,8 @@ set self.__traceback__ to tb and return self.</p>
       &copy;2022, theophanedroid.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.4</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
       <a href="_sources/index.rst.txt"

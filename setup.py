@@ -1,6 +1,6 @@
 from distutils.core import setup
 setup(
-    name='hmilerender',
+    name='hmile',
     version='0.1.0',
     author='theophanedroid',
     description='Python 3.x module to render financial results in tensorboard ',
@@ -17,6 +17,8 @@ setup(
         "tensorflow",
         "tensorboard",
         "yfinance",
-        "pickle"
+        "pickle",
+        "ta-lib",
+        "pandas-ta"
     ]
 )

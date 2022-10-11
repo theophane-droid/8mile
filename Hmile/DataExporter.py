@@ -4,9 +4,6 @@ from elasticsearch import Elasticsearch, helpers
 
 from Hmile.DataProvider import DataProvider
 
-# TODO :
-# - elastic exporter
-
 class DataExporter:
     """Export data to another format
 

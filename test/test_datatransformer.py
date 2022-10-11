@@ -6,7 +6,7 @@ import os
 sys.path.insert(0, '/app')
 
 from Hmile.DataProvider import YahooDataProvider
-from Hmile.DataExporter import CSVDataExporter, ElasticDataExporter
+from Hmile.DataTransformer import TaFeaturesTransformer
 
 PAIR = "BTCUSD"
 START = "2021-12-01"
@@ -19,8 +19,6 @@ ES_PASS = "odKJfmCJDNt17hF=WtxG"
 PATH = '/output/csvdataexporter'
 
 if __name__ == "__main__":
-    os.mkdir('/output')
-    os.mkdir(PATH)
     yf_dp = YahooDataProvider(PAIR, START, END, interval=INTERVAL)
-    CSVDataExporter(yf_dp, PATH).export()
-    ElasticDataExporter(yf_dp, ES_URL, ES_USER, ES_PASS).export()
+    data = TaFeaturesTransformer(yf_dp).transform()
+    print(data.tail(10))

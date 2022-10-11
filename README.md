@@ -1,8 +1,28 @@
 # 8 MILE RENDER
 
-Python 3.x module to render time series data espacially finantial ones.
+Python 3.x module to treat time series data espacially financial ones.
 
 Actual version : 0.1.0
+
+## Installation 🔥
+
+Pre-requisites:
+- ta-lib
+- python3
+- pip3
+
+```bash
+pip3 install git+https://github.com/theophane-droid/8miles-render
+```
+
+## Build doc 📚
+
+```bash
+make html
+rm -r docs
+mv _build/html docs
+rm -rf _build
+```
 
 ## Documentation 📚
 
