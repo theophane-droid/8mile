@@ -33,6 +33,8 @@ class TaFeaturesTransformer(DataTransformer):
         data.ta.strategy("all")
         return data
 
+
+
 # TODO:
 # - tafeatures
 # - encoder

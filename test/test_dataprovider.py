@@ -35,7 +35,7 @@ def test_dataprovider(dataprovider, start_date, end_date, interval):
 
 PAIR = "BTCUSD"
 START = "2022-01-01"
-END = "2022-02-23"
+END = "2022-01-03"
 INTERVAL = "hour"
 ES_URL = "https://elastic:9200"
 ES_USER = "elastic"
@@ -45,6 +45,6 @@ if __name__ == "__main__":
     csv_dp = CSVDataProvider(PAIR, START, END, "test/data/csvdataprovider", interval=INTERVAL)
     yfinance_dp = YahooDataProvider(PAIR, START, END, interval=INTERVAL)
     elastic_dp = ElasticDataProvider(PAIR, START, END, ES_URL, ES_USER, ES_PASS, interval=INTERVAL)
-    test_dataprovider(elastic_dp, START, END, INTERVAL)
     test_dataprovider(yfinance_dp, START, END, INTERVAL)
     test_dataprovider(csv_dp, START, END, INTERVAL)
+    test_dataprovider(elastic_dp, START, END, INTERVAL)

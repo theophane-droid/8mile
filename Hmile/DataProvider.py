@@ -15,6 +15,8 @@ import torch
 
 from abc import ABC, abstractmethod
 
+from Hmile.Exception import DataframeFormatException, DataProviderArgumentException
+
 
 yahoointervalconverter = {
     'minute': '1m',
@@ -28,14 +30,102 @@ class DataProvider(ABC):
     """
     Provide an abstraction layer on the way to get data from a source
     """
+    def __init__(self, pair, interval, start, end) -> None:
+        """Inialize a DataProvider
+
+        Args:
+            pair (str): the pair to get ex : BTCUSD
+            interval (str): should be like day, hour or minute
+            start (str): should be like 2020-12-31
+            end (str): should be > start
+
+        Raises:
+            DataframeFormatException: When the dataframe does not correspond to Hmile norm
+            DataProviderArgumentException: When the argument are not correct
+        """
+        self.checkArguments(pair, interval, start, end)
+        self.pair = pair
+        self.interval = interval
+        self.start_date = start
+        self.end_date = end
+
+    CHECK_INDEX_MONOTONIC_INCREASING = True
     @abstractmethod
     def getData(self) -> pd.DataFrame:
         """
         Return a pandas dataframe with the data.
         The main columns are named be open, high, low, close, volume. In index is the date.
+        The index name should be 'date'
         """
         raise NotImplementedError()
+    
+    def checkDataframe(self, dataframe):
+        """Check if first columns in the dataframes are open, high, low, close, volume. 
+        Check if index is a date and if the interval is the same between all rows"""
+        columns = dataframe.columns
+        if not columns[0] == 'open' or not columns[1] == 'high' or not columns[2] == 'low' or not columns[3] == 'close' or not columns[4] == 'volume':
+            raise DataframeFormatException('The first columns in the dataframe should be open, high, low, close, volume', dataframe)
+        if not isinstance(dataframe.index, pd.DatetimeIndex):
+            raise DataframeFormatException('The index of the dataframe should be a date', dataframe)
+        if not dataframe.index.is_monotonic_increasing:
+            raise DataframeFormatException('The index of the dataframe should be monotonic increasing', dataframe)
+        if not dataframe.index.is_unique:
+            raise DataframeFormatException('The index of the dataframe should be unique', dataframe)
+        if DataProvider.CHECK_INDEX_MONOTONIC_INCREASING and not dataframe.index.inferred_freq:
+            raise Exception('The index of the dataframe should have a fixed interval', dataframe)
+        if dataframe.index.name != 'date':
+            raise DataframeFormatException('The index name should be date', dataframe)
+    
+    def normalizeColumnsOrder(self, dataframe):
+        """Normalize the order of the columns to open, high, low, close, volume
+        
+        Args:
+            dataframe (pd.DataFrame): The dataframe to treat
 
+
+        Returns:
+            pd.DataFrame: After traitement
+        """
+        ohlcv = ['open', 'high', 'low', 'close', 'volume']
+        col_list = ohlcv + [col for col in dataframe.columns if col not in ohlcv]
+        return dataframe.reindex(columns=col_list)
+    
+
+    def checkArguments(self, pair, interval, start, end):
+        """Check if the arguments are valid. pair should be like BTCUSD, interval should be in yahoointervalconverter, start and end should be like YYYY-MM-DD
+        start should be before end
+        
+        Args:
+            pair (str): The pair to get
+            interval (str): The interval of the data
+            start (str): The start date
+            end (str) The end date
+        """
+        if not pair:
+            raise DataProviderArgumentException('pair should not be empty')
+        if not interval:
+            raise DataProviderArgumentException('interval should not be empty')
+        if interval not in yahoointervalconverter.keys():
+            print(interval)
+            raise DataProviderArgumentException('interval should be in day, hour or minute')
+        if not start:
+            raise DataProviderArgumentException('start should not be empty')
+        if not end:
+            raise DataProviderArgumentException('end should not be empty')
+        if not interval in yahoointervalconverter:
+            raise DataProviderArgumentException('interval should be in ' + str(yahoointervalconverter))
+        try:
+            datetime.strptime(start, '%Y-%m-%d')
+        except ValueError:
+            raise Exception('start should be like YYYY-MM-DD')
+        try:
+            datetime.strptime(end, '%Y-%m-%d')
+        except ValueError:
+            raise Exception('end should be like YYYY-MM-DD')
+        if datetime.strptime(start, '%Y-%m-%d') > datetime.strptime(end, '%Y-%m-%d'):
+            raise Exception('start should be before end')
+
+    
 class YahooDataProvider(DataProvider):
     """
     Get data from Yahoo Finance
@@ -54,8 +144,8 @@ class YahooDataProvider(DataProvider):
             end_date (datetime.datetime): Last date to get. Format : YYYY-MM-DD
             interval (str, optional): Can be day, hour, or minute.
         """
+        super().__init__(pair, interval, start_date, end_date)
         self.pair = pair
-        self.start_date = start_date
         # add one interval to the end depending on the interval
         end_date = datetime.strptime(end_date, '%Y-%m-%d')
         if interval == 'day':
@@ -66,7 +156,6 @@ class YahooDataProvider(DataProvider):
             self.end_date = end_date + timedelta(minutes=1)
         else:
             raise ValueError('Interval must be day, hour or minute')
-        self.interval = interval
 
     def getData(self) -> pd.DataFrame :
         """Returns a pandas dataframe with the data.
@@ -104,6 +193,8 @@ class YahooDataProvider(DataProvider):
         data['date'] = data.index
         data.index = data['date']
         data.drop(columns=['date'], inplace=True)
+        data = self.normalizeColumnsOrder(data)
+        self.checkDataframe(data)
         return data
 
 class CSVDataProvider(DataProvider):
@@ -125,11 +216,8 @@ class CSVDataProvider(DataProvider):
             end_date (datetime.datetime): Last date to get. Format : YYYY-MM-DD.
             interval (str, optional): Can be day, hour, or minute.
         """
-        self.pair = pair
-        self.start_date = start_date
-        self.end_date = end_date
+        super().__init__(pair, interval, start_date, end_date)
         self.directory = directory
-        self.interval = interval
 
     def getData(self) -> pd.DataFrame:
         """Returns a pandas dataframe with the data.
@@ -144,10 +232,12 @@ class CSVDataProvider(DataProvider):
         df.index = pd.to_datetime(df['date'])
         df.drop(columns=['date'], inplace=True)
         df = df[np.logical_and(df.index >= self.start_date, df.index <= self.end_date)]
+        df = self.normalizeColumnsOrder(df)
+        self.checkDataframe(df)
         return df
 
 
-class ElasticDataProvider:
+class ElasticDataProvider(DataProvider):
     """Get data from Elasticsearch. Index name must be in the format f-{pair}-{interval}.
        Main columns must be open, high, low, close, volume. And the date must be in the field @timestamp. 
     """
@@ -170,13 +260,10 @@ class ElasticDataProvider:
             es_pass (str): password of the user for elasticsearch connection
             interval (str, optional): Can be day, hour, or minute.
         """
-        self.pair = pair
-        self.start_date = datetime.strptime(start_date,  '%Y-%m-%d')
-        self.end_date =  datetime.strptime(end_date,  '%Y-%m-%d')
+        super().__init__(pair, interval, start_date, end_date)
         self.es_url = es_url
         self.es_user = es_user
         self.es_pass = es_pass
-        self.interval = interval
 
     def connect(self):
         return Elasticsearch(
@@ -229,9 +316,14 @@ class ElasticDataProvider:
         data = pd.DataFrame(data)
         data.dropna(axis=1)
         data.rename({'@timestamp': 'date'}, axis=1, inplace=True)
-        data.index = pd.to_datetime(data['date'])
-        data.drop(columns=['date'], inplace=True)
         return data
 
     def getData(self):
-        return self.download_data(self.pair, self.interval, self.start_date, self.end_date)
+        start = datetime.strptime(self.start_date, '%Y-%m-%d')
+        end = datetime.strptime(self.end_date, '%Y-%m-%d')
+        data = self.download_data(self.pair, self.interval, start, end)
+        data.index = pd.to_datetime(data['date'])
+        data.drop(columns=['date'], inplace=True)
+        data = self.normalizeColumnsOrder(data)
+        self.checkDataframe(data)
+        return data
