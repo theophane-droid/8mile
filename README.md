@@ -1,5 +1,7 @@
 # 8 MILE RENDER
 
+[![Documentation](https://readthedocs.org/projects/8mile/badge/?version=latest)](https://8mile.readthedocs.io/en/latest/?badge=latest)
+
 Python 3.x module to treat time series data espacially financial ones.
 
 Actual version : 0.2.1
@@ -96,7 +98,7 @@ rm -rf _build
 
 ## Documentation 📚
 
-[Find doc here](https://theophane-droid.github.io/8miles-render/)
+[Find doc here](https://8mile.readthedocs.io/en/latest/index.html#Hmile.DataProvider.CSVDataProvider)
 
 
 ## Launch tests 🧪

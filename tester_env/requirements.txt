@@ -1,4 +1,3 @@
-# This file should be the same than the one at the root of the project
 mplfinance
 ta
 pandas
