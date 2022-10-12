@@ -1,13 +1,14 @@
-# 8 MILE RENDER
+# 8 MILE
 
 [![Documentation](https://readthedocs.org/projects/8mile/badge/?version=latest)](https://8mile.readthedocs.io/en/latest/?badge=latest)
 
-Python 3.x module to treat time series data espacially financial ones.
-
-Actual version : 0.2.2
+Python 3.x module to treat financial data. Many features including :
+* download financial data from various sources
+* preprocess data
+* export data
+* plot data in tensorboard
 
 ![](img/8mile.jpg)
-
 
 ## Installation 🔥
 
@@ -21,12 +22,12 @@ Install the talib library:
 wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
 tar -xzf ta-lib-0.4.0-src.tar.gz
 cd ta-lib/ && ./configure --prefix=/usr && make && make install
-pip3 install ta-lib pandas-ta
+pip3 install hmile
 ```
 
 Install the package with pip3
 ```bash
-pip3 install git+https://github.com/theophane-droid/8miles-render
+pip3 install hmile
 ```
 
 ## Usage 🚀
