@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 
 from random import randint
-from Hmilerender.Renderer import Renderer
+from Hmile.Renderer import Renderer
 
 
 additional_params = {

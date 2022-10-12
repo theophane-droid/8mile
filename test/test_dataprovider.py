@@ -6,7 +6,7 @@ sys.path.insert(0, '/app')
 
 from Hmile.DataProvider import CSVDataProvider, ElasticDataProvider, YahooDataProvider
 from Hmile.DataExporter import CSVDataExporter
-
+from Hmile.FillPolicy import FillPolicyAkima
 
 interval_to_timedelta = {
     'minute': timedelta(minutes=1),
@@ -42,9 +42,10 @@ ES_USER = "elastic"
 ES_PASS = "changeme"
 
 if __name__ == "__main__":
-    csv_dp = CSVDataProvider(PAIR, START, END, "test/data/csvdataprovider", interval=INTERVAL)
+    csv_dp = CSVDataProvider(PAIR, '2021-12-01', END, "test/data/csvdataprovider", interval=INTERVAL)
+    csv_dp.fill_policy = FillPolicyAkima(INTERVAL)
     yfinance_dp = YahooDataProvider(PAIR, START, END, interval=INTERVAL)
     elastic_dp = ElasticDataProvider(PAIR, START, END, ES_URL, ES_USER, ES_PASS, interval=INTERVAL)
     test_dataprovider(yfinance_dp, START, END, INTERVAL)
-    test_dataprovider(csv_dp, START, END, INTERVAL)
+    test_dataprovider(csv_dp, '2021-12-01', END, INTERVAL)
     test_dataprovider(elastic_dp, START, END, INTERVAL)

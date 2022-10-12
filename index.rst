@@ -13,7 +13,7 @@ Welcome to 8mile-render's documentation!
 8mile allow users to renderer time series data and especially financial ones.
 
 1. Installation
-------------
+---------------
 
 .. code-block:: bash
    :caption: EXT:installation
@@ -22,16 +22,53 @@ Welcome to 8mile-render's documentation!
 
 
 2. Examples 
--------
+-----------
 
-Use a RabbitRenderer to print time series in tensorboard :
+2.1 Import data from yahoo finance :
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python3
+   :caption: EXT:import_data
+   
+   PAIR = "BTCUSD"
+   START = "2022-01-01"
+   END = "2022-01-03"
+   INTERVAL = "hour"
+
+   dp = YahooDataProvider(PAIR, START, END, interval=INTERVAL)
+   # used to fill eventual missing dates (optionnal)
+   dp.fill_policy = FillPolicyAkima(INTERVAL)
+
+   data = dp.getData()
+
+
+2.2 Download data from elasticsearch and add all ta features
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python3
+   :caption: EXT:download_data
+
+   PAIR = "BTCUSD"
+   START = "2022-01-01"
+   END = "2022-01-03"
+   INTERVAL = "hour"
+   ES_URL = "http://localhost:9200"
+   ES_USER = "elastic"
+   ES_PASS = "changeme"
+
+   dp = ElasticDataProvider(PAIR, START, END, ES_URL, ES_USER, ES_PASS, interval=INTERVAL)
+   data = TaFeaturesTransformer(dp).transform()
+
+
+2.3 Use a RabbitRenderer to print time series in tensorboard
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python3
    :caption: EXT:rabbit_renderer.py
 
    from datetime import datetime
    import pandas as pd
-   from Hmilerender.RabbitRenderer import RabbitRenderer
+   from Hmiler.RabbitRenderer import RabbitRenderer
 
    def fill_renderer(data, renderer):
     # we fill the renderer with data rows
@@ -71,10 +108,12 @@ Result in tensorboard :
 
 
 3. Core classes
-------------
+---------------
 
 3.1 Dataprovider
-~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
+
+Theses classes are used to get data from an external source.
 
 .. autoclass:: Hmile.DataProvider.YahooDataProvider
    :members:
@@ -91,6 +130,8 @@ Result in tensorboard :
 3.2 Dataexporter
 ~~~~~~~~~~~~~~~~
 
+Theses classes are used to export data to a specific format.
+
 .. autoclass:: Hmile.DataExporter.CSVDataExporter
    :members:
    :inherited-members:
@@ -102,6 +143,8 @@ Result in tensorboard :
 3.3 DataTransformer
 ~~~~~~~~~~~~~~~~~~~	
 
+Theses classes are used to apply diverses transformations on data.
+
 .. autoclass:: Hmile.DataTransformer.TaFeaturesTransformer
    :members:
    :inherited-members:
@@ -109,11 +152,31 @@ Result in tensorboard :
 3.4 Renderer
 ~~~~~~~~~~~~
 
-.. autoclass:: Hmile.RabbitRenderer import RabbitRenderer
+Theses classes are used to render data in tensorboard.
+
+.. autoclass:: Hmile.RabbitRenderer.RabbitRenderer
    :members:
    :inherited-members:
 
-3.5 Utils
+3.5 FillPolicy
+~~~~~~~~~~~~~~
+
+Theses classes are used to fill dataframe when dates are missing in data.
+
+.. autoclass:: Hmile.FillPolicy.FillPolicyError
+   :members:
+   :inherited-members:
+
+
+.. autoclass:: Hmile.FillPolicy.FillPolicyClip
+   :members:
+   :inherited-members:
+
+.. autoclass:: Hmile.FillPolicy.FillPolicyAkima
+   :members:
+   :inherited-members:
+
+3.6 Utils
 ~~~~~~~~~
 
 .. autoclass:: Hmile.utils.DataTensorer
@@ -123,6 +186,18 @@ Result in tensorboard :
 Exceptions
 ----------
 .. autoclass:: Hmile.Exception.ColumnNameDoesNotExists
+   :members:
+   :inherited-members:
+
+.. autoclass:: Hmile.Exception.DataframeFormatException
+   :members:
+   :inherited-members:
+
+.. autoclass:: Hmile.Exception.DataProviderArgumentException
+   :members:
+   :inherited-members:
+
+.. autoclass:: Hmile.Exception.NoFillPolicySet
    :members:
    :inherited-members:
 

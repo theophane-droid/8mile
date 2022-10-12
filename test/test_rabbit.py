@@ -8,7 +8,7 @@ from datetime import datetime
 
 import sys
 sys.path.insert(0, '/home/droid/8miles-render')
-from Hmilerender.RabbitRenderer import RabbitRenderer
+from Hmile.RabbitRenderer import RabbitRenderer
 from random import randint
 
 

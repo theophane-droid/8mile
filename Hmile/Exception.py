@@ -31,3 +31,10 @@ class DataProviderArgumentException(Exception):
     
     def __str__(self) -> str:
         return f'{self.msg}'
+
+class NoFillPolicySet(Exception):
+    """Exception raised when dates are missing in dataframe and no fill policy is set.
+    """
+    
+    def __str__(self) -> str:
+        return 'No fill policy set and dates are missing in dataframe. Please set a fill policy like FillPolicyAkima or FillPolicyClip'

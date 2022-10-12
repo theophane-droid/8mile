@@ -9,3 +9,4 @@ tensorboard
 yfinance
 ta-lib
 pandas-ta
+multitasking

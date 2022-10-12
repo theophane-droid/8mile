@@ -16,15 +16,13 @@ import torch
 from abc import ABC, abstractmethod
 
 from Hmile.Exception import DataframeFormatException, DataProviderArgumentException
-
+from Hmile.FillPolicy import FillPolicyError
 
 yahoointervalconverter = {
     'minute': '1m',
     'hour': '1h',
     'day': '1d'
 }
-
-# TODO: add format checker for pair, interval, start, end
 
 class DataProvider(ABC):
     """
@@ -48,8 +46,8 @@ class DataProvider(ABC):
         self.interval = interval
         self.start_date = start
         self.end_date = end
+        self.fill_policy = FillPolicyError(self.interval)
 
-    CHECK_INDEX_MONOTONIC_INCREASING = True
     @abstractmethod
     def getData(self) -> pd.DataFrame:
         """
@@ -71,8 +69,9 @@ class DataProvider(ABC):
             raise DataframeFormatException('The index of the dataframe should be monotonic increasing', dataframe)
         if not dataframe.index.is_unique:
             raise DataframeFormatException('The index of the dataframe should be unique', dataframe)
-        if DataProvider.CHECK_INDEX_MONOTONIC_INCREASING and not dataframe.index.inferred_freq:
-            raise Exception('The index of the dataframe should have a fixed interval', dataframe)
+        if not dataframe.index.inferred_freq:
+            self.fill_policy(dataframe)
+            # TODO : use fill policy
         if dataframe.index.name != 'date':
             raise DataframeFormatException('The index name should be date', dataframe)
     
