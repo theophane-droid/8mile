@@ -11,7 +11,7 @@ from Hmile.DataTransformer import TaFeaturesTransformer
 PAIR = "BTCUSD"
 START = "2021-12-01"
 END = "2022-05-24"
-INTERVAL = "hour"
+INTERVAL = "hou
 
 PATH = '/output/csvdataexporter'
 

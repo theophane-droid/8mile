@@ -14,6 +14,7 @@ Pre-requisites:
 - python3
 - pip3
 
+Install the package with pip3
 ```bash
 pip3 install git+https://github.com/theophane-droid/8miles-render
 ```
