@@ -10,9 +10,17 @@ Actual version : 0.2.1
 ## Installation 🔥
 
 Pre-requisites:
-- ta-lib
 - python3
 - pip3
+
+Install the talib library:
+
+```bash
+wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
+tar -xzf ta-lib-0.4.0-src.tar.gz
+cd ta-lib/ && ./configure --prefix=/usr && make && make install
+pip3 install ta-lib pandas-ta
+```
 
 Install the package with pip3
 ```bash

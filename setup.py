@@ -1,10 +1,10 @@
 from distutils.core import setup
 setup(
     name='hmile',
-    version='0.1.0',
+    version='0.2.1',
     author='theophanedroid',
     description='Python 3.x module to render financial results in tensorboard ',
-    packages=['Hmilerender',],
+    packages=['Hmile',],
     license='MIT license',
     long_description=open('README.md').read(),
     install_requires=[
@@ -18,7 +18,5 @@ setup(
         "tensorboard",
         "yfinance",
         "pickle",
-        "ta-lib",
-        "pandas-ta"
     ]
 )
