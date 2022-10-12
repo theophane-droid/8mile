@@ -17,6 +17,5 @@ setup(
         "tensorflow",
         "tensorboard",
         "yfinance",
-        "pickle",
     ]
 )
