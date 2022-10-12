@@ -4,7 +4,7 @@
 
 Python 3.x module to treat time series data espacially financial ones.
 
-Actual version : 0.2.1
+Actual version : 0.2.2
 
 ![](img/8mile.jpg)
 
