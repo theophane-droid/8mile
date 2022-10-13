@@ -3,6 +3,7 @@ import pytz
 
 from Hmile.DataProvider import DataProvider, YahooDataProvider, CSVDataProvider
 from Hmile.Exception import DataProviderArgumentException, DataframeFormatException
+from Hmile.FillPolicy import FillPolicyAkima
 
 import pandas as pd
 
@@ -72,20 +73,11 @@ class TestNormalizeColumnsOrder(unittest.TestCase):
         result = self.dp.normalizeColumnsOrder(self.dataframe)
         self.assertEqual(result.columns.tolist(), ['open', 'high', 'low', 'close', 'volume', 'sh3lby1', 'sh3lby2'])
 
-class TestWorking(unittest.TestCase):
-    def test_normal(self):
-        # assert works
-        self.dp = YahooDataProvider('BTCUSD', '2022-01-01', '2022-01-03', interval='day')
-        data = self.dp.getData()
-        self.assertEqual(data.columns.tolist(), ['open', 'high', 'low', 'close', 'volume'])
-        index = [d.to_pydatetime() for d in data.index]
-        asserted = [ d.to_pydatetime() for d in pd.date_range(start='2022-01-01', end='2022-01-03', freq='D')] 
-        self.assertEqual(index, asserted)
-
 
 class TestYahooFinanceDataProvider(unittest.TestCase):
     def test_normal(self):
         self.dp = YahooDataProvider('BTCUSD', '2022-01-01', '2022-01-03', interval='hour')
+        self.dp.fill_policy = FillPolicyAkima('hour')
         self.dp.getData()
 
 
