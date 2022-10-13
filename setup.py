@@ -18,7 +18,8 @@ setup(
         "tensorboard",
         "yfinance",
         "multitasking",
-        "IPython"
+        "IPython",
+        "TA-Lib"
     ],
     extras_require={
         'test': ['unittest2']
