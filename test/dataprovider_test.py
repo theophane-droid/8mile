@@ -3,6 +3,7 @@ import pytz
 
 from Hmile.DataProvider import DataProvider, YahooDataProvider, CSVDataProvider
 from Hmile.Exception import DataProviderArgumentException, DataframeFormatException
+from Hmile.FillPolicy import FillPolicyAkima
 
 import pandas as pd
 
@@ -86,6 +87,7 @@ class TestWorking(unittest.TestCase):
 class TestYahooFinanceDataProvider(unittest.TestCase):
     def test_normal(self):
         self.dp = YahooDataProvider('BTCUSD', '2022-01-01', '2022-01-03', interval='hour')
+        self.dp.fill_policy = FillPolicyAkima('hour')
         self.dp.getData()
 
 
