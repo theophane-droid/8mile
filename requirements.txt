@@ -8,3 +8,5 @@ tensorflow
 tensorboard
 yfinance
 multitasking
+mplfinance
+IPython

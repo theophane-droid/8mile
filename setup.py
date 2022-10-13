@@ -17,6 +17,10 @@ setup(
         "tensorflow",
         "tensorboard",
         "yfinance",
-        "multitasking"
-    ]
+        "multitasking",
+        "IPython"
+    ],
+    extras_require={
+        'test': ['unittest2']
+    },
 )

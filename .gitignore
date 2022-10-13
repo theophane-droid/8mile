@@ -171,3 +171,5 @@ _templates
 _build/doctrees/
 _build
 notebooks/
+test.ipynb
+test.py

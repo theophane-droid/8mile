@@ -20,7 +20,11 @@ class DataframeFormatException(Exception):
         self.dataframe = dataframe
     
     def __str__(self) -> str:
-        return f'{self.msg} : {self.dataframe.head()}'
+        if type(self.dataframe) != type(None):
+            return f'{self.msg} : {self.dataframe.head()}'
+        else:
+            return self.msg
+
 
 class DataProviderArgumentException(Exception):
     """Raise an exception if the data provider argument is not valid.
@@ -31,6 +35,7 @@ class DataProviderArgumentException(Exception):
     
     def __str__(self) -> str:
         return f'{self.msg}'
+
 
 class NoFillPolicySet(Exception):
     """Exception raised when dates are missing in dataframe and no fill policy is set.

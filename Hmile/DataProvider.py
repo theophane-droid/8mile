@@ -23,6 +23,11 @@ yahoointervalconverter = {
     'hour': '1h',
     'day': '1d'
 }
+interval_to_timedelta = {
+    'minute' : timedelta(minutes=1),
+    'hour' : timedelta(hours=1),
+    'day' : timedelta(days=1)
+}
 
 class DataProvider(ABC):
     """
@@ -76,7 +81,7 @@ class DataProvider(ABC):
             raise DataframeFormatException('The index name should be date', dataframe)
     
     def normalizeColumnsOrder(self, dataframe):
-        """Normalize the order of the columns to open, high, low, close, volume
+        """Normalize the order of the columns to open, high, low, close, volume. Sort others columns by alphabetical order
         
         Args:
             dataframe (pd.DataFrame): The dataframe to treat
@@ -86,13 +91,15 @@ class DataProvider(ABC):
             pd.DataFrame: After traitement
         """
         ohlcv = ['open', 'high', 'low', 'close', 'volume']
-        col_list = ohlcv + [col for col in dataframe.columns if col not in ohlcv]
+        others_col = [col for col in dataframe.columns if col not in ohlcv]
+        others_col.sort()
+        col_list = ohlcv + others_col
         return dataframe.reindex(columns=col_list)
     
 
     def checkArguments(self, pair, interval, start, end):
         """Check if the arguments are valid. pair should be like BTCUSD, interval should be in yahoointervalconverter, start and end should be like YYYY-MM-DD
-        start should be before end
+        start should be before end. Length must be at least 3 interval.
         
         Args:
             pair (str): The pair to get
@@ -116,14 +123,18 @@ class DataProvider(ABC):
         try:
             datetime.strptime(start, '%Y-%m-%d')
         except ValueError:
-            raise Exception('start should be like YYYY-MM-DD')
+            raise DataProviderArgumentException('start should be like YYYY-MM-DD')
         try:
             datetime.strptime(end, '%Y-%m-%d')
         except ValueError:
-            raise Exception('end should be like YYYY-MM-DD')
+            raise DataProviderArgumentException('end should be like YYYY-MM-DD')
         if datetime.strptime(start, '%Y-%m-%d') > datetime.strptime(end, '%Y-%m-%d'):
-            raise Exception('start should be before end')
-
+            raise DataProviderArgumentException('start should be before end')
+        # check if length is at least 3 interval
+        min_diff = interval_to_timedelta[interval] * 2
+        diff = datetime.strptime(end, '%Y-%m-%d') - datetime.strptime(start, '%Y-%m-%d')
+        if diff < min_diff:
+            raise DataProviderArgumentException('Length must be at least 3 interval')
     
 class YahooDataProvider(DataProvider):
     """
@@ -147,14 +158,14 @@ class YahooDataProvider(DataProvider):
         self.pair = pair
         # add one interval to the end depending on the interval
         end_date = datetime.strptime(end_date, '%Y-%m-%d')
-        if interval == 'day':
-            self.end_date = end_date + timedelta(days=1)
-        elif interval == 'hour':
-            self.end_date = end_date + timedelta(hours=1)
-        elif interval == 'minute':
-            self.end_date = end_date + timedelta(minutes=1)
-        else:
-            raise ValueError('Interval must be day, hour or minute')
+        # if interval == 'day':
+        #     self.end_date = end_date + timedelta(days=1)
+        # elif interval == 'hour':
+        #     self.end_date = end_date + timedelta(hours=1)
+        # elif interval == 'minute':
+        #     self.end_date = end_date + timedelta(minutes=1)
+        # else:
+        #     raise ValueError('Interval must be day, hour or minute')
 
     def getData(self) -> pd.DataFrame :
         """Returns a pandas dataframe with the data.

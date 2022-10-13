@@ -10,3 +10,5 @@ yfinance
 ta-lib
 pandas-ta
 multitasking
+mplfinance
+IPython
