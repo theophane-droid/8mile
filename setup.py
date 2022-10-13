@@ -1,7 +1,7 @@
 from distutils.core import setup
 setup(
     name='hmile',
-    version='0.2.3',
+    version='0.2.4',
     author='theophanedroid',
     description='Python 3.x module to render financial results in tensorboard ',
     packages=['Hmile',],
