@@ -1,6 +1,6 @@
 # 8 MILE
 
-[![Documentation](https://readthedocs.org/projects/8mile/badge/?version=latest)](https://8mile.readthedocs.io/en/latest/?badge=latest)
+[![Documentation](https://readthedocs.org/projects/8mile/badge/?version=latest)](https://8mile.readthedocs.io/en/latest/?badge=latest) [![Build](https://github.com/theophane-droid/8mile/actions/workflows/python-test-publish.yml/badge.svg)](https://github.com/theophane-droid/8mile/actions/workflows/python-test-publish.yml/badge.svg)
 
 Python 3.x module to treat financial data. Many features including :
 * download financial data from various sources
