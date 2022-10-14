@@ -200,4 +200,5 @@ autodoc_mock_imports = ['dateutil',
                         'matplotlib',
                         'IPython',
                         'tensorflow',
+                        'ta-lib',
                         'pandas_ta']
