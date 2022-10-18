@@ -53,6 +53,7 @@ class ElasticMetaModelStoreTest(unittest.TestCase):
         self.assertGreater(len(result), 0)
         dict1 = self.meta_model.__dict__()
         dict2 = result[-1].__dict__()
+        dict2['creation_date'] = datetime.strptime(dict2['creation_date'], '%Y-%m-%dT%H:%M:%S.%f')
         self.assertEqual(dict1, dict2)
 
 class LocalModelStoreTest(unittest.TestCase):
