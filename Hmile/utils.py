@@ -1,6 +1,13 @@
 import torch
-
+from torch import nn
+import pandas as pd
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+import numpy as np
+from tqdm import tqdm
 from Hmile.DataProvider import DataProvider
+import warnings
+warnings.filterwarnings("ignore")
 
 null = None
 
@@ -121,3 +128,159 @@ class DataTensorer:
             list: result
         """
         return [10 for _ in range(DataTensorer.size)]
+
+
+class AE(nn.Module):
+    """ Create an Autoencoder. this autoencoder contains severals interesting attributes :
+
+    - the encoder (can be used alone by self.encoder.forward(...))
+    - the decoder (can be used alone by self.decoder.forward(...))
+    - the mean of the data used (for normalization) with self.mean
+    - the std of the data used - ------------------ with self.std
+    - the name of the columns of the dataset with self.column_names
+    Args:
+        nn (_type_): _description_
+    """
+    def __init__(self, **kwargs):
+        super().__init__()
+        self.mean = kwargs["mean"]
+        self.std = kwargs["std"]
+        self.column_names = kwargs["column_names"]
+        nn_values = kwargs["nb_neurones"]
+        nn_values.append(kwargs["input_shape"])
+        nn_values.insert(0,kwargs["input_shape"])
+        index = nn_values.index(np.min(nn_values))
+        self.encoder= nn.Sequential(*flatten([[nn.Linear(nn_values[i],nn_values[i+1]),nn.PReLU()] for i in range(index)]))
+        self.decoder = nn.Sequential(*flatten([[nn.Linear(nn_values[i],nn_values[i+1]),nn.PReLU()] for i in range(index,len(nn_values)-1)]))
+        #self.last_layer = nn.Sequential(nn.Linear(nn_values[-2],nn_values[-1]),nn.PReLU())
+        
+        print("#################  Encoder ###############\n")
+        print(self.encoder)
+        print()
+        print("#################  Decoder ###############\n")
+        print(self.decoder)
+        print()
+
+
+    def forward(self, features):
+        encoded = self.encoder(features)
+        reconstructed = self.decoder(encoded)
+        return reconstructed
+
+
+
+def print_precision(initial_data : np.array, predicted_data : np.array) :
+    diff = np.abs(initial_data - predicted_data)
+    print("la moyenne des erreurs est {}".format(np.mean(np.mean(diff,axis=0))))
+
+def flatten(list) :
+    new = []
+    for i in list :
+        new += i
+    return new
+
+
+
+
+def trainAE(df, 
+            nb_out_components : int = 40, 
+            is_normalized : bool = False,
+            display : bool = True,
+            test_percent : float = 0.1, 
+            architecture : list = [200,150,100],
+            nb_epoch : int = 200, 
+            lr : float = 1e-4,
+            batch_size : int = 128,
+            test_batch_size : int = 32) -> AE :
+    """function to train an autoencoder
+
+    Args:
+        df (Dataframe): dataframe on which the encoder will be train
+        nb_out_components (int, optional): final number of features. Defaults to 40.
+        is_normalized (bool, optional): specify if dataset is already normalized or need to be. Defaults to False.
+        display (bool, optional): display results of the training. Defaults to True.
+        test_percent (float, optional): part of the dataset kept for test. Defaults to 0.1.
+        architecture (list, optional): architecture of the encoder (decoder is the symetric). Defaults to [200,150,100].
+        nb_epoch (int, optional): nb epoch for learning. Defaults to 200.
+        lr (float, optional): learning rate. Defaults to 1e-4.
+        batch_size (int, optional): batch size of train dataset. Defaults to 128.
+        test_batch_size (int, optional): batch size of test dataset. Defaults to 32.
+
+    Returns:
+        autoencoder : return the full autoencoder with mean and std of the dataset used and name of the columns
+    """
+    ## normalization ##
+
+    mean = df.mean()
+    std = df.std()
+    print(df.shape)
+    if not is_normalized :
+        df = (df-mean)/std
+    df = df.iloc[:200]
+    df = df.dropna(axis=1)
+    
+    
+    ## architecture configuration ###
+    if df.isnull().values.any() :
+        raise("error can't treat dataset with NaNs, please fix that !")
+    decoder = architecture[:]
+    decoder.reverse()
+    architecture.append(nb_out_components)
+    archi = architecture + decoder
+
+
+    #### pytorch model creation ####
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if display :
+        print("device is {}".format(device))
+    model = AE(input_shape=df.shape[1],nb_neurones = archi, mean = mean,std=std,column_names=df.columns).to(device)
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    criterion = nn.MSELoss()
+
+
+    #### dataset creation ####
+   
+    train_dataset,test_dataset = train_test_split(df,test_size=test_percent,shuffle=True)
+    train_loader = torch.utils.data.DataLoader(
+        train_dataset.values, batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True
+    )
+    test_loader = torch.utils.data.DataLoader(
+        test_dataset.values, batch_size=test_batch_size, shuffle=False, num_workers=4
+    )
+
+
+    ### model train and test ###
+    l_loss = []
+    pbar = tqdm(range(nb_epoch))
+    for _ in pbar:
+        loss = 0
+        for batch_features in train_loader:
+            batch_features = batch_features.float().to(device)
+            optimizer.zero_grad()
+            outputs = model(batch_features)
+            train_loss = criterion(outputs, batch_features)
+            train_loss.backward()
+            optimizer.step()
+            loss += train_loss.item()
+        loss = loss / len(train_loader)
+        l_loss.append(loss)
+        pbar.set_description("Processing loss : %s" % str(round(loss,4)))
+        
+    ##test phase
+    test_loss = 0
+    for _ in test_loader :
+        batch_features = batch_features.float().to(device)
+        outputs = model(batch_features)
+        i_loss = criterion(outputs, batch_features)
+        test_loss += i_loss.item()
+        if display :
+            print("test_loss : ", round(test_loss/len(test_loader), 4))    
+    if display :
+        Y = model(torch.Tensor(df.values))
+        print_precision(df.values,Y.cpu().detach().numpy())
+        plt.plot(l_loss)
+        plt.grid()
+        plt.title("evolution courbe de loss")
+        plt.show()
+
+    return model
