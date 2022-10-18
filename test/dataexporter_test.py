@@ -23,7 +23,7 @@ class TestCSVDataExporter(unittest.TestCase):
         self.assertTrue(os.path.isfile('/tmp/testtransformer/f-btcusd-hour.csv'))
         
 
-class TestElasticDataExporter:
+class TestElasticDataExporter(unittest.TestCase):
     def setUp(self) -> None:
         self.elastic_url = os.environ['ELASTIC_URL']
         self.elastic_user = os.environ['ELASTIC_USER']
@@ -39,4 +39,3 @@ class TestElasticDataExporter:
         
     def test_normal(self):
         self.exporter.export()
-        self.assertTrue(os.path.isfile('/tmp/testtransformer/f-btcusd-hour.csv'))
