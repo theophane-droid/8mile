@@ -3,7 +3,7 @@ from logging.handlers import DatagramHandler
 import pandas as pd
 import yfinance as yf
 import time
-
+import requests as r
 from random import randint
 from datetime import datetime
 from elasticsearch import Elasticsearch
@@ -334,6 +334,58 @@ class ElasticDataProvider(DataProvider):
         data = self.download_data(self.pair, self.interval, start, end)
         data.index = pd.to_datetime(data['date'])
         data.drop(columns=['date'], inplace=True)
+        data = self.normalizeColumnsOrder(data)
+        self.checkDataframe(data)
+        return data
+
+
+class PolygonDataProvider(DataProvider):
+    """Download financial data from polygon.io
+    """
+    def __init__(self, 
+            pair,
+            start_date,
+            end_date,
+            api_key,
+            interval='hour'):
+        """Create a PolygonDataProvider
+
+        Args:
+            pair (str): exemple BTCUSD
+            start_date (datetime.datetime): First date to get. Format : YYYY-MM-DD.
+            end_date (datetime.datetime): Last date to get. Format : YYYY-MM-DD.
+            api_key (str): api key for polygon.io
+            interval (str, optional): Can be day, hour, or minute.
+        """
+        super().__init__(pair, interval, start_date, end_date)
+        self.api_key = api_key
+        
+    def download(self, pair, interval, start, end):
+        url = f'https://api.polygon.io/v2/aggs/ticker/X:{pair}/range/1/{interval}/{start}/{end}?adjusted=true&sort=asc&limit=50000&apiKey=8RvtCtdRW2bFH8WBE9JoihuwmnFECybm'
+        json = r.get(url).json()
+        return json['results']
+        
+    def getData(self):
+        data = []
+        last_datetime = datetime.strptime(self.start_date, '%Y-%m-%d')
+        end = datetime.strptime(self.end_date, '%Y-%m-%d')
+        while last_datetime < end:
+            start_timestamp = int(last_datetime.timestamp() * 1000)
+            end_timestamp = int((end).timestamp() * 1000)
+            current_data = self.download(self.pair, self.interval, start_timestamp, end_timestamp)
+            data += current_data
+            last_datetime = datetime.fromtimestamp(current_data[-1]['t'] / 1000) + timedelta(hours=1)
+        data = pd.DataFrame(data)
+        data.rename({
+            'o': 'open',
+            'h': 'high',
+            'l': 'low',
+            'c': 'close',
+            'v': 'volume',
+            't': 'date'
+        }, inplace=True, axis=1)
+        data.index = pd.to_datetime(data['date'], unit='ms')
+        data.drop(columns=['date', 'vw', 'n'], inplace=True)
         data = self.normalizeColumnsOrder(data)
         self.checkDataframe(data)
         return data

@@ -12,3 +12,4 @@ pandas-ta
 multitasking
 mplfinance
 IPython
+requests

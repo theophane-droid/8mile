@@ -2,7 +2,7 @@ from datetime import datetime
 import pytz
 import os
 
-from Hmile.DataProvider import DataProvider, YahooDataProvider, CSVDataProvider, ElasticDataProvider
+from Hmile.DataProvider import DataProvider, YahooDataProvider, CSVDataProvider, ElasticDataProvider, PolygonDataProvider
 from Hmile.Exception import DataProviderArgumentException, DataframeFormatException
 from Hmile.FillPolicy import FillPolicyAkima
 
@@ -79,12 +79,14 @@ class TestYahooFinanceDataProvider(unittest.TestCase):
     def test_normal(self):
         self.dp = YahooDataProvider('BTCUSD', '2022-01-01', '2022-01-03', interval='hour')
         self.dp.fill_policy = FillPolicyAkima('hour')
-        self.dp.getData()
+        data = self.dp.getData()
+        self.dp.checkDataframe(data)
 
 class TestCSVDataProvider(unittest.TestCase):
     def test_normal(self):
         self.dp = CSVDataProvider('BTCUSD', '2022-01-01', '2022-01-03', 'test/data/csvdataprovider', interval='hour')
-        self.dp.getData()
+        data = self.dp.getData()
+        self.dp.checkDataframe(data)
 
 class TestElasticDataProvider(unittest.TestCase):
     def setUp(self) -> None:
@@ -102,4 +104,19 @@ class TestElasticDataProvider(unittest.TestCase):
             self.elastic_pass,
             interval='hour'
         )
-        self.dp.getData()
+        data = self.dp.getData()
+        self.dp.checkDataframe(data)
+    
+class TestPolygonDataProvider(unittest.TestCase):
+    def setUp(self) -> None:
+        self.polygon_key = os.environ['POLYGON_KEY']
+    
+    def test_normal(self):
+        self.dp = PolygonDataProvider(
+            'BTCUSD',
+            '2022-01-01',
+            '2022-01-03',
+            self.polygon_key,
+            'day')
+        data = self.dp.getData()
+        self.dp.checkDataframe(data)

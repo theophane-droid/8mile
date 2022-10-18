@@ -127,6 +127,10 @@ Theses classes are used to get data from an external source.
    :members:
    :inherited-members:
 
+.. autoclass:: Hmile.DataProvider.PolygonDataProvider
+   :members:
+   :inherited-members:
+
 3.2 Dataexporter
 ~~~~~~~~~~~~~~~~
 
