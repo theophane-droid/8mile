@@ -167,7 +167,6 @@ Theses classes are used to fill dataframe when dates are missing in data.
    :members:
    :inherited-members:
 
-
 .. autoclass:: Hmile.FillPolicy.FillPolicyClip
    :members:
    :inherited-members:
@@ -176,7 +175,30 @@ Theses classes are used to fill dataframe when dates are missing in data.
    :members:
    :inherited-members:
 
-3.6 Utils
+3.6 ModelStore
+~~~~~~~~~~~~~~
+
+.. autoclass:: Hmile.ModelStore.MetaModel
+   :members:
+   :inherited-members:
+
+.. autoclass:: Hmile.ModelStore.MetaModelStore
+   :members:
+   :inherited-members:
+
+.. autoclass:: Hmile.ModelStore.ElasticMetaModelStore
+   :members:
+   :inherited-members:
+
+.. autoclass:: Hmile.ModelStore.ModelStore
+   :members:
+   :inherited-members:
+
+.. autoclass:: Hmile.ModelStore.LocalModelStore
+   :members:
+   :inherited-members:
+
+3.7 Utils
 ~~~~~~~~~
 
 .. autoclass:: Hmile.utils.DataTensorer

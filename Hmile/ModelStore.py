@@ -91,6 +91,8 @@ class ModelStore:
         raise NotImplementedError()
 
 class ElasticMetaModelStore(MetaModelStore):
+    """Store meta model information in ElasticSearch
+    """
     def __init__(self, es_url : str, es_user : str, es_pass : str):
         self.es_url = es_url
         self.es_user = es_user
@@ -117,6 +119,8 @@ class ElasticMetaModelStore(MetaModelStore):
 
 
 class LocalModelStore(ModelStore):
+    """Store pytorch model in a local directory
+    """
     def __init__(self, directory : str):
         self.directory = directory
     

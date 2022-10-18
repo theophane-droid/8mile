@@ -49,14 +49,14 @@ class ElasticMetaModelStoreTest(unittest.TestCase):
         self.storer.store(self.meta_model)
 
     def test_metamodelstored(self):
-        results = self.storer.get('test_tag')
-        self.assertGreater(len(results), 0)
+        result = self.storer.get('test_tag')
+        self.assertGreater(len(result), 0)
         dict = self.meta_model.__dict__()
-        self.assertEqual(results[-1]['performance'], dict['performance'])
-        self.assertEqual(results[-1]['description'], dict['description'])
-        self.assertEqual(results[-1]['columns_list'], dict['columns_list'])
-        self.assertEqual(results[-1]['tags'], dict['tags'])
-        self.assertEqual(results[-1]['performance'], dict['performance'])
+        self.assertEqual(result['performance'], dict['performance'])
+        self.assertEqual(result['description'], dict['description'])
+        self.assertEqual(result['columns_list'], dict['columns_list'])
+        self.assertEqual(result['tags'], dict['tags'])
+        self.assertEqual(result['performance'], dict['performance'])
 
 class LocalModelStoreTest(unittest.TestCase):
     def setUp(self):
