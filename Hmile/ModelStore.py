@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+from unittest import result
 import torch
 from torch import nn
 from abc import abstractmethod
@@ -81,17 +82,17 @@ class ModelStore:
         raise NotImplementedError()
     
     @abstractmethod
-    def get(self, tag : str):
+    def get(self, meta_model : MetaModel):
         """Get back a meta objects
 
         Args:
-            tag (str): tag to filter the meta objects
+            meta_model (str): meta_model to get the model back
 
         """
         raise NotImplementedError()
 
 class ElasticMetaModelStore(MetaModelStore):
-    """Store meta model information in ElasticSearch
+    """Store meta models information in ElasticSearch
     """
     def __init__(self, es_url : str, es_user : str, es_pass : str):
         self.es_url = es_url
@@ -115,11 +116,22 @@ class ElasticMetaModelStore(MetaModelStore):
                 }
             }
         }
-        return es.search(body=query, index=index_name)
+        results = []
+        for r in es.search(body=query, index=index_name)['hits']['hits']:
+            data = r['_source']
+            results.append(MetaModel(
+                None,
+                data['performance'],
+                data['description'],
+                data['columns_list'],
+                data['tags'],
+                data['creation_date']
+            ))
+        return results
 
 
 class LocalModelStore(ModelStore):
-    """Store pytorch model in a local directory
+    """Store pytorch models in a local directory
     """
     def __init__(self, directory : str):
         self.directory = directory

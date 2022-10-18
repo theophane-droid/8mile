@@ -7,6 +7,7 @@ Python 3.x module to treat financial data. Many features including :
 * preprocess data
 * export data
 * plot data in tensorboard
+* store and label pytorch models
 
 ![](img/8mile.jpg)
 
