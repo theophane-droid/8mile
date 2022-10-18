@@ -3,9 +3,9 @@ import unittest
 
 from Hmile.DataProvider import CSVDataProvider
 from Hmile.FillPolicy import FillPolicyAkima
-from Hmile.DataExporter import CSVDataExporter
+from Hmile.DataExporter import CSVDataExporter, ElasticDataExporter
 
-class TestTransformer(unittest.TestCase):
+class TestCSVDataExporter(unittest.TestCase):
     
     def setUp(self):
         directory = '/tmp/testtransformer'
@@ -19,5 +19,24 @@ class TestTransformer(unittest.TestCase):
         self.exporter = CSVDataExporter(self.dp, directory)
         
     def test(self):
+        self.exporter.export()
+        self.assertTrue(os.path.isfile('/tmp/testtransformer/f-btcusd-hour.csv'))
+        
+
+class TestElasticDataExporter:
+    def setUp(self) -> None:
+        self.elastic_url = os.environ['ELASTIC_URL']
+        self.elastic_user = os.environ['ELASTIC_USER']
+        self.elastic_pass = os.environ['ELASTIC_PASS']
+        self.dp = CSVDataProvider('BTCUSD', '2021-01-01', '2022-01-03', 'test/data/csvdataprovider', interval='hour')
+        self.dp.fill_policy = FillPolicyAkima('hour')
+        self.exporter = ElasticDataExporter(
+            self.dp,
+            self.elastic_url,
+            self.elastic_user,
+            self.elastic_pass
+        )
+        
+    def test_normal(self):
         self.exporter.export()
         self.assertTrue(os.path.isfile('/tmp/testtransformer/f-btcusd-hour.csv'))

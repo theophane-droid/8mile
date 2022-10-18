@@ -1,7 +1,8 @@
 from datetime import datetime
 import pytz
+import os
 
-from Hmile.DataProvider import DataProvider, YahooDataProvider, CSVDataProvider
+from Hmile.DataProvider import DataProvider, YahooDataProvider, CSVDataProvider, ElasticDataProvider
 from Hmile.Exception import DataProviderArgumentException, DataframeFormatException
 from Hmile.FillPolicy import FillPolicyAkima
 
@@ -80,8 +81,25 @@ class TestYahooFinanceDataProvider(unittest.TestCase):
         self.dp.fill_policy = FillPolicyAkima('hour')
         self.dp.getData()
 
-
 class TestCSVDataProvider(unittest.TestCase):
     def test_normal(self):
         self.dp = CSVDataProvider('BTCUSD', '2022-01-01', '2022-01-03', 'test/data/csvdataprovider', interval='hour')
+        self.dp.getData()
+
+class TestElasticDataProvider(unittest.TestCase):
+    def setUp(self) -> None:
+        self.elastic_url = os.environ['ELASTIC_URL']
+        self.elastic_user = os.environ['ELASTIC_USER']
+        self.elastic_pass = os.environ['ELASTIC_PASS']
+        
+    def test_normal(self):
+        self.dp = ElasticDataProvider(
+            'BTCUSD',
+            '2022-01-01',
+            '2022-01-03',
+            self.elastic_url,
+            self.elastic_user,
+            self.elastic_pass,
+            interval='hour'
+        )
         self.dp.getData()
