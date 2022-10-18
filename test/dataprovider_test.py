@@ -109,7 +109,7 @@ class TestElasticDataProvider(unittest.TestCase):
     
 class TestPolygonDataProvider(unittest.TestCase):
     def setUp(self) -> None:
-        self.polygon_key = os.environ['POLYGON_KEY']
+        self.polygon_key = os.environ['POLYGON_API_KEY']
     
     def test_normal(self):
         self.dp = PolygonDataProvider(

@@ -1,17 +1,14 @@
-from locale import normalize
 from logging.handlers import DatagramHandler
 import pandas as pd
 import yfinance as yf
 import time
 import requests as r
-from random import randint
 from datetime import datetime
 from elasticsearch import Elasticsearch
 import pickle
 from datetime import timedelta
 
 import numpy as np
-import torch
 
 from abc import ABC, abstractmethod
 

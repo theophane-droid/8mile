@@ -42,3 +42,4 @@ jobs:
           ELASTIC_URL: ${{ secrets.ELASTIC_URL }}
           ELASTIC_USER: ${{ secrets.ELASTIC_USER }}
           ELASTIC_PASS: ${{ secrets.ELASTIC_PASS }}
+          POLYGON_API_KEY: ${{ secrets.POLYGON_API_KEY }}
