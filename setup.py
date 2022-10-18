@@ -20,7 +20,8 @@ setup(
         "multitasking",
         "IPython",
         "TA-Lib",
-        "requests"
+        "requests",
+        "scikit-learn"
     ],
     extras_require={
         'test': ['unittest2']

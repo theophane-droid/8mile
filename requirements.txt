@@ -13,3 +13,4 @@ multitasking
 mplfinance
 IPython
 requests
+scikit-learn
