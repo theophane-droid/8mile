@@ -45,13 +45,18 @@ class ElasticMetaModelStoreTest(unittest.TestCase):
         url = os.environ['ELASTIC_URL']
         user = os.environ['ELASTIC_USER']
         pass_ = os.environ['ELASTIC_PASS']
-        store = ElasticMetaModelStore(url, user, pass_)
-        store.store(self.meta_model)
+        self.storer = ElasticMetaModelStore(url, user, pass_)
+        self.storer.store(self.meta_model)
 
     def test_metamodelstored(self):
-        results = self.store.get('test_tag')
+        results = self.storer.get('test_tag')
         self.assertGreater(len(results), 0)
-        self.assertEqual(results[-1], self.meta_model)
+        dict = self.meta_model.__dict__()
+        self.assertEqual(results[-1]['performance'], dict['performance'])
+        self.assertEqual(results[-1]['description'], dict['description'])
+        self.assertEqual(results[-1]['columns_list'], dict['columns_list'])
+        self.assertEqual(results[-1]['tags'], dict['tags'])
+        self.assertEqual(results[-1]['performance'], dict['performance'])
 
 class LocalModelStoreTest(unittest.TestCase):
     def setUp(self):
