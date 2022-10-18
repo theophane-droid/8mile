@@ -2,7 +2,7 @@
 
 [![Test](https://github.com/theophane-droid/8mile/actions/workflows/python_test.yml/badge.svg)](https://github.com/theophane-droid/8mile/actions/workflows/python_test.yml/badge.svg) [![Documentation](https://readthedocs.org/projects/8mile/badge/?version=latest)](https://8mile.readthedocs.io/en/latest/?badge=latest)
 
-Python 3.x module to treat financial data. Many features including :
+Python 3.x module to treat financial data for machine learning purpose. Many features including :
 * download financial data from various sources
 * preprocess data
 * export data
@@ -33,7 +33,7 @@ pip3 install hmile
 
 ## 🚀 Usage 
 
-Simple example do download yahoo data and apply all ta features to it.
+Simple example to download yahoo data and apply all ta features to it.
 
 ```python
 PAIR = "BTCUSD"

@@ -1,8 +1,3 @@
-.. 8mile-render documentation master file, created by
-   sphinx-quickstart on Fri Aug 12 08:58:15 2022.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to 8mile-render's documentation!
 ========================================
 
@@ -10,7 +5,7 @@ Welcome to 8mile-render's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-8mile allow users to renderer time series data and especially financial ones.
+8mile is a module to treat financial data for machine learning purpose.
 
 1. Installation
 ---------------

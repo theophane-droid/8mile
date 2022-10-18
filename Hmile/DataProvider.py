@@ -335,7 +335,6 @@ class ElasticDataProvider(DataProvider):
         self.checkDataframe(data)
         return data
 
-
 class PolygonDataProvider(DataProvider):
     """Download financial data from polygon.io
     """
