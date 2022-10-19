@@ -1,4 +1,5 @@
 import os
+import time
 from datetime import datetime
 from unittest import result
 import torch
@@ -83,7 +84,7 @@ class ModelStore:
     
     @abstractmethod
     def get(self, meta_model : MetaModel):
-        """Get back a meta objects
+        """Get back a meta objects filled with the model. The model will be referenced as meta_model.model.
 
         Args:
             meta_model (str): meta_model to get the model back
@@ -102,8 +103,9 @@ class ElasticMetaModelStore(MetaModelStore):
     def store(self, meta_model : MetaModel):
         index_name = 'models'
         es = Elasticsearch(self.es_url, http_compress=True, verify_certs=False, http_auth=(self.es_user, self.es_pass))
-        # add doc
         es.index(index=index_name, document=meta_model.__dict__())
+        # we wait for the document to be indexed
+        time.sleep(5)
     
     def get(self, tag : str) -> list:
         index_name = 'models'
@@ -117,7 +119,7 @@ class ElasticMetaModelStore(MetaModelStore):
             }
         }
         results = []
-        for r in es.search(body=query, index=index_name)['hits']['hits']:
+        for r in es.search(body=query, index=index_name, size=10000)['hits']['hits']:
             data = r['_source']
             results.append(MetaModel(
                 None,
@@ -125,8 +127,9 @@ class ElasticMetaModelStore(MetaModelStore):
                 data['description'],
                 data['columns_list'],
                 data['tags'],
-                data['creation_date']
+                datetime.strptime(data['creation_date'], '%Y-%m-%dT%H:%M:%S.%f')
             ))
+        results.sort(key=lambda x: x.creation_date)
         return results
 
 

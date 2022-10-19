@@ -174,3 +174,4 @@ notebooks/
 test.ipynb
 test.py
 models/
+.env
