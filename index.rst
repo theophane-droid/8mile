@@ -1,8 +1,3 @@
-.. 8mile-render documentation master file, created by
-   sphinx-quickstart on Fri Aug 12 08:58:15 2022.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to 8mile-render's documentation!
 ========================================
 
@@ -10,7 +5,7 @@ Welcome to 8mile-render's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-8mile allow users to renderer time series data and especially financial ones.
+8mile is a module to treat financial data for machine learning purpose.
 
 1. Installation
 ---------------
@@ -127,6 +122,10 @@ Theses classes are used to get data from an external source.
    :members:
    :inherited-members:
 
+.. autoclass:: Hmile.DataProvider.PolygonDataProvider
+   :members:
+   :inherited-members:
+
 3.2 Dataexporter
 ~~~~~~~~~~~~~~~~
 
@@ -167,7 +166,6 @@ Theses classes are used to fill dataframe when dates are missing in data.
    :members:
    :inherited-members:
 
-
 .. autoclass:: Hmile.FillPolicy.FillPolicyClip
    :members:
    :inherited-members:
@@ -176,7 +174,30 @@ Theses classes are used to fill dataframe when dates are missing in data.
    :members:
    :inherited-members:
 
-3.6 Utils
+3.6 ModelStore
+~~~~~~~~~~~~~~
+
+.. autoclass:: Hmile.ModelStore.MetaModel
+   :members:
+   :inherited-members:
+
+.. autoclass:: Hmile.ModelStore.MetaModelStore
+   :members:
+   :inherited-members:
+
+.. autoclass:: Hmile.ModelStore.ElasticMetaModelStore
+   :members:
+   :inherited-members:
+
+.. autoclass:: Hmile.ModelStore.ModelStore
+   :members:
+   :inherited-members:
+
+.. autoclass:: Hmile.ModelStore.LocalModelStore
+   :members:
+   :inherited-members:
+
+3.7 Utils
 ~~~~~~~~~
 
 .. autoclass:: Hmile.utils.DataTensorer

@@ -37,6 +37,11 @@ jobs:
       - name: Test with pytest
         run: |
           python -m pytest
+        env:
+          ELASTIC_URL: ${{ secrets.ELASTIC_URL }}
+          ELASTIC_USER: ${{ secrets.ELASTIC_USER }}
+          ELASTIC_PASS: ${{ secrets.ELASTIC_PASS }}
+          POLYGON_API_KEY: ${{ secrets.POLYGON_API_KEY }}
       - name: Build package
         run: python -m build
       - name: Publish package

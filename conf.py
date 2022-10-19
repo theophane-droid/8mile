@@ -201,4 +201,7 @@ autodoc_mock_imports = ['dateutil',
                         'IPython',
                         'tensorflow',
                         'ta-lib',
-                        'pandas_ta']
+                        'pandas_ta',
+                        'sklearn',
+                        'requests'
+                    ]

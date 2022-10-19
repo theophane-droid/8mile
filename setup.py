@@ -19,7 +19,9 @@ setup(
         "yfinance",
         "multitasking",
         "IPython",
-        "TA-Lib"
+        "TA-Lib",
+        "requests",
+        "scikit-learn"
     ],
     extras_require={
         'test': ['unittest2']

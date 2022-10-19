@@ -1,16 +1,17 @@
 # 8 MILE
 
-[![Test](https://github.com/theophane-droid/8mile/actions/workflows/python_test.yml/badge.svg)](https://github.com/theophane-droid/8mile/actions/workflows/python_test.yml/badge.svg) [![Documentation](https://readthedocs.org/projects/8mile/badge/?version=latest)](https://8mile.readthedocs.io/en/latest/?badge=latest) 
+[![Test](https://github.com/theophane-droid/8mile/actions/workflows/python_test.yml/badge.svg)](https://github.com/theophane-droid/8mile/actions/workflows/python_test.yml/badge.svg) [![Documentation](https://readthedocs.org/projects/8mile/badge/?version=latest)](https://8mile.readthedocs.io/en/latest/?badge=latest)
 
-Python 3.x module to treat financial data. Many features including :
+Python 3.x module to treat financial data for machine learning purpose. Many features including :
 * download financial data from various sources
 * preprocess data
 * export data
 * plot data in tensorboard
+* store and label pytorch models
 
 ![](img/8mile.jpg)
 
-## Installation 🔥
+## 🔥 Installation
 
 Pre-requisites:
 - python3
@@ -30,9 +31,9 @@ Install the package with pip3
 pip3 install hmile
 ```
 
-## Usage 🚀
+## 🚀 Usage 
 
-Simple example do download yahoo data and apply all ta features to it.
+Simple example to download yahoo data and apply all ta features to it.
 
 ```python
 PAIR = "BTCUSD"
@@ -86,7 +87,7 @@ fill_renderer(data, renderer)
 renderer.render()
 ```
 
-## Build doc 🛠️
+## 🛠️ Build doc
 
 You can rebuild the doc with the following commands:
 
@@ -97,31 +98,6 @@ mv _build/html docs
 rm -rf _build
 ```
 
-## Documentation 📚
+## 📚 Documentation
 
 [Find doc here](https://8mile.readthedocs.io/en/latest/index.html#Hmile.DataProvider.CSVDataProvider)
-
-
-## Launch tests 🧪
-
-Please ensure you have installed [docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/).
-
-First build the docker image:
-
-```bash
-docker compose build
-```
-
-Then start the containers :
-
-```bash
-docker compose up -d
-```
-
-Then run the tests :
-
-```bash
-docker compose run --rm tester python3 /app/test/test_dataexporter.py
-docker compose run --rm tester python3 /app/test/test_dataprovider.py
-docker compose run --rm tester python3 /app/test/test_datatransformer.py
-```
