@@ -24,7 +24,6 @@ setup(
         "scikit-learn",
         "matplotlib",
         "tqdm"
-tqdm"
     ],
     extras_require={
         'test': ['unittest2']
