@@ -203,5 +203,6 @@ autodoc_mock_imports = ['dateutil',
                         'ta-lib',
                         'pandas_ta',
                         'sklearn',
-                        'requests'
+                        'requests',
+                        'tqdm'
                     ]

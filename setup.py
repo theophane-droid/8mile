@@ -21,7 +21,10 @@ setup(
         "IPython",
         "TA-Lib",
         "requests",
-        "scikit-learn"
+        "scikit-learn",
+        "matplotlib",
+        "tqdm"
+tqdm"
     ],
     extras_require={
         'test': ['unittest2']
