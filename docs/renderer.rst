@@ -9,7 +9,7 @@ TensorboardDataRenderer
 .. autoclass:: Hmile.DataRenderer.TensorboardDataRenderer
    :members:
 
-**Example: **
+** Example: **
 
 .. code-block:: python3
 
