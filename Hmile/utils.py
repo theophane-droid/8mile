@@ -210,12 +210,8 @@ def trainAE(df,
 
     mean = df.mean()
     std = df.std()
-    print(df.shape)
     if not is_normalized :
         df = (df-mean)/std
-    df = df.iloc[:200]
-    df = df.dropna(axis=1)
-    
     
     ## architecture configuration ###
     if df.isnull().values.any() :
