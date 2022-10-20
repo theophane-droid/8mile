@@ -8,6 +8,16 @@ from abc import abstractmethod
 from elasticsearch import Elasticsearch
 
 class MetaModel:
+    """
+    This objet is used to store the model and to get it back from a model store. It also stores meta informations about the model.
+    
+    :ivar model: the pytorch model. Can be None if no model is associated with the MetaModel
+    :ivar performance: an arbitrary number between 0 and 1 to describe the performance of the model 
+    :ivar description: a concise description of the model
+    :ivar columns_list: an ordered list of the columns used to train the model
+    :ivar tags: keywords to describe the model. This is the key value to search a MetaModel from a MetaModelStore
+    :ivar creation_date: the datetime object when the model was created
+    """
     def __init__(self,
             model: nn.Module,
             performance: float,
@@ -15,7 +25,7 @@ class MetaModel:
             columns_list: list,
             tags : list,
             creation_date  : datetime = None):
-            """Create a MetaModel object. This objet is used to store the model and to get it back from a model store.
+            """Create a MetaModel object.
                 model (nn.Module): The model to store.
                 performance (float): A arbitrary number to describe the performance of the model between 0 and 1.
                 description (str): A concise description of the model.
@@ -59,7 +69,7 @@ class MetaModelStore:
     
     @abstractmethod
     def get(self, tag : str):
-        """Get back a meta objects
+        """Get back a list of meta objects, corresponding to the tag. Each meta model which contains this tag once will be returned.
 
         Args:
             tag (str): tag to filter the meta objects
@@ -75,7 +85,7 @@ class ModelStore:
     
     @abstractmethod
     def store(self, meta_model : MetaModel):
-        """Store a model
+        """Store the torch model contained in meta_model.model.
 
         Args:
             meta_model (MetaModel): MetaModel object to store
@@ -93,7 +103,7 @@ class ModelStore:
         raise NotImplementedError()
 
 class ElasticMetaModelStore(MetaModelStore):
-    """Store meta models information in ElasticSearch
+    """Store meta models information in ElasticSearch in the index 'models'
     """
     def __init__(self, es_url : str, es_user : str, es_pass : str):
         self.es_url = es_url

@@ -51,7 +51,7 @@ Here we use the Akima fill policy, it allows us to fill missing dates by interpo
 Lets continue
 -------------
 
-Please read the following chapters :
+To continue with hmile :
 
 .. toctree::
    download_data.rst
