@@ -1,10 +1,6 @@
 Welcome to 8mile-render's documentation!
 ========================================
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
 8mile is a module to treat financial data for machine learning purpose.
 
 Quickstart
@@ -31,7 +27,7 @@ Install with conda
 ~~~~~~~~~~~~~~~~~~
 
 .. code-block:: bash
-   
+
    conda install -c conda-forge ta-lib
    pip3 install hmile
 
