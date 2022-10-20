@@ -10,6 +10,9 @@ Welcome to 8mile-render's documentation!
 Quickstart
 ---------------
 
+Install with pip3
+~~~~~~~~~~~~~~~~~
+
 First we need to install ta-lib which 8Mile use for technical indicator calculation.
 
 .. code-block:: bash
@@ -24,6 +27,13 @@ It could take a moment to compile. Then, install 8mile with:
    
    pip3 install hmile
 
+Install with conda
+~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+   
+   conda install -c conda-forge ta-lib
+   pip3 install hmile
 
 First usage
 -----------
