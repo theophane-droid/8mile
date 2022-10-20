@@ -3,7 +3,7 @@ Data exporter
 
 Hmile provides the ability to export financial data to csv or elasticsearch.
 
-1. CSVDataExporter
+CSVDataExporter
 ~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: Hmile.DataExporter.CSVDataExporter
@@ -32,7 +32,7 @@ Hmile provides the ability to export financial data to csv or elasticsearch.
    # Export data to csv
    csv_exporter.export()
 
-2. ElasticDataExporter
+ElasticDataExporter
 ~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: Hmile.DataExporter.ElasticDataExporter
