@@ -15,11 +15,11 @@ build:
 sphinx:
     configuration: docs/conf.py
 
-python:
-  system_packages: true
-  install:
-    - method: pip
-      path: .
+# python:
+#   system_packages: true
+#   install:
+#     - method: pip
+#       path: .
 # If using Sphinx, optionally build your docs in additional formats such as PDF
 # formats:
 #    - pdf
