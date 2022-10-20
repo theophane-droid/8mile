@@ -8,7 +8,7 @@ from datetime import datetime
 
 import sys
 from Hmile.DataRenderer import TensorboardDataRenderer
-from Hmile.Exception import DataframeFormatException
+from Hmile.Exception import DataframeFormatException, EmptyDataRendererException
 from random import randint
 
 import unittest
@@ -86,8 +86,7 @@ class MissingColsTensorBoardRenderer(unittest.TestCase):
 
         # create renderer
         renderer = TensorboardDataRenderer(
-            'logs/',
-            activate_rew=True
+            'logs/'
         )
         self.fill_renderer(data, renderer)
         self.renderer = renderer
@@ -97,11 +96,25 @@ class MissingColsTensorBoardRenderer(unittest.TestCase):
         for index, row in data.iterrows():
             date = datetime.strptime(row["Date"], "%Y-%m-%d")
             renderer.append("open", row["open"], date)
-            renderer.append("short", row["short"], date)
-            renderer.append("money", row["money"], date)
-            renderer.append("rew", randint(1,100), date)
+            renderer.append("close", row["close"], date)
+            renderer.append("high", row["high"], date)
+            renderer.append("low", row["low"], date)
+            if index % 2 == 0:
+                renderer.append("volume", row["volume"], date)
     
     def test_renderer(self):
         self.fill_renderer(self.data, self.renderer)
         with self.assertRaises(DataframeFormatException):
+            self.renderer.render()
+
+
+class EmptyDataDrameTest(unittest.TestCase):
+    def setUp(self):
+        self.renderer = TensorboardDataRenderer(
+            'logs/',
+            activate_rew=True
+        )
+    
+    def test(self):
+        with self.assertRaises(EmptyDataRendererException):
             self.renderer.render()
