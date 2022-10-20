@@ -43,3 +43,11 @@ class NoFillPolicySet(Exception):
     
     def __str__(self) -> str:
         return 'No fill policy set and dates are missing in dataframe. Please set a fill policy like FillPolicyAkima or FillPolicyClip'
+
+
+class EmptyDataRendererException(Exception):
+    """Exception raised when trying to render an empty dataframe.
+    """
+    
+    def __str__(self) -> str:
+        return 'You tried to render an empty dataframe. Please check your data'

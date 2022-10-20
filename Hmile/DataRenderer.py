@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 import mplfinance as mpf
 import numpy as np
-from matplotlib import pyplot as plt
 from random import randint
 import io
 import IPython.display as IPydisplay
@@ -11,9 +10,9 @@ import numpy as np
 import pandas as pd
 from threading import Thread
 import pandas as pd
-import copy
 
-from .Exception import ColumnNameDoesNotExists, DataframeFormatException
+import copy
+from .Exception import ColumnNameDoesNotExists, DataframeFormatException, EmptyDataRendererException
 
 from random import randint
 
@@ -110,6 +109,17 @@ class DataRenderer:
     def render(self):
         """Launch the rendering of all appended data
         """
+        necessary_columns = ['open', 'high', 'low', 'close']
+        # if any of the columns is empty, raise EmptyDataRendererException
+        if any([self.columns[col].size == 0 for col in necessary_columns]):
+            raise EmptyDataRendererException()
+        
+        self.render_params['columns'] = self.columns
+        if self.threaded:
+            self.render_task = RenderTask(self.render_func, self.render_params)
+            self.render_task.start()
+        else:
+            self.render_func(self.render_params)
         if self.threaded :
             if self.render_task:
                 self.render_task.join(timeout=0.1)

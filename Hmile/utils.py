@@ -179,9 +179,6 @@ def flatten(list) :
         new += i
     return new
 
-
-
-
 def trainAE(df, 
             nb_out_components : int = 40, 
             is_normalized : bool = False,
