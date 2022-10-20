@@ -193,5 +193,6 @@ autodoc_mock_imports = ['matplotlib',
                         'pandas_ta',
                         'sklearn',
                         'requests',
-                        'tqdm'
+                        'tqdm',
+                        'pandas'
                     ]
