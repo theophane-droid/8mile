@@ -55,7 +55,7 @@ class DataProvider(ABC):
         """
         Return a pandas dataframe with the data.
         The main columns are named be open, high, low, close, volume. In index is the date.
-        The index name should be 'date'
+        The index name must be 'date'
         """
         raise NotImplementedError()
     
@@ -164,12 +164,7 @@ class YahooDataProvider(DataProvider):
         # else:
         #     raise ValueError('Interval must be day, hour or minute')
 
-    def getData(self) -> pd.DataFrame :
-        """Returns a pandas dataframe with the data.
-
-        Returns:
-            pd.DataFrame: _description_
-        """        
+    def getData(self) -> pd.DataFrame :        
         # convert interval into yahoo format
         yinterval = yahoointervalconverter[self.interval]
         # convert pair into yahoo format
@@ -206,7 +201,7 @@ class YahooDataProvider(DataProvider):
 
 class CSVDataProvider(DataProvider):
     """
-    Get data from CSV file. The file name must be in the format {pair}-{interval}.csv
+    Get data from CSV file. The file name must be in the format f-{pair}-{interval}.csv
     """
 
     def __init__(self,
@@ -227,8 +222,6 @@ class CSVDataProvider(DataProvider):
         self.directory = directory
 
     def getData(self) -> pd.DataFrame:
-        """Returns a pandas dataframe with the data.
-        """
         data = pd.read_csv(f'{self.directory}/f-{self.pair.lower()}-{self.interval}.csv')
         df =data.rename(columns={'Open': 'open', 
                                 'High': 'high', 
@@ -325,7 +318,7 @@ class ElasticDataProvider(DataProvider):
         data.rename({'@timestamp': 'date'}, axis=1, inplace=True)
         return data
 
-    def getData(self):
+    def getData(self) -> pd.DataFrame:
         start = datetime.strptime(self.start_date, '%Y-%m-%d')
         end = datetime.strptime(self.end_date, '%Y-%m-%d')
         data = self.download_data(self.pair, self.interval, start, end)
@@ -361,7 +354,7 @@ class PolygonDataProvider(DataProvider):
         json = r.get(url).json()
         return json['results']
         
-    def getData(self):
+    def getData(self) -> pd.DataFrame:
         data = []
         last_datetime = datetime.strptime(self.start_date, '%Y-%m-%d')
         end = datetime.strptime(self.end_date, '%Y-%m-%d')
