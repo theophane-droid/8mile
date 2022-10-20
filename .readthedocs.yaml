@@ -17,7 +17,6 @@ sphinx:
 
 python:
   system_packages: true
-  version: "3.7"
   install:
     - method: pip
       path: .
