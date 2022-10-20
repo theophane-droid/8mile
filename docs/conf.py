@@ -196,6 +196,6 @@ autodoc_mock_imports = ['matplotlib',
                         'elasticsearch',
                         'tqdm',
                         'numpy',
-                        'torch'
+                        'torch',
                         'pandas'
                     ]
