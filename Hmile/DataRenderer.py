@@ -129,7 +129,7 @@ class DataRenderer:
             self.render_func(copy.deepcopy(self.render_params))
 
 class TensorboardDataRenderer(DataRenderer):
-    """Render in tensorboard
+    """Render in tensorboard.
     Show open, high, low, close, volume and can show money, reward, short signals, long signals, and exit signals
     """
     def __init__(self, 

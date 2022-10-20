@@ -175,3 +175,4 @@ test.ipynb
 test.py
 models/
 .env
+*.save

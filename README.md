@@ -100,4 +100,4 @@ rm -rf _build
 
 ## 📚 Documentation
 
-[Find doc here](https://8mile.readthedocs.io/en/latest/index.html#Hmile.DataProvider.CSVDataProvider)
+[Find doc here](https://8mile.readthedocs.io/en/latest)

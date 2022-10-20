@@ -31,12 +31,13 @@ class DataTransformer:
 
 
 class TaDataTransformer(DataTransformer):
+    """Add all technical analysis indicators to the data 
+    """
     def __init__(self, dataprovider : DataProvider) -> None:
-        """Apply all technical analysis features to the data
-
+        """Create a new TaDataTransformer
+       
         Args:
             dataprovider (Hmile.DataProvider.Dataprovider): Dataprovider to transform
-            ta_features (list): list of technical analysis features to apply
         """
         super().__init__(dataprovider)
         # set dataprovider start date to 50 interval before
