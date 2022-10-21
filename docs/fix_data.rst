@@ -41,7 +41,7 @@ For exemple what can you do if your data looks like :
 
 The module FillPolicy helps you to fill the missing dates. By default if you don't choose a fill policy, if hmile detects missing dates it will raises a **NoFillPolicySet** exception.
 
-1. FillPolicyAkima
+FillPolicyAkima
 ~~~~~~~~~~~~~~~~~~
 .. autoclass:: Hmile.FillPolicy.FillPolicyAkima
    :members:
@@ -64,7 +64,7 @@ The module FillPolicy helps you to fill the missing dates. By default if you don
 
 The FillPolicyAkima class is based on the Akima interpolation method. So missing data will be generated from a statistical method.
 
-2. FillPolicyClip
+FillPolicyClip
 ~~~~~~~~~~~~~~~~~
 .. autoclass:: Hmile.FillPolicy.FillPolicyClip
    :members:
@@ -86,7 +86,7 @@ The FillPolicyAkima class is based on the Akima interpolation method. So missing
 **Remark :**
 This method will just ignore if there is missing data.
 
-3. FillPolicyError
+FillPolicyError
 ~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: Hmile.DataProvider.FillPolicyError

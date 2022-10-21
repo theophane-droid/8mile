@@ -3,7 +3,7 @@ Data transformer
 
 A data transformer allow you to apply changes on data. It can be used to add financial indicators, remove indicators, or compress columns.
 
-1. TaDataTransformer
+TaDataTransformer
 ~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: Hmile.DataTransformer.TaDataTransformer

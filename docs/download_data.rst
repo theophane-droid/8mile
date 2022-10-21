@@ -33,7 +33,7 @@ All DataProvider provide a method named ``get_data`` which return a pandas DataF
      - 10.72
      - 18536300
 
-1. Yahoofinance
+Yahoofinance
 ~~~~~~~~~~~~~~~
 
 .. autoclass:: Hmile.DataProvider.YahooDataProvider
@@ -53,7 +53,7 @@ All DataProvider provide a method named ``get_data`` which return a pandas DataF
    dp = YahooDataProvider(PAIR, START, END, interval=INTERVAL)
    data = dp.getData()
 
-2. Polygon.io
+Polygon.io
 ~~~~~~~~~~~~~
 
 .. autoclass:: Hmile.DataProvider.PolygonDataProvider
@@ -74,7 +74,7 @@ All DataProvider provide a method named ``get_data`` which return a pandas DataF
    dp = PolygonDataProvider(PAIR, START, END, API_KEY, interval=INTERVAL)
    data = dp.getData()
 
-3. CSV
+CSV
 ~~~~~~
 
 .. autoclass:: Hmile.DataProvider.CSVDataProvider
@@ -99,7 +99,7 @@ All DataProvider provide a method named ``get_data`` which return a pandas DataF
 
 The csv file must be named f-{pair}-{interval}.csv and present in the directory DATA_DIR. The csv file must contain the following columns : date, open, high, low, close, volume.
 
-4. Elasticsearch
+Elasticsearch
 ~~~~~~~~~~~~~~~~
 
 .. autoclass:: Hmile.DataProvider.ElasticDataProvider

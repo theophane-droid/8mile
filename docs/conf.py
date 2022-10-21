@@ -23,6 +23,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('.'))
 
 from Hmile.__version__ import __version__, __author__
 
@@ -192,5 +193,9 @@ autodoc_mock_imports = ['matplotlib',
                         'pandas_ta',
                         'sklearn',
                         'requests',
-                        'tqdm'
+                        'elasticsearch',
+                        'tqdm',
+                        'numpy',
+                        'torch',
+                        'pandas'
                     ]
