@@ -1,6 +1,6 @@
 import os
+import sys
 import unittest
-
 from Hmile.DataProvider import CSVDataProvider, ElasticDataProvider
 from Hmile.FillPolicy import FillPolicyAkima
 from Hmile.utils import trainAE
@@ -23,6 +23,15 @@ class TestTrainAE(unittest.TestCase):
         )
         self.dp.fill_policy = FillPolicyAkima('hour')
         self.transformer = TaDataTransformer(self.dp)
+
+
+    def test_normalization(self) :
+        df2 = self.transformer.transform()
+        
+        mean = df2.mean()
+        std = df2.std()
+        df2 = (df2-mean)/std
+        self.assertTrue(not df2.isnull().values.any())
 
     def test_trainae(self) :
         df = self.transformer.transform()
@@ -47,7 +56,7 @@ class TestTaFeaturesTransformer(unittest.TestCase):
     def test_transform(self) :
         df = self.transformer.transform()
         self.assertIsNotNone(df)
-        self.assertGreater(len(df.columns), 100)
+        self.assertGreater(len(df.columns), 50)
         self.assertEqual(df.index[0].strftime('%Y-%m-%d'), self.start_date)
         self.assertEqual(df.index[-1].strftime('%Y-%m-%d'), self.end_date)
 
@@ -65,3 +74,4 @@ class TestTransformer(unittest.TestCase):
     def test_transform(self) :
         with self.assertRaises(TypeError):
             self.transformer.transform()
+

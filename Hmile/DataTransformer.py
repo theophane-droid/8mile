@@ -44,16 +44,34 @@ class TaDataTransformer(DataTransformer):
         self.initial_start_date = self.dataprovider.start_date
         start_date = datetime.strptime(self.dataprovider.start_date, "%Y-%m-%d")
         start_date = min(
-            start_date  - interval_to_timedelta[self.dataprovider.interval] * 50, 
+            start_date  - interval_to_timedelta[self.dataprovider.interval] * 100, 
             start_date - timedelta(days=1)
         )
         self.dataprovider.start_date = start_date.strftime("%Y-%m-%d")
 
+    def integrity_for_normalization(self,data : pd.DataFrame) -> pd.DataFrame :
+        """drop columns with nans and check that std is not too low to avoid nan during normalizing
+
+        Args:
+            data (pd.DataFrame): data to check
+
+        Returns:
+            pd.DataFrame: data cleaned up
+        """
+        threshold = 0.01
+
+        data2 = (data-data.mean())/data.std()
+        data2.dropna(axis=1,inplace=True)
+        data = data[data2.columns]
+        return data
+
     def apply_transform(self, data : pd.DataFrame):
         data = self.dataprovider.getData()
         data.ta.strategy("all")
+        data = data[self.initial_start_date:]
+        data = self.integrity_for_normalization(data)
         # returns data from the start_date
-        return data[self.initial_start_date:]
+        return data
 
 class AEDataTransformer(DataTransformer):
     """Use auto-encoder to reduce dimensionality of data. If no model if found, a new model will be trained.
