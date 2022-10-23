@@ -13,7 +13,7 @@ import unittest
 class TestCheckArguments(unittest.TestCase):
     def test_start_after_end(self):
         with self.assertRaises(DataProviderArgumentException):
-            self.dp = YahooDataProvider('BTCUSD', '2022-01-02', '2022-01-01', interval='hour')
+            self.dp = YahooDataProvider(['BTCUSD'], '2022-01-02', '2022-01-01', interval='hour')
             
     def test_not_pair(self):
         with self.assertRaises(DataProviderArgumentException):
@@ -21,23 +21,23 @@ class TestCheckArguments(unittest.TestCase):
             
     def test_not_start(self):
         with self.assertRaises(DataProviderArgumentException):
-             self.dp = YahooDataProvider('BTCUSD', None, '2022-01-02', interval='hour')
+             self.dp = YahooDataProvider(['BTCUSD'], None, '2022-01-02', interval='hour')
     
     def test_not_end(self):
         with self.assertRaises(DataProviderArgumentException):
-             self.dp = YahooDataProvider('BTCUSD', '2022-01-01', None, interval='hour')
+             self.dp = YahooDataProvider(['BTCUSD'], '2022-01-01', None, interval='hour')
 
     def test_not_interval(self):
         with self.assertRaises(DataProviderArgumentException):
-             self.dp = YahooDataProvider('BTCUSD', '2022-01-01', '2022-01-02', interval=None)
+             self.dp = YahooDataProvider(['BTCUSD'], '2022-01-01', '2022-01-02', interval=None)
     
     def test_format_date_error(self):
         with self.assertRaises(DataProviderArgumentException):
-             self.dp = YahooDataProvider('BTCUSD', 'sh3lby', '2022-01-02', interval=None)
+             self.dp = YahooDataProvider(['BTCUSD'], 'sh3lby', '2022-01-02', interval=None)
 
 class TestCheckDataframe(unittest.TestCase):
     def setUp(self):
-        self.dp = YahooDataProvider('BTCUSD', '2022-01-01', '2022-01-03', interval='hour')
+        self.dp = YahooDataProvider(['BTCUSD'], '2022-01-01', '2022-01-03', interval='hour')
         
     def test_working(self):
         dataframe = pd.DataFrame({'date': ['2021-01-01', '2021-01-02', '2021-01-03'], 'open': [1, 2, 3], 'high': [3, 4, 5], 'low': [5, 6, 7], 'close': [7, 8, 9], 'volume': [9, 10, 11]})
@@ -67,7 +67,7 @@ class TestCheckDataframe(unittest.TestCase):
             
 class TestNormalizeColumnsOrder(unittest.TestCase):
     def setUp(self):
-        self.dp = YahooDataProvider('BTCUSD', '2022-01-01', '2022-01-03', interval='hour')
+        self.dp = YahooDataProvider(['BTCUSD'], '2022-01-01', '2022-01-03', interval='hour')
         self.dataframe = pd.DataFrame({'close': [7, 8], 'sh3lby2' : [1,2], 'sh3lby1' : [1,2], 'volume': [9, 10], 'high': [3, 4], 'open': [1, 2], 'low': [5, 6]})
 
     def test_normalize_columns_order(self):
@@ -77,16 +77,16 @@ class TestNormalizeColumnsOrder(unittest.TestCase):
 
 class TestYahooFinanceDataProvider(unittest.TestCase):
     def test_normal(self):
-        self.dp = YahooDataProvider('BTCUSD', '2022-01-01', '2022-01-03', interval='hour')
+        self.dp = YahooDataProvider(['BTCUSD'], '2022-01-01', '2022-01-03', interval='hour')
         self.dp.fill_policy = FillPolicyAkima('hour')
         data = self.dp.getData()
-        self.dp.checkDataframe(data)
+        self.dp.checkDataframe(data['BTCUSD'])
 
 class TestCSVDataProvider(unittest.TestCase):
     def test_normal(self):
-        self.dp = CSVDataProvider('BTCUSD', '2022-01-01', '2022-01-03', 'test/data/csvdataprovider', interval='hour')
+        self.dp = CSVDataProvider(['BTCUSD'], '2022-01-01', '2022-01-03', 'test/data/csvdataprovider', interval='hour')
         data = self.dp.getData()
-        self.dp.checkDataframe(data)
+        self.dp.checkDataframe(data['BTCUSD'])
 
 class TestElasticDataProvider(unittest.TestCase):
     def setUp(self) -> None:
@@ -96,7 +96,7 @@ class TestElasticDataProvider(unittest.TestCase):
         
     def test_normal(self):
         self.dp = ElasticDataProvider(
-            'BTCUSD',
+            ['BTCUSD'],
             '2022-01-01',
             '2022-01-03',
             self.elastic_url,
@@ -105,17 +105,30 @@ class TestElasticDataProvider(unittest.TestCase):
             interval='hour'
         )
         data = self.dp.getData()
-        self.dp.checkDataframe(data)
+        self.dp.checkDataframe(data['BTCUSD'])
     
 class TestPolygonDataProvider(unittest.TestCase):
     def setUp(self) -> None:
         self.polygon_key = os.environ['POLYGON_API_KEY']
     def test_normal(self):
         self.dp = PolygonDataProvider(
-            'BTCUSD',
+            ['BTCUSD'],
             '2022-01-01',
             '2022-01-03',
             self.polygon_key,
             'day')
         data = self.dp.getData()
-        self.dp.checkDataframe(data)
+        self.dp.checkDataframe(data['BTCUSD'])
+        
+class TestMultiPairYahoo(unittest.TestCase):
+    def setUp(self) -> None:
+        self.dp = YahooDataProvider(
+            ['BTCUSD', 'ETHUSD'],
+            '2022-01-01',
+            '2022-01-03',
+            'hour'
+        )
+    def test_normal(self):
+        data = self.dp.getData()
+        self.dp.checkDataframe(data['BTCUSD'])
+        self.dp.checkDataframe(data['ETHUSD'])

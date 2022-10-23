@@ -44,7 +44,7 @@ INTERVAL = "hour"
 PATH = 'output/csvdataexporter'
 
 
-yf_dp = YahooDataProvider(PAIR, START, END, interval=INTERVAL)
+yf_dp = YahooDataProvider([PAIR], START, END, interval=INTERVAL)
 data = TaFeaturesTransformer(yf_dp).transform()
 print(data.tail(10))
 ```

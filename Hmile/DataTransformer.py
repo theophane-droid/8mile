@@ -19,12 +19,16 @@ class DataTransformer:
         """Apply transformation
         """
         if isinstance(self.dataprovider, DataProvider):
-            return self.apply_transform(self.dataprovider.getData())
+            data = self.dataprovider.getData()
         elif isinstance(self.dataprovider, DataTransformer):
-            return self.apply_transform(self.dataprovider.transform())
+            data = self.dataprovider.transform()
         else:
             raise TypeError('dataprovider not a valid type. Must be DataProvider or DataTransformer')
         
+        return {
+            pair : self.apply_transform(data[pair]) for pair in data.keys()
+        }
+
     @abstractmethod
     def apply_transform(self, data : pd.DataFrame):
         raise NotImplementedError()
@@ -66,7 +70,6 @@ class TaDataTransformer(DataTransformer):
         return data
 
     def apply_transform(self, data : pd.DataFrame):
-        data = self.dataprovider.getData()
         data.ta.strategy("all")
         data = data[self.initial_start_date:]
         data = self.integrity_for_normalization(data)

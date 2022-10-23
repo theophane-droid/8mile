@@ -34,8 +34,10 @@ class CSVDataExporter(DataExporter):
         self.directory = directory
 
     def export(self):
-        name = f'{self.directory}/f-{self.dataprovider.pair.lower()}-{self.dataprovider.interval}.csv'
-        self.dataprovider.getData().to_csv(name, index=True)
+        data = self.dataprovider.getData()
+        for pair in data.keys():
+            name = f'{self.directory}/f-{pair.lower()}-{self.dataprovider.interval}.csv'
+            data[pair].to_csv(name, index=True)
 
 
 class ElasticDataExporter(DataExporter):
@@ -51,10 +53,11 @@ class ElasticDataExporter(DataExporter):
         self.es_pass = es_pass
     
     def export(self):
-        index_name = f'f-{self.dataprovider.pair.lower()}-{self.dataprovider.interval}'
         es = Elasticsearch(self.es_url, http_compress=True, verify_certs=False, http_auth=(self.es_user, self.es_pass))
-        data = self.dataprovider.getData()
-        helpers.bulk(es, ElasticDataExporter.doc_generator(data, index_name))
+        data = self.dataprovider.getData()         
+        for pair in data.keys():
+            index_name = f'f-{pair.lower()}-{self.dataprovider.interval}'
+            helpers.bulk(es, ElasticDataExporter.doc_generator(data[pair], index_name))
 
 
     def doc_generator(df, index_name):

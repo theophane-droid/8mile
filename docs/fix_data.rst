@@ -54,7 +54,7 @@ FillPolicyAkima
     from Hmile.DataProvider import CSVDataProvider
 
     # Create a data provider
-    data_provider = CSVDataProvider(PAIR, START, END, DATA_DIR, interval=INTERVAL)
+    data_provider = CSVDataProvider([PAIR], START, END, DATA_DIR, interval=INTERVAL)
     # We set the fill policy
     data_provider.fill_policy = FillPolicyAkima(INTERVAL)
     # We get the data, the fill policy will be applied automatically
@@ -77,7 +77,7 @@ FillPolicyClip
     from Hmile.DataProvider import CSVDataProvider
 
     # Create a data provider
-    data_provider = CSVDataProvider(PAIR, START, END, DATA_DIR, interval=INTERVAL)
+    data_provider = CSVDataProvider([PAIR], START, END, DATA_DIR, interval=INTERVAL)
     # We set the fill policy
     data_provider.fill_policy = FillPolicyClip(INTERVAL)
     # We get the data, the fill policy will be applied automatically
@@ -100,7 +100,7 @@ FillPolicyError
     from Hmile.DataProvider import CSVDataProvider
 
     # Create a data provider
-    data_provider = CSVDataProvider(PAIR, START, END, DATA_DIR, interval=INTERVAL)
+    data_provider = CSVDataProvider([PAIR], START, END, DATA_DIR, interval=INTERVAL)
     # We set the fill policy
     data_provider.fill_policy = FillPolicyError(INTERVAL)
     # We get the data, the fill policy will be applied automatically

@@ -8,7 +8,18 @@ For now hmile provide three ways to download the data:
 * **csv** : a csv file containing the data, it's efficient but it is not updated. 
 * **elasticsearch** : a elasticsearch database containing the data. You have a full control on data but you need to maintains and update it yourself. `See <https://www.elastic.co/fr/what-is/elasticsearch>`_  
 
-All DataProvider provide a method named ``get_data`` which return a pandas DataFrame formated as :
+All DataProvider provide a method named ``getData`` which returns a dictionnary of a pandas DataFrame. Each key is a name of a requested pair. Exemple :
+
+.. code-block:: json
+
+   {
+      "BTCUSD": pd.DataFrame 1,
+      "ETHUSD" pd.DataFrame 2
+   }
+
+
+
+The dataframes are formatted like that.
 
 .. list-table:: data
    :widths: 25 25 25 25 25 25 
@@ -50,8 +61,8 @@ Yahoofinance
    END = "2022-01-03"
    INTERVAL = "hour"
 
-   dp = YahooDataProvider(PAIR, START, END, interval=INTERVAL)
-   data = dp.getData()
+   dp = YahooDataProvider([PAIR], START, END, interval=INTERVAL)
+   data = dp.getData()[PAIR]
 
 Polygon.io
 ~~~~~~~~~~~~~
@@ -71,8 +82,8 @@ Polygon.io
    API_KEY = "YOUR_API_KEY"
    INTERVAL = "hour"
 
-   dp = PolygonDataProvider(PAIR, START, END, API_KEY, interval=INTERVAL)
-   data = dp.getData()
+   dp = PolygonDataProvider([PAIR], START, END, API_KEY, interval=INTERVAL)
+   data = dp.getData()[PAIR]
 
 CSV
 ~~~~~~
@@ -92,8 +103,8 @@ CSV
    DATA_DIR = "mydata/"
    INTERVAL = "hour"
 
-   dp = CSVDataProvider(PAIR, START, END, DATA_DIR, interval=INTERVAL)
-   data = dp.getData()
+   dp = CSVDataProvider([PAIR], START, END, DATA_DIR, interval=INTERVAL)
+   data = dp.getData()[PAIR]
 
 **Remark :**
 
@@ -119,5 +130,5 @@ Elasticsearch
    ELASTIC_PASSWORD = "mypassword"
    INTERVAL = "hour"
 
-   dp = ElasticDataProvider(PAIR, START, END, ELASTIC_URL, ELASTIC_USER, ELASTIC_PASSWORD, interval=INTERVAL)
-   data = dp.getData()
+   dp = ElasticDataProvider([PAIR], START, END, ELASTIC_URL, ELASTIC_USER, ELASTIC_PASSWORD, interval=INTERVAL)
+   data = dp.getData()[PAIR]

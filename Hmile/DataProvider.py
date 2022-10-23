@@ -30,11 +30,11 @@ class DataProvider(ABC):
     """
     Provide an abstraction layer on the way to get data from a source
     """
-    def __init__(self, pair, interval, start, end) -> None:
+    def __init__(self, pairs, interval, start, end) -> None:
         """Inialize a DataProvider
 
         Args:
-            pair (str): the pair to get ex : BTCUSD
+            pair (list): list of the pairs to get ex : ['BTCUSD', 'ETHUSD']
             interval (str): should be like day, hour or minute
             start (str): should be like 2020-12-31
             end (str): should be > start
@@ -43,19 +43,33 @@ class DataProvider(ABC):
             DataframeFormatException: When the dataframe does not correspond to Hmile norm
             DataProviderArgumentException: When the argument are not correct
         """
-        self.checkArguments(pair, interval, start, end)
-        self.pair = pair
+        self.checkArguments(pairs, interval, start, end)
+        self.pairs = pairs
         self.interval = interval
         self.start_date = start
         self.end_date = end
         self.fill_policy = FillPolicyError(self.interval)
 
-    @abstractmethod
     def getData(self) -> pd.DataFrame:
         """
-        Return a pandas dataframe with the data.
+        Return a dict of dataframes with the key the pair and the value the corresponding dataframe.
+        Every dataframe should have the same columns and the same index : 
         The main columns are named be open, high, low, close, volume. In index is the date.
-        The index name must be 'date'
+        The index name is'date'
+        """
+        return {
+            pair : self._getOnePair(pair) for pair in self.pairs
+        }
+       
+    @abstractmethod
+    def _getOnePair(self, pair_name) -> pd.DataFrame:
+        """Return the dataframe of the pair. This method should be implemented by the child class
+
+        Raises:
+            NotImplementedError: _description_
+
+        Returns:
+            pd.DataFrame: the dataframe of the pair between self.start_date and self.end_date with an interval of self.interval
         """
         raise NotImplementedError()
     
@@ -94,17 +108,17 @@ class DataProvider(ABC):
         return dataframe.reindex(columns=col_list)
     
 
-    def checkArguments(self, pair, interval, start, end):
+    def checkArguments(self, pairs, interval, start, end):
         """Check if the arguments are valid. pair should be like BTCUSD, interval should be in yahoointervalconverter, start and end should be like YYYY-MM-DD
         start should be before end. Length must be at least 3 interval.
         
         Args:
-            pair (str): The pair to get
+            pairs (list): list of pairs to get
             interval (str): The interval of the data
             start (str): The start date
             end (str) The end date
         """
-        if not pair:
+        if not pairs:
             raise DataProviderArgumentException('pair should not be empty')
         if not interval:
             raise DataProviderArgumentException('interval should not be empty')
@@ -164,11 +178,11 @@ class YahooDataProvider(DataProvider):
         # else:
         #     raise ValueError('Interval must be day, hour or minute')
 
-    def getData(self) -> pd.DataFrame :        
+    def _getOnePair(self, pair) -> pd.DataFrame :        
         # convert interval into yahoo format
         yinterval = yahoointervalconverter[self.interval]
         # convert pair into yahoo format
-        ypair = f'{self.pair[:3]}-{self.pair[3:]}'
+        ypair = f'{pair[:3]}-{pair[3:]}'
 
         data = yf.Ticker(ypair)
         data = data.history(start=self.start_date,
@@ -221,9 +235,9 @@ class CSVDataProvider(DataProvider):
         super().__init__(pair, interval, start_date, end_date)
         self.directory = directory
 
-    def getData(self) -> pd.DataFrame:
-        data = pd.read_csv(f'{self.directory}/f-{self.pair.lower()}-{self.interval}.csv')
-        df =data.rename(columns={'Open': 'open', 
+    def _getOnePair(self, pair) -> pd.DataFrame:
+        data = pd.read_csv(f'{self.directory}/f-{pair.lower()}-{self.interval}.csv')
+        df = data.rename(columns={'Open': 'open', 
                                 'High': 'high', 
                                 'Low': 'low', 
                                 'Close': 'close', 
@@ -318,10 +332,10 @@ class ElasticDataProvider(DataProvider):
         data.rename({'@timestamp': 'date'}, axis=1, inplace=True)
         return data
 
-    def getData(self) -> pd.DataFrame:
+    def _getOnePair(self, pair) -> pd.DataFrame:
         start = datetime.strptime(self.start_date, '%Y-%m-%d')
         end = datetime.strptime(self.end_date, '%Y-%m-%d')
-        data = self.download_data(self.pair, self.interval, start, end)
+        data = self.download_data(pair, self.interval, start, end)
         data.index = pd.to_datetime(data['date'])
         data.drop(columns=['date'], inplace=True)
         data = self.normalizeColumnsOrder(data)
@@ -354,14 +368,14 @@ class PolygonDataProvider(DataProvider):
         json = r.get(url).json()
         return json['results']
         
-    def getData(self) -> pd.DataFrame:
+    def _getOnePair(self, pair) -> pd.DataFrame:
         data = []
         last_datetime = datetime.strptime(self.start_date, '%Y-%m-%d')
         end = datetime.strptime(self.end_date, '%Y-%m-%d')
         while last_datetime < end:
             start_timestamp = int(last_datetime.timestamp() * 1000)
             end_timestamp = int((end).timestamp() * 1000)
-            current_data = self.download(self.pair, self.interval, start_timestamp, end_timestamp)
+            current_data = self.download(pair, self.interval, start_timestamp, end_timestamp)
             data += current_data
             last_datetime = datetime.fromtimestamp(current_data[-1]['t'] / 1000) + timedelta(hours=1)
         data = pd.DataFrame(data)

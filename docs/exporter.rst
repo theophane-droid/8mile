@@ -22,7 +22,7 @@ CSVDataExporter
    INTERVAL = "hour"
    OUTPUT_DIR = "my/output/dir"
 
-   dp = YahooDataProvider(PAIR, START, END, interval=INTERVAL) 
+   dp = YahooDataProvider([PAIR], START, END, interval=INTERVAL) 
 
    # We first need a source of data = a data provider
    data_provider = YahooDataProvider()
@@ -53,7 +53,7 @@ ElasticDataExporter
    ELASTIC_USER = "myuser"
    ELASTIC_PASSWORD = "mypassword"
 
-   dp = ElasticDataExporter(PAIR, START, END, interval=INTERVAL) 
+   dp = ElasticDataExporter([PAIR], START, END, interval=INTERVAL) 
 
    # We first need a source of data = a data provider
    data_provider = YahooDataProvider()

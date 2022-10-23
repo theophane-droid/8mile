@@ -36,11 +36,11 @@ TensorboardDataRenderer
     # we create a renderer object
     renderer = TensorboardDataRenderer('logs/')
     # we create a data provider object
-    dp = CSVDataProvider(PAIR, START, END, DATA_DIR, interval=INTERVAL)
+    dp = CSVDataProvider([PAIR], START, END, DATA_DIR, interval=INTERVAL)
     # we set a fill policy
     dp.fill_policy = FillPolicyAkima(INTERVAL)
     # we read data
-    data = dp.getData()
+    data = dp.getData()[PAIR]
     # we fill renderer
     fill_renderer(data, renderer)
     # we launch renderer

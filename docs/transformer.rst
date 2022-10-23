@@ -24,7 +24,7 @@ Check the `ta lib documentation <https://ta-lib.org/>`_ for more information.
    END = "2022-01-03"
    INTERVAL = "hour"
 
-   dp = YahooDataProvider(PAIR, START, END, interval=INTERVAL) 
+   dp = YahooDataProvider([PAIR], START, END, interval=INTERVAL) 
 
    # We first need a source of data = a data provider
    data_provider = YahooDataProvider()

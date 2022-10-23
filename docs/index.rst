@@ -50,7 +50,7 @@ We can begin with a simple usage of 8mile by downlading bitcoin data from yahoof
    END = "2022-01-03"
    INTERVAL = "hour"
 
-   dp = YahooDataProvider(PAIR, START, END, interval=INTERVAL)
+   dp = YahooDataProvider([PAIR], START, END, interval=INTERVAL)
    # used to fill eventual missing dates (optionnal)
    dp.fill_policy = FillPolicyAkima(INTERVAL)
 

@@ -13,7 +13,7 @@ class TestTrainAE(unittest.TestCase):
         self.elastic_user = os.environ['ELASTIC_USER']
         self.elastic_pass = os.environ['ELASTIC_PASS']
         self.dp = ElasticDataProvider(
-            'BTCUSD',
+            ['BTCUSD'],
             '2020-01-01',
             '2022-01-03',
             es_url=self.elastic_url,
@@ -26,7 +26,7 @@ class TestTrainAE(unittest.TestCase):
 
 
     def test_normalization(self) :
-        df2 = self.transformer.transform()
+        df2 = self.transformer.transform()['BTCUSD']
         
         mean = df2.mean()
         std = df2.std()
@@ -34,7 +34,7 @@ class TestTrainAE(unittest.TestCase):
         self.assertTrue(not df2.isnull().values.any())
 
     def test_trainae(self) :
-        df = self.transformer.transform()
+        df = self.transformer.transform()['BTCUSD']
         AE = trainAE(df,nb_epoch=10)
         self.assertIsNotNone(AE)
     
@@ -44,7 +44,7 @@ class TestTaFeaturesTransformer(unittest.TestCase):
         self.start_date = '2021-12-05'
         self.end_date = '2021-12-17'
         self.dp = CSVDataProvider(
-            'BTCUSD',
+            ['BTCUSD'],
             self.start_date,
             self.end_date,
             directory='test/data/csvdataprovider',
@@ -54,7 +54,7 @@ class TestTaFeaturesTransformer(unittest.TestCase):
         self.transformer = TaDataTransformer(self.dp)
 
     def test_transform(self) :
-        df = self.transformer.transform()
+        df = self.transformer.transform()['BTCUSD']
         self.assertIsNotNone(df)
         self.assertGreater(len(df.columns), 50)
         self.assertEqual(df.index[0].strftime('%Y-%m-%d'), self.start_date)

@@ -14,7 +14,7 @@ class TestCSVDataExporter(unittest.TestCase):
             os.mkdir(directory)
         except FileExistsError:
             pass
-        self.dp = CSVDataProvider('BTCUSD', '2021-01-01', '2022-01-03', 'test/data/csvdataprovider', interval='hour')
+        self.dp = CSVDataProvider(['BTCUSD'], '2021-01-01', '2022-01-03', 'test/data/csvdataprovider', interval='hour')
         self.dp.fill_policy = FillPolicyAkima('hour')
         self.exporter = CSVDataExporter(self.dp, directory)
         
@@ -28,7 +28,7 @@ class TestElasticDataExporter(unittest.TestCase):
         self.elastic_url = os.environ['ELASTIC_URL']
         self.elastic_user = os.environ['ELASTIC_USER']
         self.elastic_pass = os.environ['ELASTIC_PASS']
-        self.dp = CSVDataProvider('BTCUSD', '2021-01-01', '2022-01-03', 'test/data/csvdataprovider', interval='hour')
+        self.dp = CSVDataProvider(['BTCUSD'], '2021-01-01', '2022-01-03', 'test/data/csvdataprovider', interval='hour')
         self.dp.fill_policy = FillPolicyAkima('hour')
         self.exporter = ElasticDataExporter(
             self.dp,
@@ -39,3 +39,21 @@ class TestElasticDataExporter(unittest.TestCase):
         
     def test_normal(self):
         self.exporter.export()
+        
+class MultiCSVExport(unittest.TestCase):
+    def setUp(self):
+        directory = '/tmp/testtransformer'
+        # create directory if not exists
+        try:
+            os.mkdir(directory)
+        except FileExistsError:
+            pass
+        self.dp = CSVDataProvider(['BTCUSD', 'ETHUSD'], '2021-01-01', '2022-01-03', 'test/data/csvdataprovider', interval='hour')
+        self.dp.fill_policy = FillPolicyAkima('hour')
+        self.exporter = CSVDataExporter(self.dp, directory)
+        
+    def test(self):
+        self.exporter.export()
+        self.assertTrue(os.path.isfile('/tmp/testtransformer/f-btcusd-hour.csv'))
+        self.assertTrue(os.path.isfile('/tmp/testtransformer/f-ethusd-hour.csv'))
+    
