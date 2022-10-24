@@ -139,6 +139,7 @@ class TestMultiPairYahoo(unittest.TestCase):
         self.dp.checkDataframe(data['ETHUSD'])
 
 class TestPairNotAvailable(unittest.TestCase):
+    # ref issue #18
     def setUp(self) -> None:
         es_url = os.environ['ELASTIC_URL']
         es_user = os.environ['ELASTIC_USER']
