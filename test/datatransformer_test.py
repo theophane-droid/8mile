@@ -5,6 +5,7 @@ from Hmile.DataProvider import CSVDataProvider, ElasticDataProvider
 from Hmile.FillPolicy import FillPolicyAkima
 from Hmile.utils import trainAE
 from Hmile.DataTransformer import TaDataTransformer
+from Hmile.DataExporter import CSVDataExporter
 
 class TestTrainAE(unittest.TestCase):
     
@@ -37,7 +38,7 @@ class TestTrainAE(unittest.TestCase):
         df = self.transformer.transform()['BTCUSD']
         AE = trainAE(df,nb_epoch=10)
         self.assertIsNotNone(AE)
-    
+
 class TestTaFeaturesTransformer(unittest.TestCase):
     
     def setUp(self):
@@ -75,3 +76,20 @@ class TestTransformer(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.transformer.transform()
 
+class TestExportFromDatatransformer(unittest.TestCase):
+    # ref issue #14
+    def setUp(self):
+        self.dp = CSVDataProvider(
+            ['BTCUSD'],
+            '2021-12-05',
+            '2021-12-17',
+            directory='test/data/csvdataprovider',
+            interval='hour'
+        )
+        self.dp.fill_policy = FillPolicyAkima('hour')
+        self.transformer = TaDataTransformer(self.dp)
+        self.exporter = CSVDataExporter(self.transformer, 'test/data/csvdataexporter')
+    
+    def test_export(self) :
+        self.exporter.export()
+        self.assertTrue(os.path.exists('test/data/csvdataexporter/f-btcusd-hour.csv'))

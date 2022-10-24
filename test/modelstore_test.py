@@ -75,3 +75,26 @@ class LocalModelStoreTest(unittest.TestCase):
         self.storer.store(self.meta_model)
         result = self.storer.get(self.meta_model)
         self.assertTrue(os.path.exists('models'))
+        
+class MetaFieldTest(unittest.TestCase):
+    # ref issus #22
+    def setUp(self):
+        self.meta_model = MetaModel(
+            None,
+            0.8,
+            'meta_test',
+            ['a', 'b', 'c'],
+            ['meta_test', 'tag2'],
+            meta={'meta_field': 'meta_value'}
+        )
+        url = os.environ['ELASTIC_URL']
+        user = os.environ['ELASTIC_USER']
+        pass_ = os.environ['ELASTIC_PASS']
+        self.storer = ElasticMetaModelStore(url, user, pass_)
+        self.storer.store(self.meta_model)
+    
+    def test(self):
+        # get meta_test
+        results = self.storer.get('meta_test')[-1]
+        self.assertEqual(results.meta['meta_field'], 'meta_value')
+        

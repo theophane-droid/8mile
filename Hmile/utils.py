@@ -138,6 +138,7 @@ class AE(nn.Module):
     - the mean of the data used (for normalization) with self.mean
     - the std of the data used - ------------------ with self.std
     - the name of the columns of the dataset with self.column_names
+    
     Args:
         nn (_type_): _description_
     """

@@ -24,7 +24,8 @@ class MetaModel:
             description: str,
             columns_list: list,
             tags : list,
-            creation_date  : datetime = None):
+            creation_date  : datetime = None,
+            meta : dict = {}):
             """Create a MetaModel object.
                 model (nn.Module): The model to store.
                 performance (float): A arbitrary number to describe the performance of the model between 0 and 1.
@@ -32,12 +33,14 @@ class MetaModel:
                 columns_list (list): An ordered list of the columns used to train the model.
                 tags (list) : Keywords to describe the model. Can be use to filter the model store.
                 creation_date (_type_, optional): _description_. Defaults to now
+                meta (dict, optional): A dictionary to store any other information about the model. Defaults to {}.
             """
             self.model = model
             self.performance = performance
             self.description = description
             self.columns_list = columns_list
             self.tags = tags
+            self.meta = meta
             if type(creation_date) != type(None):
                 self.creation_date = creation_date
             else:
@@ -49,7 +52,8 @@ class MetaModel:
                 'description' : self.description,
                 'columns_list' : self.columns_list,
                 'tags' : self.tags,
-                'creation_date' : self.creation_date
+                'creation_date' : self.creation_date,
+                'meta' : self.meta
         }
 
 class MetaModelStore:
@@ -131,13 +135,15 @@ class ElasticMetaModelStore(MetaModelStore):
         results = []
         for r in es.search(body=query, index=index_name, size=10000)['hits']['hits']:
             data = r['_source']
+            meta = data['meta'] if 'meta' in data else {}
             results.append(MetaModel(
                 None,
                 data['performance'],
                 data['description'],
                 data['columns_list'],
                 data['tags'],
-                datetime.strptime(data['creation_date'], '%Y-%m-%dT%H:%M:%S.%f')
+                datetime.strptime(data['creation_date'], '%Y-%m-%dT%H:%M:%S.%f'),
+                meta
             ))
         results.sort(key=lambda x: x.creation_date)
         return results

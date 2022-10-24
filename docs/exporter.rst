@@ -33,7 +33,7 @@ CSVDataExporter
    csv_exporter.export()
 
 ElasticDataExporter
-~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: Hmile.DataExporter.ElasticDataExporter
    :members:

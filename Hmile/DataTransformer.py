@@ -16,7 +16,11 @@ class DataTransformer:
         self.dataprovider = dataprovider
 
     def transform(self):
-        """Apply transformation
+        """
+        Apply transformation. Return a dict of dataframes with the key the pair and the value the corresponding dataframe.
+        Every dataframe should have the same columns and the same index : 
+        The main columns are named be open, high, low, close, volume. In index is the date.
+        The index name is'date'
         """
         if isinstance(self.dataprovider, DataProvider):
             data = self.dataprovider.getData()
@@ -26,11 +30,16 @@ class DataTransformer:
             raise TypeError('dataprovider not a valid type. Must be DataProvider or DataTransformer')
         
         return {
-            pair : self.apply_transform(data[pair]) for pair in data.keys()
+            pair : self._apply_transform(data[pair]) for pair in data.keys()
         }
 
     @abstractmethod
-    def apply_transform(self, data : pd.DataFrame):
+    def _apply_transform(self, data : pd.DataFrame):
+        """Apply transformation to a dataframe. Must be implemented by the child class
+
+        Args:
+            data (pd.DataFrame): the normalized dataframe to transform
+        """
         raise NotImplementedError()
 
 
@@ -69,7 +78,7 @@ class TaDataTransformer(DataTransformer):
         data = data[data2.columns]
         return data
 
-    def apply_transform(self, data : pd.DataFrame):
+    def _apply_transform(self, data : pd.DataFrame):
         data.ta.strategy("all")
         data = data[self.initial_start_date:]
         data = self.integrity_for_normalization(data)
@@ -101,5 +110,5 @@ class AEDataTransformer(DataTransformer):
     def concat_columns_list(self):
         pass
 
-    def apply_transform(self, data : pd.DataFrame):
+    def _apply_transform(self, data : pd.DataFrame):
         pass

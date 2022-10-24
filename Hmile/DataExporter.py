@@ -3,6 +3,7 @@ from abc import abstractmethod
 from elasticsearch import Elasticsearch, helpers
 
 from Hmile.DataProvider import DataProvider
+from Hmile.DataTransformer import DataTransformer
 
 class DataExporter:
     """Export data to another format
@@ -18,6 +19,18 @@ class DataExporter:
     def export(self):
         """Do export
         """
+        if isinstance(self.dataprovider, DataProvider):
+            data = self.dataprovider.getData()
+            interval = self.dataprovider.interval
+        elif isinstance(self.dataprovider, DataTransformer):
+            data = self.dataprovider.transform()
+            interval = self.dataprovider.dataprovider.interval
+        else:
+            raise TypeError('dataprovider must be a DataProvider or a DataTransformer')
+        self.export_func(data, interval)
+    
+    @abstractmethod
+    def export_func(self, data, interval):
         raise NotImplementedError()
 
 class CSVDataExporter(DataExporter):
@@ -33,10 +46,9 @@ class CSVDataExporter(DataExporter):
         super().__init__(dataprovider)
         self.directory = directory
 
-    def export(self):
-        data = self.dataprovider.getData()
+    def export_func(self, data, interval):
         for pair in data.keys():
-            name = f'{self.directory}/f-{pair.lower()}-{self.dataprovider.interval}.csv'
+            name = f'{self.directory}/f-{pair.lower()}-{interval}.csv'
             data[pair].to_csv(name, index=True)
 
 
@@ -52,11 +64,10 @@ class ElasticDataExporter(DataExporter):
         self.es_user = es_user
         self.es_pass = es_pass
     
-    def export(self):
+    def export_func(self, data, interval):
         es = Elasticsearch(self.es_url, http_compress=True, verify_certs=False, http_auth=(self.es_user, self.es_pass))
-        data = self.dataprovider.getData()         
         for pair in data.keys():
-            index_name = f'f-{pair.lower()}-{self.dataprovider.interval}'
+            index_name = f'f-{pair.lower()}-{interval}'
             helpers.bulk(es, ElasticDataExporter.doc_generator(data[pair], index_name))
 
 

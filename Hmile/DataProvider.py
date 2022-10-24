@@ -30,11 +30,16 @@ class DataProvider(ABC):
     """
     Provide an abstraction layer on the way to get data from a source
     """
-    def __init__(self, pairs, interval, start, end) -> None:
+    def __init__(
+        self,
+        pairs : list,
+        interval : str,
+        start : str,
+        end : str) -> None:
         """Inialize a DataProvider
 
         Args:
-            pair (list): list of the pairs to get ex : ['BTCUSD', 'ETHUSD']
+            pairs (list): list of the pairs to get ex : ['BTCUSD', 'ETHUSD']
             interval (str): should be like day, hour or minute
             start (str): should be like 2020-12-31
             end (str): should be > start
@@ -153,30 +158,19 @@ class YahooDataProvider(DataProvider):
     """
 
     def __init__(self,
-            pair,
-            start_date,
-            end_date,
-            interval='hour') -> None:
+            pairs : list,
+            start_date : str,
+            end_date : str,
+            interval : str = 'hour') -> None:
         """Initialize a YahooDataProvider
 
         Args:
-            pair (str): exemple BTCUSD
+            pairs (list): list of the pairs to get ex : ['BTCUSD', 'ETHUSD']
             start_date (datetime.datetime): First date to get. Format : YYYY-MM-DD
             end_date (datetime.datetime): Last date to get. Format : YYYY-MM-DD
             interval (str, optional): Can be day, hour, or minute.
         """
-        super().__init__(pair, interval, start_date, end_date)
-        self.pair = pair
-        # add one interval to the end depending on the interval
-        end_date = datetime.strptime(end_date, '%Y-%m-%d')
-        # if interval == 'day':
-        #     self.end_date = end_date + timedelta(days=1)
-        # elif interval == 'hour':
-        #     self.end_date = end_date + timedelta(hours=1)
-        # elif interval == 'minute':
-        #     self.end_date = end_date + timedelta(minutes=1)
-        # else:
-        #     raise ValueError('Interval must be day, hour or minute')
+        super().__init__(pairs, interval, start_date, end_date)
 
     def _getOnePair(self, pair) -> pd.DataFrame :        
         # convert interval into yahoo format
@@ -219,20 +213,20 @@ class CSVDataProvider(DataProvider):
     """
 
     def __init__(self,
-        pair,
-        start_date,
-        end_date,
-        directory,
-        interval='hour'):
+        pairs : list,
+        start_date : str,
+        end_date : str,
+        directory : str,
+        interval : str = 'hour'):
         """Initialize a CSVDataProvider
 
         Args:
-            pair (str): exemple BTCUSD
+            pairs (list): list of the pairs to get ex : ['BTCUSD', 'ETHUSD']
             start_date (datetime.datetime): First date to get. Format : YYYY-MM-DD.
             end_date (datetime.datetime): Last date to get. Format : YYYY-MM-DD.
             interval (str, optional): Can be day, hour, or minute.
         """
-        super().__init__(pair, interval, start_date, end_date)
+        super().__init__(pairs, interval, start_date, end_date)
         self.directory = directory
 
     def _getOnePair(self, pair) -> pd.DataFrame:
@@ -256,13 +250,13 @@ class ElasticDataProvider(DataProvider):
        Main columns must be open, high, low, close, volume. And the date must be in the field @timestamp. 
     """
     def __init__(self,
-            pair,
-            start_date,
-            end_date,
-            es_url,
-            es_user,
-            es_pass,
-            interval='hour') -> None:
+            pairs : str,
+            start_date : str,
+            end_date : str,
+            es_url : str,
+            es_user : str,
+            es_pass : str,
+            interval : str = 'hour') -> None:
         """Initialize a ElasticsearchDataprovider
 
         Args:
@@ -274,7 +268,7 @@ class ElasticDataProvider(DataProvider):
             es_pass (str): password of the user for elasticsearch connection
             interval (str, optional): Can be day, hour, or minute.
         """
-        super().__init__(pair, interval, start_date, end_date)
+        super().__init__(pairs, interval, start_date, end_date)
         self.es_url = es_url
         self.es_user = es_user
         self.es_pass = es_pass
@@ -346,11 +340,11 @@ class PolygonDataProvider(DataProvider):
     """Download financial data from polygon.io
     """
     def __init__(self, 
-            pair,
-            start_date,
-            end_date,
-            api_key,
-            interval='hour'):
+            pairs : str,
+            start_date : str,
+            end_date : str,
+            api_key : str,
+            interval : str = 'hour'):
         """Create a PolygonDataProvider
 
         Args:
@@ -360,7 +354,7 @@ class PolygonDataProvider(DataProvider):
             api_key (str): api key for polygon.io
             interval (str, optional): Can be day, hour, or minute.
         """
-        super().__init__(pair, interval, start_date, end_date)
+        super().__init__(pairs, interval, start_date, end_date)
         self.api_key = api_key
         
     def download(self, pair, interval, start, end):

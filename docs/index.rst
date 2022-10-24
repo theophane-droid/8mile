@@ -70,3 +70,4 @@ To continue with hmile :
    exporter.rst
    transformer.rst
    modelstore.rst
+   utils.rst
