@@ -81,6 +81,7 @@ class TestTransformer(unittest.TestCase):
 class TestExportFromDatatransformer(unittest.TestCase):
     # ref issue #14
     def setUp(self):
+        
         self.dp = CSVDataProvider(
             ['BTCUSD'],
             '2021-12-05',

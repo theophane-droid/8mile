@@ -51,3 +51,17 @@ class EmptyDataRendererException(Exception):
     
     def __str__(self) -> str:
         return 'You tried to render an empty dataframe. Please check your data'
+
+
+class DataNotAvailableException(Exception):
+    """
+    This exception is raised when a dataprovider cannot deliver the data.
+    """
+    def __init__(self, pair, start_date, end_date) -> None:
+        super().__init__(self)
+        self.pair = pair
+        self.start_date = start_date
+        self.end_date = end_date
+    
+    def __str__(self) -> str:
+        return f'Data is not available. Maybe pair {self.pair} does not exist or the date range {self.start_date} - {self.end_date} is not available'

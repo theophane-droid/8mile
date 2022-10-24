@@ -12,7 +12,9 @@ import numpy as np
 
 from abc import ABC, abstractmethod
 
-from Hmile.Exception import DataframeFormatException, DataProviderArgumentException
+from Hmile.Exception import (DataframeFormatException,
+                             DataProviderArgumentException,
+                             DataNotAvailableException)
 from Hmile.FillPolicy import FillPolicyError
 
 yahoointervalconverter = {
@@ -62,9 +64,22 @@ class DataProvider(ABC):
         The main columns are named be open, high, low, close, volume. In index is the date.
         The index name is'date'
         """
-        return {
-            pair : self._getOnePair(pair) for pair in self.pairs
-        }
+        result = {}
+        for pair in self.pairs:
+            try:
+                dataframe = self._getOnePair(pair)
+            except Exception as e:
+                # we first check if the exception is not a Hmile exception
+                if isinstance(e, NotImplementedError):
+                    raise e
+                raise DataNotAvailableException(pair, self.start_date, self.end_date)
+            # if len dataframe == 0 we raise an exception
+            if dataframe.shape[0] == 0:
+                raise DataNotAvailableException(pair, self.start_date, self.end_date)
+            # we check the dataframe
+            self.checkDataframe(dataframe)
+            result[pair] = dataframe
+        return result
        
     @abstractmethod
     def _getOnePair(self, pair_name) -> pd.DataFrame:
@@ -204,7 +219,6 @@ class YahooDataProvider(DataProvider):
         data.index = data['date']
         data.drop(columns=['date'], inplace=True)
         data = self.normalizeColumnsOrder(data)
-        self.checkDataframe(data)
         return data
 
 class CSVDataProvider(DataProvider):
@@ -241,7 +255,6 @@ class CSVDataProvider(DataProvider):
         df.drop(columns=['date'], inplace=True)
         df = df[np.logical_and(df.index >= self.start_date, df.index <= self.end_date)]
         df = self.normalizeColumnsOrder(df)
-        self.checkDataframe(df)
         return df
 
 
@@ -333,7 +346,6 @@ class ElasticDataProvider(DataProvider):
         data.index = pd.to_datetime(data['date'])
         data.drop(columns=['date'], inplace=True)
         data = self.normalizeColumnsOrder(data)
-        self.checkDataframe(data)
         return data
 
 class PolygonDataProvider(DataProvider):
@@ -384,5 +396,4 @@ class PolygonDataProvider(DataProvider):
         data.index = pd.to_datetime(data['date'], unit='ms')
         data.drop(columns=['date', 'vw', 'n'], inplace=True)
         data = self.normalizeColumnsOrder(data)
-        self.checkDataframe(data)
         return data

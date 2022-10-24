@@ -1,4 +1,3 @@
-from typing import final
 import torch
 from torch import nn
 import pandas as pd
