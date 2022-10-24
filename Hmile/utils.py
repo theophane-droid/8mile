@@ -1,3 +1,4 @@
+from typing import final
 import torch
 from torch import nn
 import pandas as pd
@@ -135,16 +136,12 @@ class AE(nn.Module):
 
     - the encoder (can be used alone by self.encoder.forward(...))
     - the decoder (can be used alone by self.decoder.forward(...))
-    - the mean of the data used (for normalization) with self.mean
-    - the std of the data used - ------------------ with self.std
+    - the norm of the data used (for normalization) with self.norm (gives dict with mean/std for each pairs)
     - the name of the columns of the dataset with self.column_names
-    Args:
-        nn (_type_): _description_
     """
     def __init__(self, **kwargs):
         super().__init__()
-        self.mean = kwargs["mean"]
-        self.std = kwargs["std"]
+        self.norm = kwargs["norm"]
         self.column_names = kwargs["column_names"]
         nn_values = kwargs["nb_neurones"]
         nn_values.append(kwargs["input_shape"])
@@ -179,7 +176,41 @@ def flatten(list) :
         new += i
     return new
 
-def trainAE(df, 
+
+def concatAndNormDf(dict : dict, norm : bool= True) -> tuple :
+    """from a df dictionnary, return a single df in which all df are concatenated/normalized by pairs and return the mean and std of those df aswell in a dictionnary
+     !!!!    keep only columns that are available for all pairs   !!!!
+    Args:
+        dict (dict): dict of all df by pairs
+        norm (boolean) : normalize all the dataset if set to true. Defaults True
+    Return:
+
+        (pd.Dataframe, dict ): concatenated df from all pairs and dict of mean/std
+    """
+    init = True
+    finaldf = pd.DataFrame()
+    norm = {}
+    for pair, df in dict.items() :
+        mean = df.mean()
+        std = df.std()
+        inter = (df-mean)/std if norm else df
+        if init : 
+            finaldf = inter
+            init = False
+        else :
+            finaldf = pd.concat([finaldf,inter], ignore_index = True)
+        norm[pair] = { "mean" : mean, "std" : std}
+    finaldf.dropna(axis=1,inplace=True)
+    cols_to_keep = finaldf.columns
+    for pair, dict in norm.items() :
+        dict["mean"] = dict["mean"][cols_to_keep]
+        dict["std"] = dict["std"][cols_to_keep]
+        norm[pair] = dict
+    return finaldf, norm
+
+
+    pass
+def trainAE(pairs : dict, 
             nb_out_components : int = 40, 
             is_normalized : bool = False,
             display : bool = True,
@@ -192,7 +223,7 @@ def trainAE(df,
     """function to train an autoencoder
 
     Args:
-        df (Dataframe): dataframe on which the encoder will be train
+        pairs (dict): dict of pairs dataframe on which the autoencoder will be trained
         nb_out_components (int, optional): final number of features. Defaults to 40.
         is_normalized (bool, optional): specify if dataset is already normalized or need to be. Defaults to False.
         display (bool, optional): display results of the training. Defaults to True.
@@ -207,11 +238,7 @@ def trainAE(df,
         autoencoder : return the full autoencoder with mean and std of the dataset used and name of the columns
     """
     ## normalization ##
-
-    mean = df.mean()
-    std = df.std()
-    if not is_normalized :
-        df = (df-mean)/std
+    df, norm = concatAndNormDf(pairs, norm= True)
     
     ## architecture configuration ###
     if df.isnull().values.any() :
@@ -226,7 +253,7 @@ def trainAE(df,
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if display :
         print("device is {}".format(device))
-    model = AE(input_shape=df.shape[1],nb_neurones = archi, mean = mean,std=std,column_names=df.columns).to(device)
+    model = AE(input_shape=df.shape[1],nb_neurones = archi, norm = norm,column_names=df.columns).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     criterion = nn.MSELoss()
 
