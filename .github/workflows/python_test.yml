@@ -23,6 +23,8 @@ jobs:
       - name: Download ta_lib
         if: steps.cache_ta.outputs.cache-hit != 'true'
         run: |
+          id
+          pwd
           mkdir -p /dl/ta_lib
           cd /dl/ta_lib
           wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
