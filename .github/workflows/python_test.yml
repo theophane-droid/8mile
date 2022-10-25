@@ -1,5 +1,4 @@
 name: Python test
-
 on:
   push:
     branches:
@@ -18,7 +17,7 @@ jobs:
         id: cache_ta
         uses: actions/cache@v3
         with:
-          path: $HOME/ta_lib
+          path: ~/ta_lib
           key: ${{ runner.os }}-ta
       - name: Download ta_lib
         if: steps.cache_ta.outputs.cache-hit != 'true'
