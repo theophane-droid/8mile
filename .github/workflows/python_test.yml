@@ -18,14 +18,14 @@ jobs:
         id: cache_ta
         uses: actions/cache@v3
         with:
-          path: /dl/ta_lib
+          path: $HOME/ta_lib
           key: ${{ runner.os }}-ta
       - name: Download ta_lib
         if: steps.cache_ta.outputs.cache-hit != 'true'
         run: |
           id
           pwd
-          mkdir -p /dl/ta_lib
+          mkdir -p $HOME/ta_lib
           cd /dl/ta_lib
           wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
       - name: Install ta-lib
