@@ -15,12 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: cache ta
-        id: download-ta
+        id: download_ta
         uses: actions/cache@v3
         with:
-          path: ta_lib
+          path: ~/ta_lib
           key: ${{ runner.os }}-ta
-      - name: Download ta-lib
+      - name: Download ta_lib
         if: steps.download-ta.outputs.cache-hit != 'true'
         run: |
           mkdir ta_lib
