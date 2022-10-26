@@ -14,17 +14,10 @@ MetaModel
    :members:
    :inherited-members:
 
-MetaModelStore
+ModelStore
 ~~~~~~~~~~~~~~
 
-.. autoclass:: Hmile.ModelStore.ElasticMetaModelStore
-   :members:
-   :inherited-members:
-
-ModelStore
-~~~~~~~~~~
-
-.. autoclass:: Hmile.ModelStore.LocalModelStore
+.. autoclass:: Hmile.ModelStore.ElastiModelStore
    :members:
    :inherited-members:
 
