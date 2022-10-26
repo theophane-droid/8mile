@@ -1,3 +1,4 @@
+from typing import Dict
 from abc import abstractmethod
 
 from datetime import datetime, timedelta
@@ -9,18 +10,24 @@ from Hmile.ModelStore import ModelStore, ModelStore
 
 
 class DataTransformer:
-    """Abstraction class to apply data transformation
+    """
+    Abstraction class to apply data transformation
+    
+    :ivar dataprovider: The dataprovider to use to get the data
     """
 
     def __init__(self, dataprovider : DataProvider) -> None:
         self.dataprovider = dataprovider
 
-    def transform(self):
+    def transform(self) -> Dict[str, pd.DataFrame]:
         """
         Apply transformation. Return a dict of dataframes with the key the pair and the value the corresponding dataframe.
         Every dataframe should have the same columns and the same index : 
         The main columns are named be open, high, low, close, volume. In index is the date.
         The index name is'date'
+        
+        Returns:
+            Dict[str, pd.DataFrame]: The transformed data
         """
         if isinstance(self.dataprovider, DataProvider):
             data = self.dataprovider.getData()
@@ -34,17 +41,23 @@ class DataTransformer:
         }
 
     @abstractmethod
-    def _apply_transform(self, data : pd.DataFrame):
+    def _apply_transform(self, data : pd.DataFrame) -> pd.DataFrame:
         """Apply transformation to a dataframe. Must be implemented by the child class
 
         Args:
             data (pd.DataFrame): the normalized dataframe to transform
+            
+        Returns:
+            pd.DataFrame: The transformed dataframe
         """
         raise NotImplementedError()
 
 
 class TaDataTransformer(DataTransformer):
-    """Add all technical analysis indicators to the data 
+    """
+    Add all technical analysis indicators to the data 
+    
+    :ivar dataprovider: The dataprovider to use to get the data
     """
     def __init__(self, dataprovider : DataProvider) -> None:
         """Create a new TaDataTransformer
@@ -82,31 +95,3 @@ class TaDataTransformer(DataTransformer):
         data = self.integrity_for_normalization(data)
         # returns data from the start_date
         return data
-
-class AEDataTransformer(DataTransformer):
-    """Use auto-encoder to reduce dimensionality of data. If no model if found, a new model will be trained.
-    """
-
-    def __init__(
-            self,
-            dataprovider :
-            DataProvider,
-            modelstore : ModelStore,
-            metamodelstore : ModelStore) -> None:
-        """Create a new AEDataTransformer
-        
-
-        Args:
-            dataprovider (DataProvider): Data source
-            modelstore (ModelStore): Where to store or found the model
-            metamodelstore (MetaModelStore): Where to store or found the metamodel
-        """
-        super().__init__(dataprovider)
-        self.modelstore = modelstore
-        self.metamodelstore = metamodelstore
-
-    def concat_columns_list(self):
-        pass
-
-    def _apply_transform(self, data : pd.DataFrame):
-        pass

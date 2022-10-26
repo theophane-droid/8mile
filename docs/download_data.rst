@@ -49,6 +49,7 @@ Yahoofinance
 
 .. autoclass:: Hmile.DataProvider.YahooDataProvider
    :members:
+   :inherited-members:
 
 **Example :**
 
@@ -69,6 +70,7 @@ Polygon.io
 
 .. autoclass:: Hmile.DataProvider.PolygonDataProvider
    :members:
+   :inherited-members:
 
 **Example :**
 
@@ -90,6 +92,7 @@ CSV
 
 .. autoclass:: Hmile.DataProvider.CSVDataProvider
    :members:
+   :inherited-members:
 
 **Example :**
 
@@ -115,6 +118,7 @@ Elasticsearch
 
 .. autoclass:: Hmile.DataProvider.ElasticDataProvider
    :members:
+   :inherited-members:
 
 **Example :**
 

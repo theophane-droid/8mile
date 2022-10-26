@@ -6,7 +6,7 @@ import requests as r
 from datetime import datetime
 from elasticsearch import Elasticsearch
 from datetime import timedelta
-from typing import List
+from typing import List, Dict
 
 import numpy as np
 
@@ -39,7 +39,7 @@ class DataProvider(ABC):
     """
     def __init__(
         self,
-        pairs : list,
+        pairs : List[str],
         interval : str,
         start : str,
         end : str) -> None:
@@ -62,12 +62,15 @@ class DataProvider(ABC):
         self.end_date = end
         self.fill_policy = FillPolicyError(self.interval)
 
-    def getData(self) -> pd.DataFrame:
+    def getData(self) -> Dict[str, pd.DataFrame]:
         """
         Return a dict of dataframes with the key the pair and the value the corresponding dataframe.
         Every dataframe should have the same columns and the same index : 
         The main columns are named be open, high, low, close, volume. In index is the date.
         The index name is'date'
+        
+        Returns:
+            Dict[str, pd.DataFrame]: The dict of dataframes
         """
         result = {}
         for pair in self.pairs:
@@ -133,15 +136,23 @@ class DataProvider(ABC):
         return dataframe.reindex(columns=col_list)
     
 
-    def checkArguments(self, pairs, interval, start, end):
+    def checkArguments(
+        self,
+        pairs : List[str],
+        interval : str,
+        start : str,
+        end : str) -> None:
         """Check if the arguments are valid. pair should be like BTCUSD, interval should be in yahoointervalconverter, start and end should be like YYYY-MM-DD
         start should be before end. Length must be at least 3 interval.
         
         Args:
-            pairs (list): list of pairs to get
+            pairs (List[str]): list of pairs to get
             interval (str): The interval of the data
             start (str): The start date
             end (str) The end date
+            
+        Raises:
+            DataProviderArgumentException: When the arguments are not correct
         """
         if not pairs:
             raise DataProviderArgumentException('pair should not be empty')
@@ -186,10 +197,16 @@ class DataProvider(ABC):
 class YahooDataProvider(DataProvider):
     """
     Get data from Yahoo Finance
+    
+    :ivar pairs: list of pairs to get
+    :ivar interval: The interval of the data
+    :ivar start_date: The start date
+    :ivar end_date: The end date
+    :ivar fill_policy: The fill policy to use
     """
 
     def __init__(self,
-            pairs : list,
+            pairs : List[str],
             start_date : str,
             end_date : str,
             interval : str = 'hour') -> None:
@@ -240,10 +257,17 @@ class YahooDataProvider(DataProvider):
 class CSVDataProvider(DataProvider):
     """
     Get data from CSV file. The file name must be in the format f-{pair}-{interval}.csv
+    
+    :ivar pairs: list of pairs to get
+    :ivar interval: The interval of the data
+    :ivar start_date: The start date
+    :ivar end_date: The end date
+    :ivar fill_policy: The fill policy to use
+    :ivar directory: The directory where the csv files are
     """
 
     def __init__(self,
-        pairs : list,
+        pairs : List[str],
         start_date : str,
         end_date : str,
         directory : str,
@@ -251,7 +275,7 @@ class CSVDataProvider(DataProvider):
         """Initialize a CSVDataProvider
 
         Args:
-            pairs (list): list of the pairs to get ex : ['BTCUSD', 'ETHUSD']
+            pairs (List[str]): list of the pairs to get ex : ['BTCUSD', 'ETHUSD']
             start_date (datetime.datetime): First date to get. Format : YYYY-MM-DD.
             end_date (datetime.datetime): Last date to get. Format : YYYY-MM-DD.
             interval (str, optional): Can be day, hour, or minute.
@@ -290,11 +314,21 @@ class CSVDataProvider(DataProvider):
 
 
 class ElasticDataProvider(DataProvider):
-    """Get data from Elasticsearch. Index name must be in the format f-{pair}-{interval}.
-       Main columns must be open, high, low, close, volume. And the date must be in the field @timestamp. 
+    """
+    Get data from Elasticsearch. Index name must be in the format f-{pair}-{interval}.
+    Main columns must be open, high, low, close, volume. And the date must be in the field @timestamp. 
+    
+    :ivar pairs: list of pairs to get
+    :ivar interval: The interval of the data
+    :ivar start_date: The start date
+    :ivar end_date: The end date
+    :ivar fill_policy: The fill policy to use
+    :ivar es_url: The url of the elasticsearch server
+    :ivar es_user: The elasticsearch user to connect to
+    :ivar es_pass: The elasticsearch password to connect to
     """
     def __init__(self,
-            pairs : str,
+            pairs : List[str],
             start_date : str,
             end_date : str,
             es_url : str,
@@ -304,7 +338,7 @@ class ElasticDataProvider(DataProvider):
         """Initialize a ElasticsearchDataprovider
 
         Args:
-            pair (str): exemple BTCUSD
+            pairs (List[str]): exemple BTCUSD
             start_date (datetime.datetime): First date to get. Format : YYYY-MM-DD.
             end_date (datetime.datetime): Last date to get. Format : YYYY-MM-DD.
             es_url (str): url of the elasticsearch server, example : https://localhost:9200
@@ -396,10 +430,18 @@ class ElasticDataProvider(DataProvider):
         return pairs
 
 class PolygonDataProvider(DataProvider):
-    """Download financial data from polygon.io
+    """
+    Download financial data from polygon.io
+    
+    :ivar pairs: list of pairs to get
+    :ivar interval: The interval of the data
+    :ivar start_date: The start date
+    :ivar end_date: The end date
+    :ivar fill_policy: The fill policy to use
+    :ivar key: The polygon api key to use
     """
     def __init__(self, 
-            pairs : str,
+            pairs : List[str],
             start_date : str,
             end_date : str,
             api_key : str,
@@ -407,7 +449,7 @@ class PolygonDataProvider(DataProvider):
         """Create a PolygonDataProvider
 
         Args:
-            pair (str): exemple BTCUSD
+            pairs (List[str]): exemple BTCUSD
             start_date (datetime.datetime): First date to get. Format : YYYY-MM-DD.
             end_date (datetime.datetime): Last date to get. Format : YYYY-MM-DD.
             api_key (str): api key for polygon.io
