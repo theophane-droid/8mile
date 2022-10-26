@@ -20,7 +20,6 @@ class DataExporter:
         """
         self.dataprovider = dataprovider
 
-    @abstractmethod
     def export(self) -> None:
         """Apply export and store result
 
