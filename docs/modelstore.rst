@@ -4,7 +4,6 @@ Model store
 Hmile provides the ability to store and retrieve torch models. To do that we have built three base classes : 
 
 * MetaModel : model informations like name, description, performance, tags, etc.
-* MetaModelStore : a store for MetaModel
 * ModelStore : a store for torch models
 
 MetaModel
@@ -17,20 +16,19 @@ MetaModel
 ModelStore
 ~~~~~~~~~~~~~~
 
-.. autoclass:: Hmile.ModelStore.ElastiModelStore
+.. autoclass:: Hmile.ModelStore.ElasticModelStore
    :members:
    :inherited-members:
 
 Example
 ~~~~~~~
 
-This can be combined to store a model an its meta model as follow :
+This can be used to store a model an its meta model as follow :
 
 .. code-block:: python
 
-    from Hmile.ModelStore import MetaModel
-    from Hmile.ModelStore import ElasticMetaModelStore
-    from Hmile.ModelStore import LocalModelStore
+    from torch import nn
+    from Hmile.ModelStore import MetaModel, ElasticModelStore
 
     ELASTIC_URL = "https://myelastic.com:9200"
     ELASTIC_USER = "myuser"
@@ -51,7 +49,7 @@ This can be combined to store a model an its meta model as follow :
     )
 
     # we create a MetaModelStore object
-    meta_model_store = ElasticMetaModelStore(
+    meta_model_store = ElasticModelStore(
         ELASTIC_URL,
         ELASTIC_USER,
         ELASTIC_PASSWORD)
@@ -68,25 +66,23 @@ Then we can retrieve our model :
 
 .. code-block:: python
 
-    from Hmile.ModelStore import ElasticMetaModelStore
-    from Hmile.ModelStore import LocalModelStore
+    from Hmile.ModelStore import ElasticModelStore
 
     ELASTIC_URL = "https://myelastic.com:9200"
     ELASTIC_USER = "myuser"
     ELASTIC_PASSWORD = "mypassword"
 
     # we create a MetaModelStore object
-    meta_model_store = ElasticMetaModelStore(
+    meta_model_store = ElasticModelStore(
         ELASTIC_URL,
         ELASTIC_USER,
         ELASTIC_PASSWORD)
 
-    # we retrieve our model
-    meta = meta_model_store.get('test')
+    # we retrieve the list of models with the tag 'test'
+    meta_model_list = meta_model_store.get(tags='test')
 
-    # we create a now model storer
-    self.storer = LocalModelStore('my/models/path')
-    model = self.storer.get(meta)
+    # we now get the model
+    model = meta_model_list[-1].model
 
     # we can now use our model
     model(torch.rand(10))

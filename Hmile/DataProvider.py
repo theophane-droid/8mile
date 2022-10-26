@@ -1,12 +1,12 @@
+import os
 from logging.handlers import DatagramHandler
 import pandas as pd
 import yfinance as yf
-import time
 import requests as r
 from datetime import datetime
 from elasticsearch import Elasticsearch
-import pickle
 from datetime import timedelta
+from typing import List
 
 import numpy as np
 
@@ -31,6 +31,11 @@ interval_to_timedelta = {
 class DataProvider(ABC):
     """
     Provide an abstraction layer on the way to get data from a source
+    
+    :ivar pairs: list of the pairs to get ex : ['BTCUSD', 'ETHUSD']
+    :ivar interval: day, hour or minute
+    :ivar start: date of the first data to get
+    :ivar end: date of the last data to get
     """
     def __init__(
         self,
@@ -166,6 +171,17 @@ class DataProvider(ABC):
         diff = datetime.strptime(end, '%Y-%m-%d') - datetime.strptime(start, '%Y-%m-%d')
         if diff < min_diff:
             raise DataProviderArgumentException('Length must be at least 3 interval')
+        
+    def getAvailablePairs(self) -> List[str]:
+        """Return the list of available pairs
+
+        Raises:
+            NotImplementedError: if the current dataprovider does not implement this method
+
+        Returns:
+            List[str]: the list of available pairs
+        """
+        raise NotImplementedError(f'{self.__class__.__name__} does not implement getAvailablePairs()')
     
 class YahooDataProvider(DataProvider):
     """
@@ -257,6 +273,20 @@ class CSVDataProvider(DataProvider):
         df = self.normalizeColumnsOrder(df)
         return df
 
+    def getAvailablePairs(self) -> List[str]:
+        """Return the list of available pairs
+
+        Returns:
+            List[str]: the list of available pairs
+        """
+        files = os.listdir(self.directory)
+        pairs = []
+        for f in files:
+            if f.startswith('f-') and f.endswith(f'-{self.interval}.csv'):
+                pair = f[2:-len(f'-{self.interval}.csv')]
+                pairs.append(pair.upper())
+        return pairs
+
 
 class ElasticDataProvider(DataProvider):
     """Get data from Elasticsearch. Index name must be in the format f-{pair}-{interval}.
@@ -294,7 +324,7 @@ class ElasticDataProvider(DataProvider):
             http_auth=(self.es_user, self.es_pass),
         )
 
-    def download(self, from_, to, index_name):
+    def __download(self, from_, to, index_name):
         es = self.connect()
         query = {
             "query": {
@@ -314,7 +344,7 @@ class ElasticDataProvider(DataProvider):
         result = [x['_source'] for x in result]
         return result
     
-    def download_data(self, pair, interval, from_, to):
+    def __download_data(self, pair, interval, from_, to):
         index_name = f'f-{pair.lower()}_{interval}'
         step = {
             'minute': timedelta(minutes=1),
@@ -331,7 +361,7 @@ class ElasticDataProvider(DataProvider):
         data = []
         while beg < to:
 
-            data += self.download(beg, beg + step[interval] * 10000 if beg + step[interval] * 10000 < to else to, index_name)
+            data += self.__download(beg, beg + step[interval] * 10000 if beg + step[interval] * 10000 < to else to, index_name)
             beg += step[interval] * 10000
             end += step[interval] * 10000
         data = pd.DataFrame(data)
@@ -342,11 +372,26 @@ class ElasticDataProvider(DataProvider):
     def _getOnePair(self, pair) -> pd.DataFrame:
         start = datetime.strptime(self.start_date, '%Y-%m-%d')
         end = datetime.strptime(self.end_date, '%Y-%m-%d')
-        data = self.download_data(pair, self.interval, start, end)
+        data = self.__download_data(pair, self.interval, start, end)
         data.index = pd.to_datetime(data['date'])
         data.drop(columns=['date'], inplace=True)
         data = self.normalizeColumnsOrder(data)
         return data
+
+    def getAvailablePairs(self) -> List[str]:
+        """Return the list of available pairs
+
+        Returns:
+            List[str]: the list of available pairs
+        """
+        es = self.connect()
+        indices = es.cat.indices(h='index', s='index').split()
+        pairs = []
+        for index in indices:
+            if index.startswith('f-') and index.endswith(f'_{self.interval}'):
+                pair = index[2:-len(f'_{self.interval}')]
+                pairs.append(pair.upper())
+        return pairs
 
 class PolygonDataProvider(DataProvider):
     """Download financial data from polygon.io
@@ -369,7 +414,7 @@ class PolygonDataProvider(DataProvider):
         super().__init__(pairs, interval, start_date, end_date)
         self.api_key = api_key
         
-    def download(self, pair, interval, start, end):
+    def __download(self, pair, interval, start, end):
         url = f'https://api.polygon.io/v2/aggs/ticker/X:{pair}/range/1/{interval}/{start}/{end}?adjusted=true&sort=asc&limit=50000&apiKey=8RvtCtdRW2bFH8WBE9JoihuwmnFECybm'
         json = r.get(url).json()
         return json['results']
@@ -381,7 +426,7 @@ class PolygonDataProvider(DataProvider):
         while last_datetime < end:
             start_timestamp = int(last_datetime.timestamp() * 1000)
             end_timestamp = int((end).timestamp() * 1000)
-            current_data = self.download(pair, self.interval, start_timestamp, end_timestamp)
+            current_data = self.__download(pair, self.interval, start_timestamp, end_timestamp)
             data += current_data
             last_datetime = datetime.fromtimestamp(current_data[-1]['t'] / 1000) + timedelta(hours=1)
         data = pd.DataFrame(data)
@@ -397,3 +442,20 @@ class PolygonDataProvider(DataProvider):
         data.drop(columns=['date', 'vw', 'n'], inplace=True)
         data = self.normalizeColumnsOrder(data)
         return data
+
+    def getAvailablePairs(self, market : str = 'crypto') -> List[str]:
+        """Return the list of available pairs
+
+        Returns:
+            List[str]: the list of available pairs
+        """
+        url = f'https://api.polygon.io/v3/reference/tickers?market={market}&active=true&sort=ticker&order=asc&limit=5000&apiKey=8RvtCtdRW2bFH8WBE9JoihuwmnFECybm'
+        json = r.get(url).json()
+        pairs = []
+        
+        for pair in json['results']:
+            ticker = pair['ticker']
+            if ticker.startswith('X:'):
+                ticker = ticker[2:]
+            pairs.append(ticker)
+        return pairs
