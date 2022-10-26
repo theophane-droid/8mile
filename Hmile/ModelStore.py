@@ -132,8 +132,8 @@ class ElasticModelStore(ModelStore):
         if nb_results >= limit:
             return res + self.__search(index_name, query, limit=limit, search_after=res[-1]['_source']['creation_date'])
         return res
-    
-    def get(self, limit=10000) -> List[MetaModel]:
+
+    def get(self, limit=10000, **kwargs) -> List[MetaModel]:
         """Return a list of MetaModel objects, corresponding to the keyword arguments. Each meta model which match to each keyword arguments will be returned.
            Arguments can be :
             - performance : float

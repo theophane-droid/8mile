@@ -129,6 +129,12 @@ class DataTensorer:
         """
         return [10 for _ in range(DataTensorer.size)]
 
+def getActivateFunction(i : int ,index : int,normalize : bool) :
+    if i == index-1 and normalize:
+        return nn.Tanh()
+    return nn.PReLU()
+    
+
 
 class AE(nn.Module):
     """ Create an Autoencoder. this autoencoder contains severals interesting attributes :
@@ -138,15 +144,25 @@ class AE(nn.Module):
     - the norm of the data used (for normalization) with self.norm (gives dict with mean/std for each pairs)
     - the name of the columns of the dataset with self.column_names
     """
-    def __init__(self, **kwargs):
+    def __init__(self, norm : dict,column_names : list,input_shape : int, nb_neurones : list, normalize_output : bool = False):
+        """
+        Create Autoencoder depending on different parameters
+
+        Args:
+            norm (dict): dict of each mean and std for each paur
+            column_names (list): column_namethe final dataset
+            input_shape (int): input length
+            nb_neurones (list): list of layers with their number of neurones for the whole AE.
+            normalize_output (bool, optional): if true, output features of encoder will be btw [-1,1]. Defaults to False.
+        """
         super().__init__()
-        self.norm = kwargs["norm"]
-        self.column_names = kwargs["column_names"]
-        nn_values = kwargs["nb_neurones"]
-        nn_values.append(kwargs["input_shape"])
-        nn_values.insert(0,kwargs["input_shape"])
+        self.norm = norm
+        self.column_names = column_names
+        nn_values = nb_neurones
+        nn_values.append(input_shape)
+        nn_values.insert(0,input_shape)
         index = nn_values.index(np.min(nn_values))
-        self.encoder= nn.Sequential(*flatten([[nn.Linear(nn_values[i],nn_values[i+1]),nn.PReLU()] for i in range(index)]))
+        self.encoder= nn.Sequential(*flatten([[nn.Linear(nn_values[i],nn_values[i+1]),getActivateFunction(i,index,normalize_output)] for i in range(index)]))
         self.decoder = nn.Sequential(*flatten([[nn.Linear(nn_values[i],nn_values[i+1]),nn.PReLU()] for i in range(index,len(nn_values)-1)]))
         #self.last_layer = nn.Sequential(nn.Linear(nn_values[-2],nn_values[-1]),nn.PReLU())
         
@@ -163,8 +179,6 @@ class AE(nn.Module):
         reconstructed = self.decoder(encoded)
         return reconstructed
 
-
-
 def print_precision(initial_data : np.array, predicted_data : np.array) :
     diff = np.abs(initial_data - predicted_data)
     print("la moyenne des erreurs est {}".format(np.mean(np.mean(diff,axis=0))))
@@ -176,12 +190,12 @@ def flatten(list) :
     return new
 
 
-def concatAndNormDf(dict : dict, norm : bool= True) -> tuple :
+def concatAndNormDf(dict : dict, normalize : bool= True) -> tuple :
     """from a df dictionnary, return a single df in which all df are concatenated/normalized by pairs and return the mean and std of those df aswell in a dictionnary
      !!!!    keep only columns that are available for all pairs   !!!!
     Args:
         dict (dict): dict of all df by pairs
-        norm (boolean) : normalize all the dataset if set to true. Defaults True
+        normalize (boolean) : normalize all the dataset if set to true. Defaults True
     Return:
 
         (pd.Dataframe, dict ): concatenated df from all pairs and dict of mean/std
@@ -192,7 +206,7 @@ def concatAndNormDf(dict : dict, norm : bool= True) -> tuple :
     for pair, df in dict.items() :
         mean = df.mean()
         std = df.std()
-        inter = (df-mean)/std if norm else df
+        inter = (df-mean)/std if normalize else df
         if init : 
             finaldf = inter
             init = False
@@ -208,13 +222,13 @@ def concatAndNormDf(dict : dict, norm : bool= True) -> tuple :
     return finaldf, norm
 
 
-    pass
 def trainAE(pairs : dict, 
-            nb_out_components : int = 40, 
+            nb_out_components : int = 60, 
             is_normalized : bool = False,
             display : bool = True,
             test_percent : float = 0.1, 
             architecture : list = [200,150,100],
+            normalize_output : bool = False,
             nb_epoch : int = 200, 
             lr : float = 1e-4,
             batch_size : int = 128,
@@ -236,8 +250,8 @@ def trainAE(pairs : dict,
     Returns:
         autoencoder : return the full autoencoder with mean and std of the dataset used and name of the columns
     """
-    df, norm = concatAndNormDf(pairs, norm= True)
-    
+    ## normalization ##
+    df, norm = concatAndNormDf(pairs, normalize= not is_normalized)
     ## architecture configuration ###
     if df.isnull().values.any() :
         raise("error can't treat dataset with NaNs, please fix that !")
@@ -251,7 +265,7 @@ def trainAE(pairs : dict,
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if display :
         print("device is {}".format(device))
-    model = AE(input_shape=df.shape[1],nb_neurones = archi, norm = norm,column_names=df.columns).to(device)
+    model = AE(input_shape=df.shape[1],nb_neurones = archi, norm = norm,column_names=df.columns,normalize_output=normalize_output).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     criterion = nn.MSELoss()
 

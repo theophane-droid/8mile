@@ -84,8 +84,6 @@ class TaDataTransformer(DataTransformer):
         Returns:
             pd.DataFrame: data cleaned up
         """
-        threshold = 0.01
-
         data2 = (data-data.mean())/data.std()
         data2.dropna(axis=1,inplace=True)
         data = data[data2.columns]
