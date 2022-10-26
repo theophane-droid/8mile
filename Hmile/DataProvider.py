@@ -285,6 +285,7 @@ class CSVDataProvider(DataProvider):
             if f.startswith('f-') and f.endswith(f'-{self.interval}.csv'):
                 pair = f[2:-len(f'-{self.interval}.csv')]
                 pairs.append(pair.upper())
+        pairs.sort()
         return pairs
 
 
@@ -391,6 +392,7 @@ class ElasticDataProvider(DataProvider):
             if index.startswith('f-') and index.endswith(f'_{self.interval}'):
                 pair = index[2:-len(f'_{self.interval}')]
                 pairs.append(pair.upper())
+        pairs.sort()
         return pairs
 
 class PolygonDataProvider(DataProvider):
@@ -458,4 +460,5 @@ class PolygonDataProvider(DataProvider):
             if ticker.startswith('X:'):
                 ticker = ticker[2:]
             pairs.append(ticker)
+        pairs.sort()
         return pairs
