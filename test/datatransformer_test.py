@@ -38,7 +38,7 @@ class TestTrainAE(unittest.TestCase):
 
     def test_trainae(self) :
         df = self.transformer.transform()
-        AE = trainAE(df,nb_epoch=10)
+        AE = trainAE(df,60,is_normalized=False,architecture= [450,300,150], nb_epoch=10,normalize_output=True)
         self.assertIsNotNone(AE)
 
 class TestTaFeaturesTransformer(unittest.TestCase):
