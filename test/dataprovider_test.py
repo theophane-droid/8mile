@@ -92,6 +92,10 @@ class TestCSVDataProvider(unittest.TestCase):
         self.dp = CSVDataProvider(['BTCUSD'], '2022-01-01', '2022-01-03', 'test/data/csvdataprovider', interval='hour')
         data = self.dp.getData()
         self.dp.checkDataframe(data['BTCUSD'])
+    
+    def test_available_pairs(self):
+        self.dp = CSVDataProvider(['BTCUSD'], '2022-01-01', '2022-01-03', 'test/data/csvdataprovider', interval='hour')
+        self.assertEqual(self.dp.getAvailablePairs(), ['ETHUSD', 'BTCUSD'])
 
 class TestElasticDataProvider(unittest.TestCase):
     def setUp(self) -> None:
@@ -112,6 +116,19 @@ class TestElasticDataProvider(unittest.TestCase):
         data = self.dp.getData()
         self.dp.checkDataframe(data['BTCUSD'])
     
+    def test_available_pairs(self):
+        self.dp = ElasticDataProvider(
+            ['BTCUSD'],
+            '2022-01-01',
+            '2022-01-03',
+            self.elastic_url,
+            self.elastic_user,
+            self.elastic_pass,
+            interval='hour'
+        )
+        available_pairs = self.dp.getAvailablePairs()
+        self.assertTrue('BTCUSD' in available_pairs)
+    
 class TestPolygonDataProvider(unittest.TestCase):
     def setUp(self) -> None:
         self.polygon_key = os.environ['POLYGON_API_KEY']
@@ -124,6 +141,16 @@ class TestPolygonDataProvider(unittest.TestCase):
             'day')
         data = self.dp.getData()
         self.dp.checkDataframe(data['BTCUSD'])
+    
+    def test_get_available_pairs(self):
+        self.dp = PolygonDataProvider(
+            ['BTCUSD'],
+            '2022-01-01',
+            '2022-01-03',
+            self.polygon_key,
+            'day')
+        pairs = self.dp.getAvailablePairs()
+        self.assertTrue('BTCUSD' in pairs)
         
 class TestMultiPairYahoo(unittest.TestCase):
     def setUp(self) -> None:

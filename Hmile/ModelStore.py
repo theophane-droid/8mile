@@ -1,11 +1,11 @@
-import os
+from typing import Union, List
+import pickle
 import time
 from datetime import datetime
-from unittest import result
-import torch
 from torch import nn
 from abc import abstractmethod
 from elasticsearch import Elasticsearch
+import base64
 
 class MetaModel:
     """
@@ -17,13 +17,14 @@ class MetaModel:
     :ivar columns_list: an ordered list of the columns used to train the model
     :ivar tags: keywords to describe the model. This is the key value to search a MetaModel from a MetaModelStore
     :ivar creation_date: the datetime object when the model was created
+    :ivar meta: a dict object to store any other information about the model
     """
     def __init__(self,
-            model: nn.Module,
+            model: Union[nn.Module, str],
             performance: float,
             description: str,
-            columns_list: list,
-            tags : list,
+            columns_list: List[str],
+            tags : List[str],
             creation_date  : datetime = None,
             meta : dict = {}):
             """Create a MetaModel object.
@@ -35,7 +36,11 @@ class MetaModel:
                 creation_date (_type_, optional): _description_. Defaults to now
                 meta (dict, optional): A dictionary to store any other information about the model. Defaults to {}.
             """
-            self.model = model
+            if type(model) == str:
+                data = base64.decodebytes(model.encode('utf-8'))
+                self.model = pickle.loads(data)
+            else:
+                self.model = model
             self.performance = performance
             self.description = description
             self.columns_list = columns_list
@@ -47,16 +52,19 @@ class MetaModel:
                 self.creation_date = datetime.now()
     
     def __dict__(self):
+        model_data = pickle.dumps(self.model)
+        model_b64 = base64.b64encode(model_data).decode('utf-8')
         return {
                 'performance' : self.performance,
                 'description' : self.description,
                 'columns_list' : self.columns_list,
                 'tags' : self.tags,
                 'creation_date' : self.creation_date,
-                'meta' : self.meta
+                'meta' : self.meta,
+                'model' : model_b64
         }
 
-class MetaModelStore:
+class ModelStore:
     def __init__(self):
         """Abstraction to store meta values about models
         """
@@ -72,41 +80,16 @@ class MetaModelStore:
         raise NotImplementedError()
     
     @abstractmethod
-    def get(self, tag : str):
+    def get(self, **kwargs) -> List[MetaModel]:
         """Get back a list of meta objects, corresponding to the tag. Each meta model which contains this tag once will be returned.
 
         Args:
-            tag (str): tag to filter the meta objects
-
-        """
-        raise NotImplementedError()
-    
-class ModelStore:
-    def __init__(self):
-        """Abstraction to store model
-        """
-        raise NotImplementedError()
-    
-    @abstractmethod
-    def store(self, meta_model : MetaModel):
-        """Store the torch model contained in meta_model.model.
-
-        Args:
-            meta_model (MetaModel): MetaModel object to store
-        """
-        raise NotImplementedError()
-    
-    @abstractmethod
-    def get(self, meta_model : MetaModel):
-        """Get back a meta objects filled with the model. The model will be referenced as meta_model.model.
-
-        Args:
-            meta_model (str): meta_model to get the model back
+            kwargs (dict): A dict of values to filter the model store. Exemple : {'tag' : 'my_tag', 'performance' : 0.8} will return all the models with the tag 'my_tag' AND a performance of 0.8
 
         """
         raise NotImplementedError()
 
-class ElasticMetaModelStore(MetaModelStore):
+class ElasticModelStore(ModelStore):
     """Store meta models information in ElasticSearch in the index 'models'
     """
     def __init__(self, es_url : str, es_user : str, es_pass : str):
@@ -117,61 +100,61 @@ class ElasticMetaModelStore(MetaModelStore):
     def store(self, meta_model : MetaModel):
         index_name = 'models'
         es = Elasticsearch(self.es_url, http_compress=True, verify_certs=False, http_auth=(self.es_user, self.es_pass))
-        es.index(index=index_name, document=meta_model.__dict__())
-        # we wait for the document to be indexed
-        time.sleep(5)
-    
-    def get(self, tag : str) -> list:
-        index_name = 'models'
+        data = meta_model.__dict__()
+        es.index(index=index_name, document=data, refresh=True)
+        es.close()
+        
+    def __search(self, index_name, query, limit=10000, search_after=None):
+        """Search **query** in **index_name**. If results > **limit**, we split the query in two and search recursively. 
+
+        Args:
+            index_name (str) : The elasticsearch index to search
+            query (dict): an elastic formatted query
+            limit (int, optional): The maximum number of results to return, max to 10000. Defaults to 10000.
+            search_after (list, optional): The search_after parameter to paginate the results. Defaults to None.
+        """
+        print(query)
+        query['size'] = limit
+        query['sort'] = [{'creation_date' : 'asc'}]
+        if search_after:
+            query['search_after'] = [search_after]
         es = Elasticsearch(self.es_url, http_compress=True, verify_certs=False, http_auth=(self.es_user, self.es_pass))
-        # add doc
+        res = es.search(index=index_name, body=query)['hits']['hits']
+        nb_results = len(res)
+        print('nb_results : ', nb_results)
+        if nb_results >= limit:
+            return res + self.__search(index_name, query, limit=limit, search_after=res[-1]['_source']['creation_date'])
+        return res
+    
+    def get(self, limit=10000, **kwargs) -> List[MetaModel]:
+        for key in kwargs.keys():
+            if key not in ['tag', 'performance', 'description', 'columns_list', 'tags', 'creation_date']:
+                raise Exception(f'Key {key} is not a supported key to filter the model store')
+        index_name = 'models'
+        # query which match kwargs
         query = {
-            'query': {
-                'match': {
-                    'tags': tag
+            "query" : {
+                "bool" : {
+                    "must" : []
                 }
             }
         }
-        results = []
-        for r in es.search(body=query, index=index_name, size=10000)['hits']['hits']:
-            data = r['_source']
-            meta = data['meta'] if 'meta' in data else {}
-            results.append(MetaModel(
-                None,
-                data['performance'],
-                data['description'],
-                data['columns_list'],
-                data['tags'],
-                datetime.strptime(data['creation_date'], '%Y-%m-%dT%H:%M:%S.%f'),
-                meta
+        for key, value in kwargs.items():
+            query['query']['bool']['must'].append({"match" : {key : value}})
+        
+        # we search in the index
+        res = self.__search(index_name, query, limit=limit)
+        # we create a list of MetaModel objects
+        meta_model_list = []
+        for hit in res:
+            meta_model_list.append(MetaModel(
+                hit['_source']['model'],
+                hit['_source']['performance'],
+                hit['_source']['description'],
+                hit['_source']['columns_list'],
+                hit['_source']['tags'],
+                datetime.strptime(hit['_source']['creation_date'], '%Y-%m-%dT%H:%M:%S.%f'),
+                hit['_source']['meta']
             ))
-        results.sort(key=lambda x: x.creation_date)
-        return results
-
-
-class LocalModelStore(ModelStore):
-    """Store pytorch models in a local directory
-    """
-    def __init__(self, directory : str):
-        self.directory = directory
-    
-    def __generate_path(self, meta_model : MetaModel):
-        timestamp = meta_model.creation_date.timestamp()
-        tags = '_'.join(meta_model.tags)
-        name = f'{tags}_{timestamp}'
-        return f'{self.directory}/{name}'
-
-    
-    def store(self, meta_model : MetaModel):
-        # create dir if needed
-        if not os.path.exists(self.directory):
-            os.makedirs(self.directory)
-        path = self.__generate_path(meta_model)
-        torch.save(meta_model.model, path)
-        path = self.__generate_path(meta_model)
-        torch.save(meta_model.model, path)
-        
-        
-    def get(self, meta_model : MetaModel) -> list:
-        path = self.__generate_path(meta_model)
-        return torch.load(path)
+        meta_model_list.sort(key=lambda x: x.creation_date)
+        return meta_model_list

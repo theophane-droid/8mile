@@ -5,7 +5,7 @@ import pandas as pd
 import pandas_ta as ta
 
 from Hmile.DataProvider import DataProvider, interval_to_timedelta
-from Hmile.ModelStore import MetaModelStore, ModelStore
+from Hmile.ModelStore import ModelStore, ModelStore
 
 
 class DataTransformer:
@@ -92,7 +92,7 @@ class AEDataTransformer(DataTransformer):
             dataprovider :
             DataProvider,
             modelstore : ModelStore,
-            metamodelstore : MetaModelStore) -> None:
+            metamodelstore : ModelStore) -> None:
         """Create a new AEDataTransformer
         
 
