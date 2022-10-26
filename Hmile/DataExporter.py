@@ -1,3 +1,4 @@
+from typing import Union
 from abc import abstractmethod
 
 from elasticsearch import Elasticsearch, helpers
@@ -8,16 +9,23 @@ from Hmile.DataTransformer import DataTransformer
 class DataExporter:
     """Export data to another format
 
-    Args:
-        DataProvider (Hmile.DataProvider.Dataprovider): Dataprovider to export
+    :ivar dataprovider: Source of the data to export    
     """
     def __init__(self,
-        dataprovider : DataProvider):
+        dataprovider : Union[DataProvider, DataTransformer]):
+        """Initialize the DataExporter
+
+        Args:
+            dataprovider (Union[DataProvider, DataTransformer]): the source of the data to transform
+        """
         self.dataprovider = dataprovider
 
     @abstractmethod
-    def export(self):
-        """Do export
+    def export(self) -> None:
+        """Apply export and store result
+
+        Raises:
+            TypeError: if dataprovider is not a DataProvider or a DataTransformer
         """
         if isinstance(self.dataprovider, DataProvider):
             data = self.dataprovider.getData()
@@ -34,8 +42,14 @@ class DataExporter:
         raise NotImplementedError()
 
 class CSVDataExporter(DataExporter):
+    """
+    Export data to csv. The file name will be in the format {pair}-{interval}.csv
+    
+    :ivar dataprovider: Source of the data to export    
+    :ivar directory: directory in with the csv will be saved
+    """
     def __init__(self,
-        dataprovider : DataProvider,
+        dataprovider : Union[DataProvider, DataTransformer],
         directory : str):
         """Export data to csv. The file name will be in the format {pair}-{interval}.csv
 
@@ -53,6 +67,13 @@ class CSVDataExporter(DataExporter):
 
 
 class ElasticDataExporter(DataExporter):
+    """Export data to ElasticSearch. The index name will be in the format f-{pair}-{interval
+
+    :ivar dataprovider: Source of the data to export    
+    :ivar es_url: ElasticSearch url
+    :ivar es_user: ElasticSearch user
+    :ivar es_pass: ElasticSearch password
+    """
     def __init__(
         self,
         dataprovider: DataProvider,

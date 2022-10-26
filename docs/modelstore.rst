@@ -57,11 +57,6 @@ This can be used to store a model an its meta model as follow :
     # then we store our mode_model in it
     meta_model_store.store(meta)
 
-    # we can create a now model storer
-    self.storer = LocalModelStore('my/models/path')
-    self.storer.store(meta)
-
-
 Then we can retrieve our model :
 
 .. code-block:: python

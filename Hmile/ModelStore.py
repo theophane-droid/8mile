@@ -100,6 +100,11 @@ class ElasticModelStore(ModelStore):
         self.es_pass = es_pass
     
     def store(self, meta_model : MetaModel):
+        """Store a MetaModel object in elasticsearch in the index 'models'. If the index does not exist, it will be created.
+
+        Args:
+            meta_model (MetaModel): MetaModel object to store
+        """
         index_name = 'models'
         es = Elasticsearch(self.es_url, http_compress=True, verify_certs=False, http_auth=(self.es_user, self.es_pass))
         data = meta_model.__dict__()
@@ -128,12 +133,28 @@ class ElasticModelStore(ModelStore):
             return res + self.__search(index_name, query, limit=limit, search_after=res[-1]['_source']['creation_date'])
         return res
     
-    def get(self, limit=10000, **kwargs) -> List[MetaModel]:
+    def get(self, limit=10000) -> List[MetaModel]:
+        """Return a list of MetaModel objects, corresponding to the keyword arguments. Each meta model which match to each keyword arguments will be returned.
+           Arguments can be :
+            - performance : float
+            - description : str
+            - columns_list : List[str]
+            - tags : List[str]
+            - creation_date : datetime
+           
+        Args:
+            limit (int, optional): number of Elasticsearch results per pagination. Defaults to 10000.
+
+        Raises:
+            Exception: if the argument is not in the list of allowed arguments
+
+        Returns:
+            List[MetaModel]: the requested list of MetaModel objects
+        """
         for key in kwargs.keys():
             if key not in ['tag', 'performance', 'description', 'columns_list', 'tags', 'creation_date']:
                 raise Exception(f'Key {key} is not a supported key to filter the model store')
         index_name = 'models'
-        # query which match kwargs
         query = {
             "query" : {
                 "bool" : {

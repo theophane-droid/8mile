@@ -8,6 +8,7 @@ CSVDataExporter
 
 .. autoclass:: Hmile.DataExporter.CSVDataExporter
    :members:
+   :inherited-members:
 
 **Example :**
 
@@ -37,6 +38,7 @@ ElasticDataExporter
 
 .. autoclass:: Hmile.DataExporter.ElasticDataExporter
    :members:
+   :inherited-members:
 
 **Example :**
 

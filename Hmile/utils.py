@@ -222,7 +222,7 @@ def trainAE(pairs : dict,
     """function to train an autoencoder
 
     Args:
-        pairs (dict): dict of pairs dataframe on which the autoencoder will be trained
+        pairs (dict): dict of pairs dataframe on which the autoencoder will be trained.
         nb_out_components (int, optional): final number of features. Defaults to 40.
         is_normalized (bool, optional): specify if dataset is already normalized or need to be. Defaults to False.
         display (bool, optional): display results of the training. Defaults to True.
@@ -236,7 +236,6 @@ def trainAE(pairs : dict,
     Returns:
         autoencoder : return the full autoencoder with mean and std of the dataset used and name of the columns
     """
-    ## normalization ##
     df, norm = concatAndNormDf(pairs, norm= True)
     
     ## architecture configuration ###
