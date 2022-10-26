@@ -94,8 +94,11 @@ class ElasticRecursiveSearch(unittest.TestCase):
 class MetaFieldTest(unittest.TestCase):
     # ref issus #22
     def setUp(self):
+        self.model = nn.Sequential(
+            nn.Linear(10, 20)
+        )
         self.meta_model = MetaModel(
-            None,
+            self.model,
             0.8,
             'meta_test',
             ['a', 'b', 'c'],

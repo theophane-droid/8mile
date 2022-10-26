@@ -36,11 +36,13 @@ class MetaModel:
                 creation_date (_type_, optional): _description_. Defaults to now
                 meta (dict, optional): A dictionary to store any other information about the model. Defaults to {}.
             """
-            if type(model) == str:
+            if isinstance(model, str):
                 data = base64.decodebytes(model.encode('utf-8'))
                 self.model = pickle.loads(data)
-            else:
+            elif isinstance(model, nn.Module):
                 self.model = model
+            else:
+                raise TypeError('model must be a str base64 or a nn.Module')
             self.performance = performance
             self.description = description
             self.columns_list = columns_list

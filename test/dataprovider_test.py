@@ -95,7 +95,8 @@ class TestCSVDataProvider(unittest.TestCase):
     
     def test_available_pairs(self):
         self.dp = CSVDataProvider(['BTCUSD'], '2022-01-01', '2022-01-03', 'test/data/csvdataprovider', interval='hour')
-        self.assertEqual(self.dp.getAvailablePairs(), ['ETHUSD', 'BTCUSD'])
+        available_pairs = self.dp.getAvailablePairs()
+        self.assertEqual(available_pairs, ['BTCUSD', 'ETHUSD'])
 
 class TestElasticDataProvider(unittest.TestCase):
     def setUp(self) -> None:
