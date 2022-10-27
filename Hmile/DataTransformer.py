@@ -6,8 +6,8 @@ import pandas as pd
 import pandas_ta as ta
 
 from Hmile.DataProvider import DataProvider, interval_to_timedelta
-from Hmile.ModelStore import ModelStore, ModelStore
-
+from Hmile.ModelStore import ModelStore
+from Hmile.utils import merge_columns, get_number_lines
 
 class DataTransformer:
     """
@@ -26,6 +26,9 @@ class DataTransformer:
         The main columns are named be open, high, low, close, volume. In index is the date.
         The index name is'date'
         
+        when multiples pairs : the columns returned are only those belonging to every one. Raise an error if each pair doesn't have the same row number
+
+
         Returns:
             Dict[str, pd.DataFrame]: The transformed data
         """
@@ -36,9 +39,12 @@ class DataTransformer:
         else:
             raise TypeError('dataprovider not a valid type. Must be DataProvider or DataTransformer')
         
-        return {
+        transformed_pairs = {
             pair : self._apply_transform(data[pair]) for pair in data.keys()
         }
+        assert(len(set(get_number_lines(transformed_pairs))) == 1) #assure that each pair's df has the same number of rows
+        return merge_columns(transformed_pairs)
+
 
     @abstractmethod
     def _apply_transform(self, data : pd.DataFrame) -> pd.DataFrame:
@@ -90,6 +96,7 @@ class TaDataTransformer(DataTransformer):
         return data
 
     def _apply_transform(self, data : pd.DataFrame):
+        data = data[["open","high","low","close","volume"]]
         data.ta.strategy("all")
         data = data[self.initial_start_date:]
         data = self.integrity_for_normalization(data)

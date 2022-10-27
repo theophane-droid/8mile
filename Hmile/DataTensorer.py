@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 from textwrap import fill
 from Hmile.DataProvider import DataProvider,ElasticDataProvider, CSVDataProvider, PolygonDataProvider, YahooDataProvider
 from Hmile.FillPolicy import FillPolicyAkima, FillPolicyClip, FillPolicyError
+from Hmile.DataTransformer import TaDataTransformer
+from Hmile.utils import AE
 import torch
 
 
@@ -81,7 +83,7 @@ class SingleFeaturesDataTensorer(Tensorer):
 
     """
     def __init__(self,
-        episode_length : int,
+        episode_max_length : int,
         provider_type : str,
         provider_configuration : dict,
         nb_env : int,
@@ -116,18 +118,33 @@ class SingleFeaturesDataTensorer(Tensorer):
 
         provider : DataProvider = Provider[provider_type](**provider_configuration)
         provider.fill_policy = FillPolicy[fill_policy](interval)
-        self.data = provider.getData()
-        self.size = self.data.shape[0]
+
+        transformer = TaDataTransformer(provider)
+        self.data = transformer.transform()
+
+        self.nb_pairs = len(self.data)
+        self.pairs = list(self.data.keys())
+        self.shape = self.data[self.pairs[0]].shape
         self.nb_env = nb_env
         self.device = device
-        self.episode_length = episode_length
+        self.episode_max_length = episode_max_length
         self.create_tensor()
         
-    def create_tensor(self):
+    def create_tensors(self):
         self.current_step = torch.zeros(self.nb_env,device=self.device,dtype=torch.long)
-        self.provider = torch.zeros(self.nb_env,device=self.device,dtype=torch.float64)
-        self.reset()
+        self.indicators = torch.zeros(self.nb_pairs,*self.shape)
+        self.ohlcv = torch.zeros(self.nb_pairs,self.shape[0],5) #open high low close volume for each pair
+        for i,(_,df) in enumerate(self.data.items()):
+            ohlcv = df[["open","high","low","close","volume"]]
+            self.ohlcv[i] = torch.tensor(ohlcv.values,device=self.device)
+            self.indicators[i] = torch.tensor(df.values,device= self.device)
     
+    def apply_encoder(self, encoder : AE, is_normalized : bool = False) :
+        #TODO : redefine self.indicators 
+        #TODO : redefine self.shape
+        #TODO : mean and std are stored in AE for each pair...
+
+        pass
     def normalize(self, data):
 
         mean = torch.clone(data) # moyenne glissante
@@ -165,8 +182,8 @@ class SingleFeaturesDataTensorer(Tensorer):
         self.reset_by_id(torch.ones(self.nb_env,device=self.device,dtype=torch.bool))
                 
     def get_indicators(self):
-        norm_indicators = DataTensorer.norm_data[self.current_step]
-        indicators = DataTensorer.data[self.current_step]
+        norm_indicators = self.norm_data[self.current_step]
+        indicators = self.data[self.current_step]
         self.current_step+=1
         # return indicators from self.mean_window_size to end
         return norm_indicators, indicators
