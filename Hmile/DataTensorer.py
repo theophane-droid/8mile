@@ -131,7 +131,7 @@ class SingleFeaturesDataTensorer(Tensorer):
         self.create_tensor()
         
     def create_tensors(self):
-        self.current_step = torch.zeros(self.nb_env,device=self.device,dtype=torch.long)
+        self.current_step = torch.zeros(self.nb_env,2,device=self.device,dtype=torch.long)
         self.indicators = torch.zeros(self.nb_pairs,*self.shape)
         self.ohlcv = torch.zeros(self.nb_pairs,self.shape[0],5) #open high low close volume for each pair
         for i,(_,df) in enumerate(self.data.items()):
@@ -175,18 +175,25 @@ class SingleFeaturesDataTensorer(Tensorer):
         """
         if indices.shape[0] == 0 :
             return True
-        begin_indices = torch.randint(0,self.size-self.episode_length,(indices.shape[0],),device=self.device,dtype=torch.long)
-        self.current_step[indices] = begin_indices
+        begin_indices = torch.randint(0,self.shape[0]-self.episode_max_length,(indices.shape[0],),device=self.device,dtype=torch.long)
+        pair = torch.randint(0,self.nb_pairs,(indices.shape[0],),device=self.device,dtype=torch.long)
+        self.current_step[indices,0] = pair
+        self.current_step[indices,1] = begin_indices
 
     def reset(self):
         self.reset_by_id(torch.ones(self.nb_env,device=self.device,dtype=torch.bool))
                 
     def get_indicators(self):
-        norm_indicators = self.norm_data[self.current_step]
-        indicators = self.data[self.current_step]
-        self.current_step+=1
+        """return indicators and ohlcv for each env at each timestep
+
+        Returns:
+            tuple(torch.tensor, torch.tensor) : (indicators, ohlcv)
+        """
+        indicators = self.norm_data[self.current_step]
+        ohlcv = self.ohlcv[self.current_step]
+        self.current_step[:,1] += 1
         # return indicators from self.mean_window_size to end
-        return norm_indicators, indicators
+        return indicators, ohlcv
 
     def get_min_indices(self) -> list :
         return [-10 for _ in range(DataTensorer.size)] 
