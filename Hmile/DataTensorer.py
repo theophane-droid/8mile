@@ -3,7 +3,7 @@ from textwrap import fill
 from Hmile.DataProvider import DataProvider,ElasticDataProvider, CSVDataProvider, PolygonDataProvider, YahooDataProvider
 from Hmile.FillPolicy import FillPolicyAkima, FillPolicyClip, FillPolicyError
 from Hmile.DataTransformer import TaDataTransformer
-from Hmile.utils import AE
+from Hmile.utils import AE,apply_encoder, request_elastic_model, get_min_dict,get_max_dict
 import torch
 
 
@@ -93,7 +93,7 @@ class SingleFeaturesDataTensorer(Tensorer):
         end_date : str = "2022-06-04",
         fill_policy : str = "default",
         interval : str = "hour",
-        
+        encoder_configuration : dict = None
         ) -> None:
         """create the simulation environement for trading
 
@@ -110,6 +110,7 @@ class SingleFeaturesDataTensorer(Tensorer):
             end_date (str, optional): end date of dataset. Defaults to "2022-06-04".
             fill_policy (str, optionnal) : method to fill missing values (akimia/clip/error). see 8mile doc. Defaults to error
             interval (str, optional): interval between each time step. Defaults to "hour".
+            encoder_configuration (dict, optinal) : usefull if encoder stored in an Elastic DB and a config file, use it automatically
         """
         provider_configuration["pairs"] = pairs
         provider_configuration["start_date"] = start_date
@@ -128,7 +129,12 @@ class SingleFeaturesDataTensorer(Tensorer):
         self.nb_env = nb_env
         self.device = device
         self.episode_max_length = episode_max_length
-        self.create_tensor()
+        self.create_tensors()
+
+        if encoder_configuration != None :
+            AE = request_elastic_model(**encoder_configuration)
+            self.apply_encoder(AE)
+
         
     def create_tensors(self):
         self.current_step = torch.zeros(self.nb_env,2,device=self.device,dtype=torch.long)
@@ -138,14 +144,22 @@ class SingleFeaturesDataTensorer(Tensorer):
             ohlcv = df[["open","high","low","close","volume"]]
             self.ohlcv[i] = torch.tensor(ohlcv.values,device=self.device)
             self.indicators[i] = torch.tensor(df.values,device= self.device)
+        self.min = get_min_dict(self.data)
+        self.max = get_max_dict(self.data)
     
-    def apply_encoder(self, encoder : AE, is_normalized : bool = False) :
-        #TODO : redefine self.indicators 
-        #TODO : redefine self.shape
-        #TODO : mean and std are stored in AE for each pair...
+    def apply_encoder(self, encoder : AE) :
+        self.data = apply_encoder(encoder,self.data)
+        self.shape = self.data[self.pairs[0]].shape
+        self.indicators = torch.zeros(self.nb_pairs,*self.shape)
+        for i,(_,df) in enumerate(self.data.items()):
+            self.indicators[i] = torch.tensor(df.values,device= self.device)
+        if encoder.normalize_output :
+            self.min = [-1]*self.shape[1]
+            self.max = [1]*self.shape[1]
 
-        pass
-    def normalize(self, data):
+
+    def apply_rolling_normalization(self, data : torch.Tensor):
+
 
         mean = torch.clone(data) # moyenne glissante
         var = torch.clone(data) # variance glissante
@@ -160,7 +174,7 @@ class SingleFeaturesDataTensorer(Tensorer):
 
         diff = torch.sub(data, mean)
         out = torch.div(diff, torch.sqrt(var))
-        return torch.clip(out, min=MIN, max=MAX)
+        return out
 
     
 
@@ -193,10 +207,11 @@ class SingleFeaturesDataTensorer(Tensorer):
         ohlcv = self.ohlcv[self.current_step]
         self.current_step[:,1] += 1
         # return indicators from self.mean_window_size to end
+        #TODO : end that (need to be tested)
         return indicators, ohlcv
 
     def get_min_indices(self) -> list :
-        return [-10 for _ in range(DataTensorer.size)] 
+        return self.min 
 
     def get_max_indices(self) -> list :
-        return [10 for _ in range(DataTensorer.size)]
+        return self.max
