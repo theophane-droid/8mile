@@ -5,142 +5,81 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import numpy as np
 from tqdm import tqdm
-from Hmile.DataProvider import DataProvider
+from Hmile.ModelStore import ElasticModelStore
 import warnings
 warnings.filterwarnings("ignore")
 
-null = None
+def flatten(list) :
+    new = []
+    for i in list :
+        new += i
+    return new
 
-class DataTensorer:
-    """Can be used to transform data into pytorch tensor
-    """
-    data = null
-    norm_data = null
-    min = null
-    max = null
-    size = null
-    MIN = -10
-    MAX = 10
-    def __init__(
-        self,
-        dataprovider : DataProvider,
-        nb_env,
-        nb_data_per_session,
-        device,
-        mean_window_size=300,
-        window_size=-1
-        ) -> None:
-        """Initialize the DataTensorer
+def get_min_dict(pairs : dict) -> list:
+    min = None
+    for _,df in pairs :
+        if min is None :
+            min = df.min().values
+        else :
+            min = np.minimum(min,df.min().values)
 
-        Args:
-            dataprovider (DataProvider): Dataprovider to use to get the data
-            nb_env (int): size of dim 3 of the tensor
-            nb_data_per_session (str): size of dim 2 of the tensor
-            device (str): pytorch device to use
-            mean_window_size (int, optional): Window for rolling mean normalization. Defaults to 300.
-            window_size (int, optional): size of dim 1. Defaults to -1.
-        """        
+        if type(list(min)[0]) == list :
+            raise("error min is not a single list")
+        return list(min)
 
-        self.window_size = window_size
-        self.mean_window_size = mean_window_size
-        if DataTensorer.data == null :
-            df = dataprovider.getData()
-            df.fillna(method="ffill",inplace=True)
-            df.fillna(method="bfill",inplace=True)
-            DataTensorer.size = df.shape[1]
-            DataTensorer.data = torch.tensor(df.to_numpy(), device=device)
-            DataTensorer.norm_data = self.normalize(DataTensorer.data)
-        
-        self.size = DataTensorer.norm_data.shape[0]
-        self.nb_env = nb_env
-        self.nb_data_per_session = nb_data_per_session
-        self.device = device
-        self.create_tensor()
-        
+def get_max_dict(pairs : dict) :
+    max = None
+    for _,df in pairs :
+        if max is None :
+            max = df.max().values
+        else :
+            max = np.maximum(max,df.max().values)
+    
+        if type(list(max)[0]) == list :
+            raise("error max is not a single list")
+    return list(max)
 
-    def normalize(self, data):
-        """Apply rolling mean and variance normalization. 
-        The result is clipped between -10 and 10 
-        
-        Args:
-            data (torch.tensor): tensor to normalize
-        """
 
-        mean = torch.clone(data) # moyenne glissante
-        var = torch.clone(data) # variance glissante
-
-        for i in range (data.size()[0]):
-            if i < self.mean_window_size:
-                mean[i] = torch.mean(data[0:self.mean_window_size], dim=0)
-                var[i] = torch.var(data[0:self.mean_window_size], dim=0)
-            else:
-                mean[i] = torch.mean(data[i-self.mean_window_size:i], dim=0)
-                var[i] = torch.var(data[i-self.mean_window_size:i], dim=0)
-
-        diff = torch.sub(data, mean)
-        out = torch.div(diff, torch.sqrt(var))
-        return torch.clip(out, min=DataTensorer.MIN, max=DataTensorer.MAX)
-
-    def create_tensor(self):
-        self.current_step = torch.zeros(self.nb_env,device=self.device,dtype=torch.long)
-        self.provider = torch.zeros(self.nb_env,device=self.device,dtype=torch.float64)
-        self.reset()
-
-    def reset_by_id(self,indices) :
-        """Reset the current step for the given indices
-
-        Args:
-            indices (list): list of indices to reset
-        """
-        if indices.shape[0] == 0 :
-            return True
-        begin_indices = torch.randint(self.mean_window_size,self.size-self.nb_data_per_session-5,(indices.shape[0],),device=self.device,dtype=torch.long)
-        self.current_step[indices] = begin_indices
-
-    def reset(self):
-        """Reset the current step for all indices
-        """
-        self.reset_by_id(torch.ones(self.nb_env,device=self.device,dtype=torch.bool))
-                
-    def get_indicators(self):
-        """Returns normalized and unnormalized data
-        
-        Returns:
-            tuple: (unnormalized data : torch.Tensor, normalized data : torch.Tensor)"""
-
-        norm_indicators = DataTensorer.norm_data[self.current_step]
-        indicators = DataTensorer.data[self.current_step]
-        self.current_step+=1
-        return norm_indicators, indicators
-
-    def get_min_indices(self) -> list :
-        """Returns the min for each feature
-
-        Returns:
-            list: result
-        """
-        return [-10 for _ in range(DataTensorer.size)] 
-
-    def get_max_indices(self) -> list :
-        """Returns the max for each feature
-
-         Returns:
-            list: result
-        """
-        return [10 for _ in range(DataTensorer.size)]
 
 def getActivateFunction(i : int ,index : int,normalize : bool) :
     if i == index-1 and normalize:
         return nn.Tanh()
     return nn.PReLU()
-    
 
+def merge_columns(pairs : dict) :
+    """ keep only common indicators between multiples pairs
+
+    Args:
+        pairs (dict): dict of pairs
+
+    Returns:
+        dict of actuated pairs 
+    """
+    init = True
+    cols : pd.Index = None
+    for _,df in pairs.items() :
+        if init :
+            cols = df.columns
+            init = False
+        else :
+            cols = cols.intersection(df.columns)
+    cols = cols.drop_duplicates(keep='first')
+    to_keep = cols.values.tolist()
+    for pair,df in pairs.items() :
+        pairs[pair] = df[to_keep]
+    return pairs
+
+def get_number_lines(pairs : dict) :
+    lines = []
+    for _,df in pairs.items() :
+        lines.append(df.shape[0])
+    return lines
 
 class AE(nn.Module):
     """ Create an Autoencoder. this autoencoder contains severals interesting attributes :
 
-    - the encoder (can be used alone by self.encoder.forward(...))
-    - the decoder (can be used alone by self.decoder.forward(...))
+    - the encoder (can be used alone by self.encoder(...))
+    - the decoder (can be used alone by self.encoder(...))
     - the norm of the data used (for normalization) with self.norm (gives dict with mean/std for each pairs)
     - the name of the columns of the dataset with self.column_names
     """
@@ -149,7 +88,7 @@ class AE(nn.Module):
         Create Autoencoder depending on different parameters
 
         Args:
-            norm (dict): dict of each mean and std for each paur
+            norm (dict): dict of each mean and std for each pair
             column_names (list): column_namethe final dataset
             input_shape (int): input length
             nb_neurones (list): list of layers with their number of neurones for the whole AE.
@@ -158,6 +97,7 @@ class AE(nn.Module):
         super().__init__()
         self.norm = norm
         self.column_names = column_names
+        self.normalize_output = normalize_output
         nn_values = nb_neurones
         nn_values.append(input_shape)
         nn_values.insert(0,input_shape)
@@ -179,15 +119,65 @@ class AE(nn.Module):
         reconstructed = self.decoder(encoded)
         return reconstructed
 
+
+def request_elastic_model(es_url : str, es_user : str, es_pass : str, searching_args : dict) -> AE :
+    """seach in an es DB model and return it
+
+    Args:
+        es_url (str): url de la BDD elastic
+        es_user (str): user pour la bdd
+        es_pass (str): password for the user
+        searching args (dict): tags, description.... look at hmile doc for more information
+
+    Returns:
+        AE: autoencoder
+    """
+    # we create a MetaModelStore object
+    meta_model_store = ElasticModelStore(
+        es_url,
+        es_user,
+        es_pass)
+
+    # we retrieve the list of models with the tag 'test'
+    meta_model_list = meta_model_store.get(**searching_args)
+
+    # we now get the model
+    model = meta_model_list[-1].model
+    if model is not None :
+        return model
+
 def print_precision(initial_data : np.array, predicted_data : np.array) :
     diff = np.abs(initial_data - predicted_data)
     print("la moyenne des erreurs est {}".format(np.mean(np.mean(diff,axis=0))))
 
-def flatten(list) :
-    new = []
-    for i in list :
-        new += i
-    return new
+
+
+
+def apply_encoder(encoder : AE, pairs : dict) -> dict :
+    """apply the encoder part of an Autoencoder to a list of pairs
+
+    warning : the AE need to be trained with these pairs to be used with them. 
+    
+    Please do not normalize the indicators since it will be done with the values known by the AE for each pairs
+
+    Args:
+        encoder (AE): Autoencoder model to use for this transformation
+        pairs (dict): pairs to transforme
+
+    Returns:
+        dict: indicators returned
+    """
+    encoder.training = False
+
+    for pair,df in pairs.items() :
+        if not all(col in encoder.column_names for col in list(df.columns)) :
+            raise("error, indicators needed for autoencoder are not present in the dataset")
+        if not pair in encoder.norm :
+            raise("Autoencoder not trained with this pair")
+        df = (df - encoder.norm[pair]["mean"])/encoder.norm[pair]["std"]
+        df = df[encoder.column_names]
+        pairs[pair] = encoder.encoder(df)
+    return pairs
 
 
 def concatAndNormDf(dict : dict, normalize : bool= True) -> tuple :
