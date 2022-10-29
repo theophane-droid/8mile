@@ -29,24 +29,5 @@ class TestSingleFeatururesDatatensorer(unittest.TestCase):
         self.assertIsNotNone(self.dt1)
         self.assertIsNotNone(dt2)
         
-    def test_get_indicators(self):
-        for _ in range(10) :
-            ind = self.dt1.current_step[:]
-            self.dt1.get_indicators()
-            self.assertTrue(self.dt1.current_step[:,1] == ind[:,1]+1)
-            self.assertTrue(self.dt1.current_step[:,0] == ind[:,0])
 
-    def test_reset(self) :
-        self.dt1.reset()
-        for _ in range(20) :
-            self.dt1.get_indicators()
-        ind_to_reset = torch.zeros(self.dt1.nb_env)
-        ind_to_reset[[0,3,4,10,15]] = 1
-        prev_step = self.dt1.current_step[:]
-        self.dt1.reset_by_id(ind_to_reset)
-        self.assertTrue(prev_step[ind_to_reset] != self.dt1.current_step[ind_to_reset])
-        ind_to_reset = torch.ones(self.dt1.nb_env)-ind_to_reset
-        self.assertTrue(prev_step[ind_to_reset] == self.dt1.current_step[ind_to_reset])
-
-        self.assertTrue
 
