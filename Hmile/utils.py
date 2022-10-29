@@ -298,8 +298,8 @@ def trainAE(pairs : dict,
         outputs = model(batch_features)
         i_loss = criterion(outputs, batch_features)
         test_loss += i_loss.item()
-        if display :
-            print("test_loss : ", round(test_loss/len(test_loader), 4))    
+    if display :
+        print("test_loss : ", round(test_loss/len(test_loader), 4))    
     if display :
         Y = model(torch.Tensor(df.values))
         precision = print_precision(df.values,Y.cpu().detach().numpy())
