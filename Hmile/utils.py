@@ -148,7 +148,9 @@ def request_elastic_model(es_url : str, es_user : str, es_pass : str, searching_
 
 def print_precision(initial_data : np.array, predicted_data : np.array) :
     diff = np.abs(initial_data - predicted_data)
-    print("la moyenne des erreurs est {}".format(np.mean(np.mean(diff,axis=0))))
+    prec = np.mean(np.mean(diff,axis=0))
+    print("la moyenne des erreurs est {}".format(prec))
+    return prec
 
 
 
@@ -239,6 +241,7 @@ def trainAE(pairs : dict,
 
     Returns:
         autoencoder : return the full autoencoder with mean and std of the dataset used and name of the columns
+        precision : return precision of the model
     """
     ## normalization ##
     df, norm = concatAndNormDf(pairs, normalize= not is_normalized)
@@ -290,7 +293,7 @@ def trainAE(pairs : dict,
         
     ##test phase
     test_loss = 0
-    for _ in test_loader :
+    for batch_features in test_loader :
         batch_features = batch_features.float().to(device)
         outputs = model(batch_features)
         i_loss = criterion(outputs, batch_features)
@@ -299,10 +302,10 @@ def trainAE(pairs : dict,
             print("test_loss : ", round(test_loss/len(test_loader), 4))    
     if display :
         Y = model(torch.Tensor(df.values))
-        print_precision(df.values,Y.cpu().detach().numpy())
+        precision = print_precision(df.values,Y.cpu().detach().numpy())
         plt.plot(l_loss)
         plt.grid()
         plt.title("evolution courbe de loss")
         plt.show()
 
-    return model
+    return model, precision

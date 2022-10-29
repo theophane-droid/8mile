@@ -128,6 +128,10 @@ class SingleFeaturesDataTensorer(Tensorer):
         self.shape = self.data[self.pairs[0]].shape
         self.nb_env = nb_env
         self.device = device
+        if self.device == "cuda" :
+            if not torch.cuda.is_available() :
+                self.device = "cpu"
+        
         self.episode_max_length = episode_max_length
         self.create_tensors()
 
@@ -203,7 +207,7 @@ class SingleFeaturesDataTensorer(Tensorer):
         Returns:
             tuple(torch.tensor, torch.tensor) : (indicators, ohlcv)
         """
-        indicators = self.norm_data[self.current_step]
+        indicators = self.indicators[self.current_step]
         ohlcv = self.ohlcv[self.current_step]
         self.current_step[:,1] += 1
         # return indicators from self.mean_window_size to end
