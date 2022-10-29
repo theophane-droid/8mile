@@ -73,8 +73,8 @@ Then we can retrieve our model :
         ELASTIC_USER,
         ELASTIC_PASSWORD)
 
-    # we retrieve the list of models with the tag 'test'
-    meta_model_list = meta_model_store.get(tags='test')
+    # we retrieve the models with the tag 'test'
+    meta_model_list = meta_model_store.get(tags=['test'])
 
     # we now get the model
     model = meta_model_list[-1].model

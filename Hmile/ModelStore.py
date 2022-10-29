@@ -94,10 +94,24 @@ class ModelStore:
 class ElasticModelStore(ModelStore):
     """Store meta models information in ElasticSearch in the index 'models'
     """
-    def __init__(self, es_url : str, es_user : str, es_pass : str):
+    def __init__(
+            self,
+            es_url : str,
+            es_user : str,
+            es_pass : str,
+            index_name : str = 'models'):
+        """Create an ElasticModelStore object
+
+        Args:
+            es_url (str): specify the url of the elasticsearch instance to use with the port. Exemple : 'http://localhost:9200'
+            es_user (str): the username to connect to the elasticsearch instance
+            es_pass (str): the password to connect to the elasticsearch instance
+            index_name (str, optional): The elasticsearch index name to store/get models. Defaults to 'models'.
+        """
         self.es_url = es_url
         self.es_user = es_user
         self.es_pass = es_pass
+        self.index_name = index_name
     
     def store(self, meta_model : MetaModel):
         """Store a MetaModel object in elasticsearch in the index 'models'. If the index does not exist, it will be created.
@@ -105,10 +119,9 @@ class ElasticModelStore(ModelStore):
         Args:
             meta_model (MetaModel): MetaModel object to store
         """
-        index_name = 'models'
         es = Elasticsearch(self.es_url, http_compress=True, verify_certs=False, http_auth=(self.es_user, self.es_pass))
         data = meta_model.__dict__()
-        es.index(index=index_name, document=data, refresh=True)
+        es.index(index=self.index_name, document=data, refresh=True)
         es.close()
         
     def __search(self, index_name, query, limit=10000, search_after=None):
@@ -139,7 +152,7 @@ class ElasticModelStore(ModelStore):
             - performance : float
             - description : str
             - columns_list : List[str]
-            - tags : List[str]
+            - tags : List[str] this list must be a subset of the tags of the searched model
             - creation_date : datetime
            
         Args:
@@ -152,9 +165,8 @@ class ElasticModelStore(ModelStore):
             List[MetaModel]: the requested list of MetaModel objects
         """
         for key in kwargs.keys():
-            if key not in ['tag', 'performance', 'description', 'columns_list', 'tags', 'creation_date']:
+            if key not in ['performance', 'description', 'columns_list', 'tags', 'creation_date']:
                 raise Exception(f'Key {key} is not a supported key to filter the model store')
-        index_name = 'models'
         query = {
             "query" : {
                 "bool" : {
@@ -163,10 +175,13 @@ class ElasticModelStore(ModelStore):
             }
         }
         for key, value in kwargs.items():
-            query['query']['bool']['must'].append({"match" : {key : value}})
+            if key == 'tags':
+                query['query']['bool']['must'].append({'match' : {'tags' : value[0]}})
+            else:
+                query['query']['bool']['must'].append({"match" : {key : value}})
         
         # we search in the index
-        res = self.__search(index_name, query, limit=limit)
+        res = self.__search(self.index_name, query, limit=limit)
         # we create a list of MetaModel objects
         meta_model_list = []
         for hit in res:
@@ -180,4 +195,6 @@ class ElasticModelStore(ModelStore):
                 hit['_source']['meta']
             ))
         meta_model_list.sort(key=lambda x: x.creation_date)
+        if 'tags' in kwargs.keys():
+            meta_model_list = [meta_model for meta_model in meta_model_list if set(kwargs['tags']).issubset(set(meta_model.tags))]
         return meta_model_list
