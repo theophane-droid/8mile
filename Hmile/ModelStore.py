@@ -152,7 +152,7 @@ class ElasticModelStore(ModelStore):
             - performance : float
             - description : str
             - columns_list : List[str]
-            - tags : List[str]
+            - tags : List[str] this list must be a subset of the tags of the searched model
             - creation_date : datetime
            
         Args:
