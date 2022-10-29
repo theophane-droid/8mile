@@ -2,19 +2,19 @@ tensorer :
   episode_max_length : 100
   provider_type : "elastic"
   provider_configuration : 
-    es_url : "https://deemel.ovh:9200"
-    es_user : "elastic"
+    es_url : "provider_url_arg"
+    es_user : "provider_usr_arg"
+    es_pass : "provider_usr_pass"
   nb_env : 5
   device : "cpu"
-  pairs : ["BTCUSD", "ETHUSD", "XRPUSD"] # need to be a list for multiples pairs possibility
+  pairs : ["BTCUSD", "XRPUSD", "ETHUSD"] # need to be a list for multiples pairs possibility
   start_date : "2020-01-01"
-  end_date : "2022-06-04"
+  end_date : "2022-01-03"
   fill_policy : "akima"
   interval : "hour"
   encoder_configuration : 
-    es_url : "https://deemel.ovh:9200"
-    es_user : "elastic"
+    es_url : "es_url"
+    es_user : "es_user"
+    es_pass : "es_pass" #should not put it inside
     searching_args :
-      tags : "chez_ap"
-      description : "bonsoir"
-
+      tags : ["BTCUSD", "ETHUSD", "XRPUSD"]

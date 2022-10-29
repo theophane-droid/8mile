@@ -17,7 +17,7 @@ def flatten(list) :
 
 def get_min_dict(pairs : dict) -> list:
     min = None
-    for _,df in pairs :
+    for _,df in pairs.items() :
         if min is None :
             min = df.min().values
         else :
@@ -29,7 +29,7 @@ def get_min_dict(pairs : dict) -> list:
 
 def get_max_dict(pairs : dict) :
     max = None
-    for _,df in pairs :
+    for _,df in pairs.items() :
         if max is None :
             max = df.max().values
         else :
