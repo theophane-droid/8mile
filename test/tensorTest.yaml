@@ -17,4 +17,4 @@ tensorer :
     es_user : "es_user"
     es_pass : "es_pass" #should not put it inside
     searching_args :
-      tags : 60
+      tags : ["60","BTCUSD","XRPUSD"]
