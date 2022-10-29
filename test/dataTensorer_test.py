@@ -44,8 +44,7 @@ class TestSingleFeatururesDatatensorer(unittest.TestCase):
         dt1.reset()
         for _ in range(20) :
             dt1.get_indicators()
-        ind_to_reset = torch.zeros(dt1.nb_env)
-        ind_to_reset[[0,3,4,10,15]] = 1
+        ind_to_reset = torch.Tensor([0,3,4,10,15])
         prev_step = dt1.current_step.detach().clone()
         dt1.reset_by_id(ind_to_reset)
         self.assertTrue(prev_step[ind_to_reset] != dt1.current_step[ind_to_reset])

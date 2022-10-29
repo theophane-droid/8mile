@@ -160,6 +160,7 @@ class SingleFeaturesDataTensorer(Tensorer):
         if encoder.normalize_output :
             self.min = [-1]*self.shape[1]
             self.max = [1]*self.shape[1]
+        #TODO : implement else
 
 
     def apply_rolling_normalization(self, data : torch.Tensor):
@@ -207,8 +208,8 @@ class SingleFeaturesDataTensorer(Tensorer):
         Returns:
             tuple(torch.tensor, torch.tensor) : (indicators, ohlcv)
         """
-        indicators = self.indicators[self.current_step]
-        ohlcv = self.ohlcv[self.current_step]
+        indicators = self.indicators[self.current_step[:,0],self.current_step[:,1]]
+        ohlcv = self.ohlcv[self.current_step[:,0],self.current_step[:,1]]
         self.current_step[:,1] += 1
         # return indicators from self.mean_window_size to end
         #TODO : end that (need to be tested)
