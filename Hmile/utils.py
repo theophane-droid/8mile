@@ -17,7 +17,7 @@ def flatten(list) :
 
 def get_min_dict(pairs : dict) -> list:
     min = None
-    for _,df in pairs :
+    for _,df in pairs.items() :
         if min is None :
             min = df.min().values
         else :
@@ -29,7 +29,7 @@ def get_min_dict(pairs : dict) -> list:
 
 def get_max_dict(pairs : dict) :
     max = None
-    for _,df in pairs :
+    for _,df in pairs.items() :
         if max is None :
             max = df.max().values
         else :
@@ -148,7 +148,9 @@ def request_elastic_model(es_url : str, es_user : str, es_pass : str, searching_
 
 def print_precision(initial_data : np.array, predicted_data : np.array) :
     diff = np.abs(initial_data - predicted_data)
-    print("la moyenne des erreurs est {}".format(np.mean(np.mean(diff,axis=0))))
+    prec = np.mean(np.mean(diff,axis=0))
+    print("la moyenne des erreurs est {}".format(prec))
+    return prec
 
 
 
@@ -170,13 +172,15 @@ def apply_encoder(encoder : AE, pairs : dict) -> dict :
     encoder.training = False
 
     for pair,df in pairs.items() :
-        if not all(col in encoder.column_names for col in list(df.columns)) :
+        if not all(col in list(df.columns) for col in encoder.column_names) :
             raise("error, indicators needed for autoencoder are not present in the dataset")
         if not pair in encoder.norm :
             raise("Autoencoder not trained with this pair")
         df = (df - encoder.norm[pair]["mean"])/encoder.norm[pair]["std"]
         df = df[encoder.column_names]
-        pairs[pair] = encoder.encoder(df)
+        X = torch.Tensor(df.values)
+        indic = encoder.encoder(X)
+        pairs[pair] = indic
     return pairs
 
 
@@ -239,6 +243,7 @@ def trainAE(pairs : dict,
 
     Returns:
         autoencoder : return the full autoencoder with mean and std of the dataset used and name of the columns
+        precision : return precision of the model
     """
     ## normalization ##
     df, norm = concatAndNormDf(pairs, normalize= not is_normalized)
@@ -290,19 +295,19 @@ def trainAE(pairs : dict,
         
     ##test phase
     test_loss = 0
-    for _ in test_loader :
+    for batch_features in test_loader :
         batch_features = batch_features.float().to(device)
         outputs = model(batch_features)
         i_loss = criterion(outputs, batch_features)
         test_loss += i_loss.item()
-        if display :
-            print("test_loss : ", round(test_loss/len(test_loader), 4))    
+    if display :
+        print("test_loss : ", round(test_loss/len(test_loader), 4))    
     if display :
         Y = model(torch.Tensor(df.values))
-        print_precision(df.values,Y.cpu().detach().numpy())
+        precision = print_precision(df.values,Y.cpu().detach().numpy())
         plt.plot(l_loss)
         plt.grid()
         plt.title("evolution courbe de loss")
         plt.show()
 
-    return model
+    return model, precision

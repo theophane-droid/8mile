@@ -128,6 +128,10 @@ class SingleFeaturesDataTensorer(Tensorer):
         self.shape = self.data[self.pairs[0]].shape
         self.nb_env = nb_env
         self.device = device
+        if self.device == "cuda" :
+            if not torch.cuda.is_available() :
+                self.device = "cpu"
+        
         self.episode_max_length = episode_max_length
         self.create_tensors()
 
@@ -148,14 +152,15 @@ class SingleFeaturesDataTensorer(Tensorer):
         self.max = get_max_dict(self.data)
     
     def apply_encoder(self, encoder : AE) :
-        self.data = apply_encoder(encoder,self.data)
-        self.shape = self.data[self.pairs[0]].shape
+        data = apply_encoder(encoder,self.data)
+        self.shape = data[self.pairs[0]].shape
         self.indicators = torch.zeros(self.nb_pairs,*self.shape)
-        for i,(_,df) in enumerate(self.data.items()):
-            self.indicators[i] = torch.tensor(df.values,device= self.device)
+        for i,(_,tens) in enumerate(data.items()):
+            self.indicators[i] = tens.to(self.device)
         if encoder.normalize_output :
             self.min = [-1]*self.shape[1]
             self.max = [1]*self.shape[1]
+        #TODO : implement else
 
 
     def apply_rolling_normalization(self, data : torch.Tensor):
@@ -203,8 +208,8 @@ class SingleFeaturesDataTensorer(Tensorer):
         Returns:
             tuple(torch.tensor, torch.tensor) : (indicators, ohlcv)
         """
-        indicators = self.norm_data[self.current_step]
-        ohlcv = self.ohlcv[self.current_step]
+        indicators = self.indicators[self.current_step[:,0],self.current_step[:,1]]
+        ohlcv = self.ohlcv[self.current_step[:,0],self.current_step[:,1]]
         self.current_step[:,1] += 1
         # return indicators from self.mean_window_size to end
         #TODO : end that (need to be tested)
