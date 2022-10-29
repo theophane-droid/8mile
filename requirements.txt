@@ -16,4 +16,4 @@ requests
 scikit-learn
 matplotlib
 tqdm
-yaml
+pyyaml

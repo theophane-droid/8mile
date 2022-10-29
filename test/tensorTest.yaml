@@ -5,7 +5,7 @@ tensorer :
     es_url : "provider_url_arg"
     es_user : "provider_usr_arg"
     es_pass : "provider_usr_pass"
-  nb_env : 5
+  nb_env : 30
   device : "cpu"
   pairs : ["BTCUSD", "XRPUSD", "ETHUSD"] # need to be a list for multiples pairs possibility
   start_date : "2020-01-01"
@@ -17,4 +17,4 @@ tensorer :
     es_user : "es_user"
     es_pass : "es_pass" #should not put it inside
     searching_args :
-      tags : ["BTCUSD", "ETHUSD", "XRPUSD"]
+      tags : 60

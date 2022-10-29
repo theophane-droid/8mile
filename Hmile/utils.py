@@ -172,13 +172,15 @@ def apply_encoder(encoder : AE, pairs : dict) -> dict :
     encoder.training = False
 
     for pair,df in pairs.items() :
-        if not all(col in encoder.column_names for col in list(df.columns)) :
+        if not all(col in list(df.columns) for col in encoder.column_names) :
             raise("error, indicators needed for autoencoder are not present in the dataset")
         if not pair in encoder.norm :
             raise("Autoencoder not trained with this pair")
         df = (df - encoder.norm[pair]["mean"])/encoder.norm[pair]["std"]
         df = df[encoder.column_names]
-        pairs[pair] = encoder.encoder(df)
+        X = torch.Tensor(df.values)
+        indic = encoder.encoder(X)
+        pairs[pair] = indic
     return pairs
 
 

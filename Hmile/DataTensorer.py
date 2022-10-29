@@ -152,11 +152,11 @@ class SingleFeaturesDataTensorer(Tensorer):
         self.max = get_max_dict(self.data)
     
     def apply_encoder(self, encoder : AE) :
-        self.data = apply_encoder(encoder,self.data)
-        self.shape = self.data[self.pairs[0]].shape
+        data = apply_encoder(encoder,self.data)
+        self.shape = data[self.pairs[0]].shape
         self.indicators = torch.zeros(self.nb_pairs,*self.shape)
-        for i,(_,df) in enumerate(self.data.items()):
-            self.indicators[i] = torch.tensor(df.values,device= self.device)
+        for i,(_,tens) in enumerate(data.items()):
+            self.indicators[i] = tens.to(self.device)
         if encoder.normalize_output :
             self.min = [-1]*self.shape[1]
             self.max = [1]*self.shape[1]
