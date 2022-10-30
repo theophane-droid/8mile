@@ -44,12 +44,17 @@ class TestSingleFeatururesDatatensorer(unittest.TestCase):
         dt1.reset()
         for _ in range(20) :
             dt1.get_indicators()
-        ind_to_reset = torch.Tensor([0,3,4,10,15])
+        ind_to_reset = torch.tensor([0,3,4,10,15],dtype=torch.long)
+        ind_to_verif = torch.tensor([1,2,5,6,7,8,9,11,12,13,14],dtype=torch.long)
+
         prev_step = dt1.current_step.detach().clone()
         dt1.reset_by_id(ind_to_reset)
-        self.assertTrue(prev_step[ind_to_reset] != dt1.current_step[ind_to_reset])
-        ind_to_reset = torch.ones(dt1.nb_env)-ind_to_reset
-        self.assertTrue(prev_step[ind_to_reset] == dt1.current_step[ind_to_reset])
+        self.assertTrue(torch.all(prev_step[ind_to_reset,0] != dt1.current_step[ind_to_reset,0]))
+        self.assertTrue(torch.all(prev_step[ind_to_reset,1] != dt1.current_step[ind_to_reset,1]))
+
+        self.assertTrue(torch.all(prev_step[ind_to_verif,0] == dt1.current_step[ind_to_verif,0]))
+        self.assertTrue(torch.all(prev_step[ind_to_verif,1] == dt1.current_step[ind_to_verif,1]))
+
 
 
 
