@@ -16,6 +16,14 @@ def flatten(list) :
     return new
 
 def get_min_dict(pairs : dict) -> list:
+    """return the min of a dict with severals pairs
+
+    Args:
+        pairs (dict): dict of pairs
+
+    Returns:
+        list : list of min
+    """
     min = None
     for _,df in pairs.items() :
         if min is None :
@@ -27,7 +35,15 @@ def get_min_dict(pairs : dict) -> list:
             raise("error min is not a single list")
         return list(min)
 
-def get_max_dict(pairs : dict) :
+def get_max_dict(pairs : dict) -> list:
+    """return the max of a dict with severals pairs
+
+    Args:
+        pairs (dict): dict of pairs
+
+    Returns:
+        list : list of max
+    """
     max = None
     for _,df in pairs.items() :
         if max is None :
@@ -42,6 +58,16 @@ def get_max_dict(pairs : dict) :
 
 
 def getActivateFunction(i : int ,index : int,normalize : bool) :
+    """return Tanh in the middle for autoencoder in order to have output normalized between -1 and 1
+
+    Args:
+        i (int): layer number
+        index (int): number of layers
+        normalize (bool): if wanted to normalize
+
+    Returns:
+        _type_: _description_
+    """
     if i == index-1 and normalize:
         return nn.Tanh()
     return nn.PReLU()
