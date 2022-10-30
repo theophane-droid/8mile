@@ -100,7 +100,7 @@ class SingleFeaturesDataTensorer(Tensorer):
         To make it easier and readable, You can only pass the episode_length and the environment part of the cfg as arguments
 
         Args:
-            episode_length (int) : max length of an episode
+            episode_max_length (int) : max length of an episode
             provider_type (str) : type of the provider (elastic/csv/yahoo)
             provider_configuration (dict): dataprovider parameters (see 8mile documentation to see what is needed)
             nb_env (int): number of parallele environments
@@ -152,6 +152,12 @@ class SingleFeaturesDataTensorer(Tensorer):
         self.max = get_max_dict(self.data)
     
     def apply_encoder(self, encoder : AE) :
+        """
+        apply if possible the encoder given to the indicators
+
+        Args:
+            encoder (AE): see doc
+        """
         data = apply_encoder(encoder,self.data)
         self.shape = data[self.pairs[0]].shape
         self.indicators = torch.zeros(self.nb_pairs,*self.shape)
