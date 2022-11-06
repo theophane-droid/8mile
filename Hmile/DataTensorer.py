@@ -149,7 +149,7 @@ class SingleFeaturesDataTensorer(Tensorer):
     def create_tensors(self):
         self.current_step = torch.zeros(self.nb_env,2,device=self.device,dtype=torch.long)
         self.indicators = torch.zeros(self.nb_pairs,*self.shape,device=self.device)
-        self.ohlcv = torch.zeros(self.nb_pairs,self.shape[0],5) #open high low close volume for each pair
+        self.ohlcv = torch.zeros(self.nb_pairs,self.shape[0],5,device=self.device) #open high low close volume for each pair
         for i,(_,df) in enumerate(self.data.items()):
             ohlcv = df[["open","high","low","close","volume"]]
             self.ohlcv[i] = torch.tensor(ohlcv.values,device=self.device)
@@ -167,7 +167,7 @@ class SingleFeaturesDataTensorer(Tensorer):
         """
         data = apply_encoder(encoder,self.data)
         self.shape = data[self.pairs[0]].shape
-        self.indicators = torch.zeros(self.nb_pairs,*self.shape)
+        self.indicators = torch.zeros(self.nb_pairs,*self.shape,device=self.device)
         for i,(_,tens) in enumerate(data.items()):
             self.indicators[i] = tens.to(self.device)
         if encoder.normalize_output :
