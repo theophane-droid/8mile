@@ -148,15 +148,15 @@ class SingleFeaturesDataTensorer(Tensorer):
         
     def create_tensors(self):
         self.current_step = torch.zeros(self.nb_env,2,device=self.device,dtype=torch.long)
-        self.indicators = torch.zeros(self.nb_pairs,*self.shape,device=self.device)
-        self.ohlcv = torch.zeros(self.nb_pairs,self.shape[0],5,device=self.device) #open high low close volume for each pair
+        self.indicators = torch.zeros(self.nb_pairs,*self.shape,device=self.device,dtype=torch.float64)
+        self.ohlcv = torch.zeros(self.nb_pairs,self.shape[0],5,device=self.device,dtype=torch.float64) #open high low close volume for each pair
         for i,(_,df) in enumerate(self.data.items()):
             ohlcv = df[["open","high","low","close","volume"]]
-            self.ohlcv[i] = torch.tensor(ohlcv.values,device=self.device)
-            self.indicators[i] = torch.tensor(df.values,device= self.device)
+            self.ohlcv[i] = torch.tensor(ohlcv.values,device=self.device,dtype=torch.float64)
+            self.indicators[i] = torch.tensor(df.values,device= self.device,dtype=torch.float64)
         self.min = get_min_dict(self.data)
         self.max = get_max_dict(self.data)
-        self.max_gains = torch.zeros(self.nb_env,device=self.device,dtype=torch.float)
+        self.max_gains = torch.zeros(self.nb_env,device=self.device,dtype=torch.float64)
     
     def apply_encoder(self, encoder : AE) :
         """
@@ -167,7 +167,7 @@ class SingleFeaturesDataTensorer(Tensorer):
         """
         data = apply_encoder(encoder,self.data)
         self.shape = data[self.pairs[0]].shape
-        self.indicators = torch.zeros(self.nb_pairs,*self.shape,device=self.device)
+        self.indicators = torch.zeros(self.nb_pairs,*self.shape,device=self.device,dtype=torch.float64)
         for i,(_,tens) in enumerate(data.items()):
             self.indicators[i] = tens.to(self.device)
         if encoder.normalize_output :
