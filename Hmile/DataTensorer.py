@@ -142,7 +142,7 @@ class SingleFeaturesDataTensorer(Tensorer):
         
     def create_tensors(self):
         self.current_step = torch.zeros(self.nb_env,2,device=self.device,dtype=torch.long)
-        self.indicators = torch.zeros(self.nb_pairs,*self.shape)
+        self.indicators = torch.zeros(self.nb_pairs,*self.shape,device=self.device)
         self.ohlcv = torch.zeros(self.nb_pairs,self.shape[0],5) #open high low close volume for each pair
         for i,(_,df) in enumerate(self.data.items()):
             ohlcv = df[["open","high","low","close","volume"]]
@@ -150,6 +150,7 @@ class SingleFeaturesDataTensorer(Tensorer):
             self.indicators[i] = torch.tensor(df.values,device= self.device)
         self.min = get_min_dict(self.data)
         self.max = get_max_dict(self.data)
+        self.max_gains = torch.zeros(self.nb_env,device=self.device,dtype=torch.float)
     
     def apply_encoder(self, encoder : AE) :
         """
@@ -204,9 +205,13 @@ class SingleFeaturesDataTensorer(Tensorer):
         pair = torch.randint(0,self.nb_pairs,(indices.shape[0],),device=self.device,dtype=torch.long)
         self.current_step[indices,0] = pair
         self.current_step[indices,1] = begin_indices
+        for i in indices.detach().cpu().numpy() :
+            env = self.ohlcv[self.current_step[i,0],self.current_step[i,1]:self.current_step[i,1]+self.episode_max_length,0:-1]
+            self.max_gains[i] = torch.max(env)/torch.min(env)
+
 
     def reset(self):
-        self.reset_by_id(torch.ones(self.nb_env,device=self.device,dtype=torch.bool))
+        self.reset_by_id(torch.range(0,self.nb_env,device=self.device,dtype=torch.long))
                 
     def get_indicators(self):
         """return indicators and ohlcv for each env at each timestep
@@ -220,7 +225,9 @@ class SingleFeaturesDataTensorer(Tensorer):
         # return indicators from self.mean_window_size to end
         #TODO : end that (need to be tested)
         return indicators, ohlcv
-
+    def max_range(self) -> torch.Tensor :
+        return self.max_gains
+        
     def get_min_indices(self) -> list :
         return self.min 
 
