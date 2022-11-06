@@ -87,7 +87,7 @@ class SingleFeaturesDataTensorer(Tensorer):
         provider_type : str,
         provider_configuration : dict,
         nb_env : int,
-        device : str = "cpu",
+        device : str = None,
         pairs : list = ["BTCUSD"],
         start_date : str = "2021-02-24",
         end_date : str = "2022-06-04",
@@ -127,7 +127,13 @@ class SingleFeaturesDataTensorer(Tensorer):
         self.pairs = list(self.data.keys())
         self.shape = self.data[self.pairs[0]].shape
         self.nb_env = nb_env
-        self.device = device
+        if device != None :
+            self.device = device
+        else :
+            if torch.cuda.is_available() :
+                self.device = "cuda"
+            else :
+                self.device = "cpu"
         if self.device == "cuda" :
             if not torch.cuda.is_available() :
                 self.device = "cpu"
