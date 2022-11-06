@@ -211,7 +211,7 @@ class SingleFeaturesDataTensorer(Tensorer):
 
 
     def reset(self):
-        self.reset_by_id(torch.range(0,self.nb_env,device=self.device,dtype=torch.long))
+        self.reset_by_id(torch.range(0,self.nb_env-1,device=self.device,dtype=torch.long))
                 
     def get_indicators(self):
         """return indicators and ohlcv for each env at each timestep
@@ -227,7 +227,7 @@ class SingleFeaturesDataTensorer(Tensorer):
         return indicators, ohlcv
     def max_range(self) -> torch.Tensor :
         return self.max_gains
-        
+
     def get_min_indices(self) -> list :
         return self.min 
 

@@ -49,8 +49,8 @@ class TestSingleFeatururesDatatensorer(unittest.TestCase):
 
         prev_step = dt1.current_step.detach().clone()
         dt1.reset_by_id(ind_to_reset)
-        self.assertTrue(torch.all(prev_step[ind_to_reset,0] != dt1.current_step[ind_to_reset,0]))
-        self.assertTrue(torch.all(prev_step[ind_to_reset,1] != dt1.current_step[ind_to_reset,1]))
+        self.assertTrue(torch.any(prev_step[ind_to_reset,0] != dt1.current_step[ind_to_reset,0]))
+        self.assertTrue(torch.any(prev_step[ind_to_reset,1] != dt1.current_step[ind_to_reset,1]))
 
         self.assertTrue(torch.all(prev_step[ind_to_verif,0] == dt1.current_step[ind_to_verif,0]))
         self.assertTrue(torch.all(prev_step[ind_to_verif,1] == dt1.current_step[ind_to_verif,1]))
