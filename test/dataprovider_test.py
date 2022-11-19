@@ -269,3 +269,19 @@ class TestDateNotAvailable(unittest.TestCase):
     def test_polygon(self):
         with self.assertRaises(DataNotAvailableException):
             self.dp_polygon.getData()
+
+class TestYahooDataProviderOnStock(unittest.TestCase):
+    # ref issue #46
+    def setUp(self) -> None:
+        self.dp = YahooDataProvider(
+            ['AAPL'],
+            '2022-01-01',
+            '2022-01-20',
+            interval='day',
+            market='stock'
+        )
+        self.dp.fill_policy = FillPolicyAkima('day')
+
+    def test_normal(self):
+        data = self.dp.getData()
+        self.assertTrue(len(data['AAPL']) > 0)

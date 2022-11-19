@@ -209,7 +209,8 @@ class YahooDataProvider(DataProvider):
             pairs : List[str],
             start_date : str,
             end_date : str,
-            interval : str = 'hour') -> None:
+            interval : str = 'hour',
+            market : str = 'crypto') -> None:
         """Initialize a YahooDataProvider
 
         Args:
@@ -217,15 +218,19 @@ class YahooDataProvider(DataProvider):
             start_date (datetime.datetime): First date to get. Format : YYYY-MM-DD
             end_date (datetime.datetime): Last date to get. Format : YYYY-MM-DD
             interval (str, optional): Can be day, hour, or minute.
+            market (str, optional): Can be crypto, stock of forex. Defaults to 'crypto'.
         """
         super().__init__(pairs, interval, start_date, end_date)
+        self.market = market
 
     def _getOnePair(self, pair) -> pd.DataFrame :        
         # convert interval into yahoo format
         yinterval = yahoointervalconverter[self.interval]
-        # convert pair into yahoo format
-        ypair = f'{pair[:3]}-{pair[3:]}'
-
+        # convert pair into yahoo format if needed
+        if self.market == 'crypto':
+            ypair = f'{pair[:3]}-{pair[3:]}'
+        elif self.market in ['stock', 'forex']:
+            ypair = pair
         data = yf.Ticker(ypair)
         data = data.history(start=self.start_date,
                             end=self.end_date, interval=yinterval)
@@ -493,7 +498,7 @@ class PolygonDataProvider(DataProvider):
         Returns:
             List[str]: the list of available pairs
         """
-        url = f'https://api.polygon.io/v3/reference/tickers?market={market}&active=true&sort=ticker&order=asc&limit=5000&apiKey=8RvtCtdRW2bFH8WBE9JoihuwmnFECybm'
+        url = f'https://api.polygon.io/v3/reference/tickers?market={market}&active=true&sort=ticker&order=asc&apiKey=8RvtCtdRW2bFH8WBE9JoihuwmnFECybm'
         json = r.get(url).json()
         pairs = []
         
