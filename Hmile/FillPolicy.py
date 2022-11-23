@@ -48,4 +48,7 @@ class FillPolicyAkima(FillPolicy):
             start=dataframe.index[0],
             end=dataframe.index[-1],
             freq=offset_by_interval[self.interval])
-        return dataframe.interpolate(method='akima')
+        dataframe = dataframe.reindex(ideal_date_range)
+        dataframe = dataframe.interpolate(method='akima')
+        dataframe.index.name = 'date'
+        return dataframe

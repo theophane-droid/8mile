@@ -1,7 +1,7 @@
 from distutils.core import setup
 setup(
     name='hmile',
-    version='0.3.3',
+    version='0.4.2',
     author='theophanedroid',
     description='Python 3.x module to render financial results in tensorboard ',
     packages=['Hmile',],
@@ -23,7 +23,8 @@ setup(
         "requests",
         "scikit-learn",
         "matplotlib",
-        "tqdm"
+        "tqdm",
+        "pytickersymbols"
     ],
     extras_require={
         'test': ['unittest2']

@@ -27,8 +27,7 @@ class DataTransformer:
         The index name is'date'
         
         when multiples pairs : the columns returned are only those belonging to every one. Raise an error if each pair doesn't have the same row number
-
-
+        
         Returns:
             Dict[str, pd.DataFrame]: The transformed data
         """
@@ -42,6 +41,10 @@ class DataTransformer:
         transformed_pairs = {
             pair : self._apply_transform(data[pair]) for pair in data.keys()
         }
+        
+        # normalize the data so that every pair has the same columns
+        transformed_pairs = merge_columns(transformed_pairs)
+
         assert(len(set(get_number_lines(transformed_pairs))) == 1) #assure that each pair's df has the same number of rows
         return merge_columns(transformed_pairs)
 

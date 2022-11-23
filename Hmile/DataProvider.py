@@ -85,7 +85,7 @@ class DataProvider(ABC):
             if dataframe.shape[0] == 0:
                 raise DataNotAvailableException(pair, self.start_date, self.end_date)
             # we check the dataframe
-            self.checkDataframe(dataframe)
+            dataframe = self.checkDataframe(dataframe)
             result[pair] = dataframe
         return result
        
@@ -114,11 +114,12 @@ class DataProvider(ABC):
         if not dataframe.index.is_unique:
             raise DataframeFormatException('The index of the dataframe should be unique', dataframe)
         if not dataframe.index.inferred_freq:
-            self.fill_policy(dataframe)
+            dataframe = self.fill_policy(dataframe)
             # TODO : use fill policy
         if dataframe.index.name != 'date':
             raise DataframeFormatException('The index name should be date', dataframe)
-    
+        return dataframe
+
     def normalizeColumnsOrder(self, dataframe):
         """Normalize the order of the columns to open, high, low, close, volume. Sort others columns by alphabetical order
         
