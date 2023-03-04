@@ -47,7 +47,7 @@ The dataframes are formatted like that.
 Yahoofinance
 ~~~~~~~~~~~~~~~
 
-.. autoclass:: hmile.DataProvider.YahooDataProvider
+.. autoclass:: hmile.Yahooprovider
    :members:
    :inherited-members:
 
@@ -55,20 +55,20 @@ Yahoofinance
 
 .. code-block:: bash
 
-   from hmile.DataProvider import YahooDataProvider
+   from hmile import Yahooprovider
    
    PAIR = "BTCUSD"
    START = "2022-01-01"
    END = "2022-01-03"
    INTERVAL = "hour"
 
-   dp = YahooDataProvider([PAIR], START, END, interval=INTERVAL)
+   dp = Yahooprovider([PAIR], START, END, interval=INTERVAL)
    data = dp.getData()[PAIR]
 
 Polygon.io
 ~~~~~~~~~~~~~
 
-.. autoclass:: hmile.DataProvider.PolygonDataProvider
+.. autoclass:: hmile.Polygonprovider
    :members:
    :inherited-members:
 
@@ -76,7 +76,7 @@ Polygon.io
 
 .. code-block:: bash
 
-   from hmile.DataProvider import PolygonDataProvider        
+   from hmile import Polygonprovider        
    
    PAIR = "BTCUSD"
    START = "2022-01-01"
@@ -84,13 +84,13 @@ Polygon.io
    API_KEY = "YOUR_API_KEY"
    INTERVAL = "hour"
 
-   dp = PolygonDataProvider([PAIR], START, END, API_KEY, interval=INTERVAL)
+   dp = Polygonprovider([PAIR], START, END, API_KEY, interval=INTERVAL)
    data = dp.getData()[PAIR]
 
 CSV
 ~~~~~~
 
-.. autoclass:: hmile.DataProvider.CSVDataProvider
+.. autoclass:: hmile.Csvprovider
    :members:
    :inherited-members:
 
@@ -98,7 +98,7 @@ CSV
 
 .. code-block:: bash
 
-   from hmile.DataProvider import CSVDataProvider        
+   from hmile import Csvprovider        
    
    PAIR = "BTCUSD"
    START = "2022-01-01"
@@ -106,7 +106,7 @@ CSV
    DATA_DIR = "mydata/"
    INTERVAL = "hour"
 
-   dp = CSVDataProvider([PAIR], START, END, DATA_DIR, interval=INTERVAL)
+   dp = Csvprovider([PAIR], START, END, DATA_DIR, interval=INTERVAL)
    data = dp.getData()[PAIR]
 
 **Remark :**
@@ -116,7 +116,7 @@ The csv file must be named f-{pair}-{interval}.csv and present in the directory 
 Elasticsearch
 ~~~~~~~~~~~~~~~~
 
-.. autoclass:: hmile.DataProvider.ElasticDataProvider
+.. autoclass:: hmile.Elasticprovider
    :members:
    :inherited-members:
 
@@ -124,7 +124,7 @@ Elasticsearch
 
 .. code-block:: bash
 
-   from hmile.DataProvider import ElasticDataProvider    
+   from hmile import Elasticprovider    
    
    PAIR = "BTCUSD"
    START = "2022-01-01"
@@ -134,5 +134,5 @@ Elasticsearch
    ELASTIC_PASSWORD = "mypassword"
    INTERVAL = "hour"
 
-   dp = ElasticDataProvider([PAIR], START, END, ELASTIC_URL, ELASTIC_USER, ELASTIC_PASSWORD, interval=INTERVAL)
+   dp = Elasticprovider([PAIR], START, END, ELASTIC_URL, ELASTIC_USER, ELASTIC_PASSWORD, interval=INTERVAL)
    data = dp.getData()[PAIR]

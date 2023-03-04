@@ -6,7 +6,7 @@ hmile provides the ability to export financial data to csv or elasticsearch.
 CSVDataExporter
 ~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: hmile.DataExporter.CSVDataExporter
+.. autoclass:: hmile.Csvexporter
    :members:
    :inherited-members:
 
@@ -14,8 +14,8 @@ CSVDataExporter
 
 .. code-block:: python
 
-   from hmile.DataProvider import YahooDataProvider
-   from hmile.DataExporter import CSVDataExporter
+   from hmile import Yahooprovider
+   from hmile import Csvexporter
 
    PAIR = "BTCUSD"
    START = "2022-01-01"
@@ -23,12 +23,11 @@ CSVDataExporter
    INTERVAL = "hour"
    OUTPUT_DIR = "my/output/dir"
 
-   dp = YahooDataProvider([PAIR], START, END, interval=INTERVAL) 
-
    # We first need a source of data = a data provider
-   data_provider = YahooDataProvider()
-   # Create a CSVDataExporter object
-   csv_exporter = CSVDataExporter(data_provider, OUTPUT_DIR)
+   dp = Yahooprovider([PAIR], START, END, interval=INTERVAL) 
+
+   # Then we creat the exporter
+   csv_exporter = Csvexporter(dp, OUTPUT_DIR)
 
    # Export data to csv
    csv_exporter.export()
@@ -36,7 +35,7 @@ CSVDataExporter
 ElasticDataExporter
 ~~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: hmile.DataExporter.ElasticDataExporter
+.. autoclass:: hmile.Elasticexporter
    :members:
    :inherited-members:
 
@@ -44,8 +43,8 @@ ElasticDataExporter
 
 .. code-block:: python
 
-   from hmile.DataProvider import YahooDataProvider
-   from hmile.DataExporter import ElasticDataExporter
+   from hmile import Yahooprovider
+   from hmile import Elasticexporter
 
    PAIR = "BTCUSD"
    START = "2022-01-01"
@@ -55,13 +54,12 @@ ElasticDataExporter
    ELASTIC_USER = "myuser"
    ELASTIC_PASSWORD = "mypassword"
 
-   dp = ElasticDataExporter([PAIR], START, END, interval=INTERVAL) 
-
    # We first need a source of data = a data provider
-   data_provider = YahooDataProvider()
+   dp = Elasticexporter([PAIR], START, END, interval=INTERVAL) 
+
    # Create a ElasticDataExporter object
-   csv_exporter = ElasticDataExporter(
-    data_provider,
+   csv_exporter = Elasticexporter(
+    dp,
     ELASTIC_URL,
     ELASTIC_USER,
     ELASTIC_PASSWORD
