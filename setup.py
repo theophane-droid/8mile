@@ -5,7 +5,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='hmile',
-    version='0.4.2',
+    version='0.5.0',
     author='theophanedroid',
     description='Python 3.x module to render financial results in tensorboard ',
     packages=['hmile',],
