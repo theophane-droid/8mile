@@ -21,22 +21,18 @@ jobs:
           key: ${{ runner.os }}-ta-${{ hashFiles('requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-ta-
-      - name: Use cached ta-lib
-        if: steps.cache_ta.outputs.cache-hit == 'true'
-        run: |
-          ls -la ~/ta_lib
-      - name: Download ta-lib
+      - name: Download and install ta-lib
         if: steps.cache_ta.outputs.cache-hit != 'true'
         run: |
           mkdir -p $HOME/ta_lib
           cd $HOME/ta_lib
           wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
-      - name: Install ta-lib
-        if: steps.cache_ta.outputs.cache-hit != 'true'
-        run: |
-          cd $HOME/ta_lib
           tar -xzf ta-lib-0.4.0-src.tar.gz
           cd ta-lib/ && ./configure --prefix=/usr && make && sudo make install && cd ..
+      - name: Use cached ta-lib
+        if: steps.cache_ta.outputs.cache-hit == 'true'
+        run: |
+          ls -la ~/ta_lib
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
