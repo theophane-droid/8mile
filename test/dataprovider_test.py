@@ -2,14 +2,14 @@ from datetime import datetime
 import pytz
 import os
 
-from Hmile.DataProvider import (YahooDataProvider,
+from hmile.DataProvider import (YahooDataProvider,
                                 CSVDataProvider,
                                 ElasticDataProvider,
                                 PolygonDataProvider)
-from Hmile.Exception import (DataProviderArgumentException, 
+from hmile.Exception import (DataProviderArgumentException, 
                              DataframeFormatException,
                              DataNotAvailableException)
-from Hmile.FillPolicy import FillPolicyAkima
+from hmile.FillPolicy import FillPolicyAkima
 
 import pandas as pd
 

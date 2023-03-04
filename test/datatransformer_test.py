@@ -1,11 +1,11 @@
 import os
 import sys
 import unittest
-from Hmile.DataProvider import CSVDataProvider, ElasticDataProvider
-from Hmile.FillPolicy import FillPolicyAkima
-from Hmile.utils import trainAE, concatAndNormDf
-from Hmile.DataTransformer import TaDataTransformer
-from Hmile.DataExporter import CSVDataExporter
+from hmile.DataProvider import CSVDataProvider, ElasticDataProvider
+from hmile.FillPolicy import FillPolicyAkima
+from hmile.utils import trainAE, concatAndNormDf
+from hmile.DataTransformer import TaDataTransformer
+from hmile.DataExporter import CSVDataExporter
 
 class TestTrainAE(unittest.TestCase):
     

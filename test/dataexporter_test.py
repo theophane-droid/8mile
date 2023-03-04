@@ -1,9 +1,9 @@
 import os
 import unittest
 
-from Hmile.DataProvider import CSVDataProvider
-from Hmile.FillPolicy import FillPolicyAkima
-from Hmile.DataExporter import CSVDataExporter, ElasticDataExporter
+from hmile.DataProvider import CSVDataProvider
+from hmile.FillPolicy import FillPolicyAkima
+from hmile.DataExporter import CSVDataExporter, ElasticDataExporter
 
 class TestCSVDataExporter(unittest.TestCase):
     

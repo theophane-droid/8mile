@@ -176,3 +176,4 @@ test.py
 models/
 .env
 *.save
+/docs/.buildinfo

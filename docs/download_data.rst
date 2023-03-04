@@ -47,7 +47,7 @@ The dataframes are formatted like that.
 Yahoofinance
 ~~~~~~~~~~~~~~~
 
-.. autoclass:: Hmile.DataProvider.YahooDataProvider
+.. autoclass:: hmile.DataProvider.YahooDataProvider
    :members:
    :inherited-members:
 
@@ -55,7 +55,7 @@ Yahoofinance
 
 .. code-block:: bash
 
-   from Hmile.DataProvider import YahooDataProvider
+   from hmile.DataProvider import YahooDataProvider
    
    PAIR = "BTCUSD"
    START = "2022-01-01"
@@ -68,7 +68,7 @@ Yahoofinance
 Polygon.io
 ~~~~~~~~~~~~~
 
-.. autoclass:: Hmile.DataProvider.PolygonDataProvider
+.. autoclass:: hmile.DataProvider.PolygonDataProvider
    :members:
    :inherited-members:
 
@@ -76,7 +76,7 @@ Polygon.io
 
 .. code-block:: bash
 
-   from Hmile.DataProvider import PolygonDataProvider        
+   from hmile.DataProvider import PolygonDataProvider        
    
    PAIR = "BTCUSD"
    START = "2022-01-01"
@@ -90,7 +90,7 @@ Polygon.io
 CSV
 ~~~~~~
 
-.. autoclass:: Hmile.DataProvider.CSVDataProvider
+.. autoclass:: hmile.DataProvider.CSVDataProvider
    :members:
    :inherited-members:
 
@@ -98,7 +98,7 @@ CSV
 
 .. code-block:: bash
 
-   from Hmile.DataProvider import CSVDataProvider        
+   from hmile.DataProvider import CSVDataProvider        
    
    PAIR = "BTCUSD"
    START = "2022-01-01"
@@ -116,7 +116,7 @@ The csv file must be named f-{pair}-{interval}.csv and present in the directory 
 Elasticsearch
 ~~~~~~~~~~~~~~~~
 
-.. autoclass:: Hmile.DataProvider.ElasticDataProvider
+.. autoclass:: hmile.DataProvider.ElasticDataProvider
    :members:
    :inherited-members:
 
@@ -124,7 +124,7 @@ Elasticsearch
 
 .. code-block:: bash
 
-   from Hmile.DataProvider import ElasticDataProvider    
+   from hmile.DataProvider import ElasticDataProvider    
    
    PAIR = "BTCUSD"
    START = "2022-01-01"

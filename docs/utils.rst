@@ -3,10 +3,10 @@ Utilities
 
 You can use additional utilities to help you with your development. These are described below.
 
-.. autoclass:: Hmile.utils.DataTensorer
+.. autoclass:: hmile.utils.DataTensorer
     :members:
 
-.. autoclass:: Hmile.utils.AE
+.. autoclass:: hmile.utils.AE
     :members:
 
-.. autofunction:: Hmile.utils.trainAE
+.. autofunction:: hmile.utils.trainAE

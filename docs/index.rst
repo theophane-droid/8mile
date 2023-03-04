@@ -5,7 +5,7 @@ Welcome to 8mile-render's documentation!
    :maxdepth: 1
    :caption: Contents:
 
-8mile is a module to treat financial data for machine learning purpose.
+8mile is a module to download financial data for machine learning purpose.
 
 Quickstart
 ---------------
@@ -66,8 +66,5 @@ To continue with hmile :
 .. toctree::
    download_data.rst
    fix_data.rst
-   renderer.rst
    exporter.rst
    transformer.rst
-   modelstore.rst
-   utils.rst

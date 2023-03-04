@@ -31,7 +31,7 @@ Use a RabbitRenderer to print time series in tensorboard :
 
    from datetime import datetime
    import pandas as pd
-   from Hmilerender.RabbitRenderer import RabbitRenderer
+   from hmilerender.RabbitRenderer import RabbitRenderer
 
    def fill_renderer(data, renderer):
     # we fill the renderer with data rows
@@ -76,53 +76,53 @@ Result in tensorboard :
 3.1 Dataprovider
 ~~~~~~~~~~~~
 
-.. autoclass:: Hmile.DataProvider.YahooDataProvider
+.. autoclass:: hmile.DataProvider.YahooDataProvider
    :members:
    :inherited-members:
 
-.. autoclass:: Hmile.DataProvider.CSVDataProvider
+.. autoclass:: hmile.DataProvider.CSVDataProvider
    :members:
    :inherited-members:
 
-.. autoclass:: Hmile.DataProvider.ElasticDataProvider
+.. autoclass:: hmile.DataProvider.ElasticDataProvider
    :members:
    :inherited-members:
 
 3.2 Dataexporter
 ~~~~~~~~~~~~~~~~
 
-.. autoclass:: Hmile.DataExporter.CSVDataExporter
+.. autoclass:: hmile.DataExporter.CSVDataExporter
    :members:
    :inherited-members:
 
-.. autoclass:: Hmile.DataExporter.ElasticDataExporter
+.. autoclass:: hmile.DataExporter.ElasticDataExporter
    :members:
    :inherited-members:
 
 3.3 DataTransformer
 ~~~~~~~~~~~~~~~~~~~	
 
-.. autoclass:: Hmile.DataTransformer.TaFeaturesTransformer
+.. autoclass:: hmile.DataTransformer.TaFeaturesTransformer
    :members:
    :inherited-members:
 
 3.4 Renderer
 ~~~~~~~~~~~~
 
-.. autoclass:: Hmile.RabbitRenderer import RabbitRenderer
+.. autoclass:: hmile.RabbitRenderer import RabbitRenderer
    :members:
    :inherited-members:
 
 3.5 Utils
 ~~~~~~~~~
 
-.. autoclass:: Hmile.utils.DataTensorer
+.. autoclass:: hmile.utils.DataTensorer
    :members:
    :inherited-members:
 
 Exceptions
 ----------
-.. autoclass:: Hmile.Exception.ColumnNameDoesNotExists
+.. autoclass:: hmile.Exception.ColumnNameDoesNotExists
    :members:
    :inherited-members:
 

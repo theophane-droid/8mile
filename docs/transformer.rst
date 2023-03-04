@@ -6,7 +6,7 @@ A data transformer allow you to apply changes on data. It can be used to add fin
 TaDataTransformer
 ~~~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: Hmile.DataTransformer.TaDataTransformer
+.. autoclass:: hmile.DataTransformer.TaDataTransformer
    :members:
    :inherited-members:
 
@@ -16,8 +16,8 @@ Check the `ta lib documentation <https://ta-lib.org/>`_ for more information.
 
 .. code-block:: python
 
-   from Hmile.DataProvider import YahooDataProvider
-   from Hmile.DataTransformer import TaDataTransformer
+   from hmile.DataProvider import YahooDataProvider
+   from hmile.DataTransformer import TaDataTransformer
 
    PAIR = "BTCUSD"
    START = "2022-01-01"

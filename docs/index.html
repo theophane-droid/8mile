@@ -52,7 +52,7 @@
 <div class="code-block-caption"><span class="caption-text">EXT:rabbit_renderer.py</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">Hmilerender.RabbitRenderer</span> <span class="kn">import</span> <span class="n">RabbitRenderer</span>
+<span class="kn">from</span> <span class="nn">hmilerender.RabbitRenderer</span> <span class="kn">import</span> <span class="n">RabbitRenderer</span>
 
 <span class="k">def</span> <span class="nf">fill_renderer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">renderer</span><span class="p">):</span>
  <span class="c1"># we fill the renderer with data rows</span>
@@ -93,12 +93,12 @@
 <section id="dataprovider">
 <h3>3.1 Dataprovider<a class="headerlink" href="#dataprovider" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
-<dt class="sig sig-object py" id="Hmile.DataProvider.YahooDataProvider">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Hmile.DataProvider.</span></span><span class="sig-name descname"><span class="pre">YahooDataProvider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pair</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hour'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.DataProvider.YahooDataProvider" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hmile.DataProvider.YahooDataProvider">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hmile.DataProvider.</span></span><span class="sig-name descname"><span class="pre">YahooDataProvider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pair</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hour'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hmile.DataProvider.YahooDataProvider" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get data from Yahoo Finance</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="Hmile.DataProvider.YahooDataProvider.getData">
-<span class="sig-name descname"><span class="pre">getData</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#Hmile.DataProvider.YahooDataProvider.getData" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hmile.DataProvider.YahooDataProvider.getData">
+<span class="sig-name descname"><span class="pre">getData</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#hmile.DataProvider.YahooDataProvider.getData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a pandas dataframe with the data.</p>
 <dl class="simple">
 <dt>Returns:</dt><dd><p>pd.DataFrame: _description_</p>
@@ -109,20 +109,20 @@
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="Hmile.DataProvider.CSVDataProvider">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Hmile.DataProvider.</span></span><span class="sig-name descname"><span class="pre">CSVDataProvider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pair</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hour'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.DataProvider.CSVDataProvider" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hmile.DataProvider.CSVDataProvider">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hmile.DataProvider.</span></span><span class="sig-name descname"><span class="pre">CSVDataProvider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pair</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hour'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hmile.DataProvider.CSVDataProvider" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get data from CSV file. The file name must be in the format {pair}-{interval}.csv</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="Hmile.DataProvider.CSVDataProvider.getData">
-<span class="sig-name descname"><span class="pre">getData</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#Hmile.DataProvider.CSVDataProvider.getData" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hmile.DataProvider.CSVDataProvider.getData">
+<span class="sig-name descname"><span class="pre">getData</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#hmile.DataProvider.CSVDataProvider.getData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a pandas dataframe with the data.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="Hmile.DataProvider.ElasticDataProvider">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Hmile.DataProvider.</span></span><span class="sig-name descname"><span class="pre">ElasticDataProvider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pair</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_pass</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hour'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.DataProvider.ElasticDataProvider" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hmile.DataProvider.ElasticDataProvider">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hmile.DataProvider.</span></span><span class="sig-name descname"><span class="pre">ElasticDataProvider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pair</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_pass</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hour'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hmile.DataProvider.ElasticDataProvider" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get data from Elasticsearch. Index name must be in the format f-{pair}-{interval}.
 Main columns must be open, high, low, close, volume. And the date must be in the field &#64;timestamp.</p>
 </dd></dl>
@@ -131,22 +131,22 @@ Main columns must be open, high, low, close, volume. And the date must be in the
 <section id="dataexporter">
 <h3>3.2 Dataexporter<a class="headerlink" href="#dataexporter" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
-<dt class="sig sig-object py" id="Hmile.DataExporter.CSVDataExporter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Hmile.DataExporter.</span></span><span class="sig-name descname"><span class="pre">CSVDataExporter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataprovider</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Hmile.DataProvider.DataProvider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.DataExporter.CSVDataExporter" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hmile.DataExporter.CSVDataExporter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hmile.DataExporter.</span></span><span class="sig-name descname"><span class="pre">CSVDataExporter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataprovider</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hmile.DataProvider.DataProvider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hmile.DataExporter.CSVDataExporter" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py method">
-<dt class="sig sig-object py" id="Hmile.DataExporter.CSVDataExporter.export">
-<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.DataExporter.CSVDataExporter.export" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hmile.DataExporter.CSVDataExporter.export">
+<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hmile.DataExporter.CSVDataExporter.export" title="Permalink to this definition">¶</a></dt>
 <dd><p>Do export</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="Hmile.DataExporter.ElasticDataExporter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Hmile.DataExporter.</span></span><span class="sig-name descname"><span class="pre">ElasticDataExporter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataprovider</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Hmile.DataProvider.DataProvider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_pass</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.DataExporter.ElasticDataExporter" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hmile.DataExporter.ElasticDataExporter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hmile.DataExporter.</span></span><span class="sig-name descname"><span class="pre">ElasticDataExporter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataprovider</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hmile.DataProvider.DataProvider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">es_pass</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hmile.DataExporter.ElasticDataExporter" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py method">
-<dt class="sig sig-object py" id="Hmile.DataExporter.ElasticDataExporter.export">
-<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.DataExporter.ElasticDataExporter.export" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hmile.DataExporter.ElasticDataExporter.export">
+<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hmile.DataExporter.ElasticDataExporter.export" title="Permalink to this definition">¶</a></dt>
 <dd><p>Do export</p>
 </dd></dl>
 
@@ -156,11 +156,11 @@ Main columns must be open, high, low, close, volume. And the date must be in the
 <section id="datatransformer">
 <h3>3.3 DataTransformer<a class="headerlink" href="#datatransformer" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
-<dt class="sig sig-object py" id="Hmile.DataTransformer.TaFeaturesTransformer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Hmile.DataTransformer.</span></span><span class="sig-name descname"><span class="pre">TaFeaturesTransformer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataprovider</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Hmile.DataProvider.DataProvider</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.DataTransformer.TaFeaturesTransformer" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hmile.DataTransformer.TaFeaturesTransformer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hmile.DataTransformer.</span></span><span class="sig-name descname"><span class="pre">TaFeaturesTransformer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataprovider</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hmile.DataProvider.DataProvider</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hmile.DataTransformer.TaFeaturesTransformer" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py method">
-<dt class="sig sig-object py" id="Hmile.DataTransformer.TaFeaturesTransformer.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.DataTransformer.TaFeaturesTransformer.transform" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hmile.DataTransformer.TaFeaturesTransformer.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hmile.DataTransformer.TaFeaturesTransformer.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply transformation</p>
 </dd></dl>
 
@@ -173,12 +173,12 @@ Main columns must be open, high, low, close, volume. And the date must be in the
 <section id="utils">
 <h3>3.5 Utils<a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
-<dt class="sig sig-object py" id="Hmile.utils.DataTensorer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Hmile.utils.</span></span><span class="sig-name descname"><span class="pre">DataTensorer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataprovider</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Hmile.DataProvider.DataProvider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_data_per_session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean_window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.utils.DataTensorer" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hmile.utils.DataTensorer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hmile.utils.</span></span><span class="sig-name descname"><span class="pre">DataTensorer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataprovider</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hmile.DataProvider.DataProvider</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_data_per_session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean_window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hmile.utils.DataTensorer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Can be used to transform data into pytorch tensor</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="Hmile.utils.DataTensorer.get_indicators">
-<span class="sig-name descname"><span class="pre">get_indicators</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.utils.DataTensorer.get_indicators" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hmile.utils.DataTensorer.get_indicators">
+<span class="sig-name descname"><span class="pre">get_indicators</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hmile.utils.DataTensorer.get_indicators" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns normalized and unnormalized data</p>
 <dl class="simple">
 <dt>Returns:</dt><dd><p>tuple: (unnormalized data : torch.Tensor, normalized data : torch.Tensor)</p>
@@ -187,8 +187,8 @@ Main columns must be open, high, low, close, volume. And the date must be in the
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Hmile.utils.DataTensorer.get_max_indices">
-<span class="sig-name descname"><span class="pre">get_max_indices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#Hmile.utils.DataTensorer.get_max_indices" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hmile.utils.DataTensorer.get_max_indices">
+<span class="sig-name descname"><span class="pre">get_max_indices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#hmile.utils.DataTensorer.get_max_indices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the max for each feature</p>
 <dl class="simple">
 <dt>Returns:</dt><dd><p>list: result</p>
@@ -197,8 +197,8 @@ Main columns must be open, high, low, close, volume. And the date must be in the
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Hmile.utils.DataTensorer.get_min_indices">
-<span class="sig-name descname"><span class="pre">get_min_indices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#Hmile.utils.DataTensorer.get_min_indices" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hmile.utils.DataTensorer.get_min_indices">
+<span class="sig-name descname"><span class="pre">get_min_indices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#hmile.utils.DataTensorer.get_min_indices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the min for each feature</p>
 <dl class="simple">
 <dt>Returns:</dt><dd><p>list: result</p>
@@ -207,8 +207,8 @@ Main columns must be open, high, low, close, volume. And the date must be in the
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Hmile.utils.DataTensorer.normalize">
-<span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.utils.DataTensorer.normalize" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hmile.utils.DataTensorer.normalize">
+<span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hmile.utils.DataTensorer.normalize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply rolling mean and variance normalization. 
 The result is clipped between -10 and 10</p>
 <dl class="simple">
@@ -218,14 +218,14 @@ The result is clipped between -10 and 10</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Hmile.utils.DataTensorer.reset">
-<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.utils.DataTensorer.reset" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hmile.utils.DataTensorer.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hmile.utils.DataTensorer.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reset the current step for all indices</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Hmile.utils.DataTensorer.reset_by_id">
-<span class="sig-name descname"><span class="pre">reset_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indices</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.utils.DataTensorer.reset_by_id" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hmile.utils.DataTensorer.reset_by_id">
+<span class="sig-name descname"><span class="pre">reset_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indices</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hmile.utils.DataTensorer.reset_by_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reset the current step for the given indices</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>indices (list): list of indices to reset</p>
@@ -240,12 +240,12 @@ The result is clipped between -10 and 10</p>
 <section id="exceptions">
 <h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="Hmile.Exception.ColumnNameDoesNotExists">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Hmile.Exception.</span></span><span class="sig-name descname"><span class="pre">ColumnNameDoesNotExists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.Exception.ColumnNameDoesNotExists" title="Permalink to this definition">¶</a></dt>
-<dd><p>Raised if user try to access to a not existing column in Hmilerender.Renderer.Renderer</p>
+<dt class="sig sig-object py" id="hmile.Exception.ColumnNameDoesNotExists">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hmile.Exception.</span></span><span class="sig-name descname"><span class="pre">ColumnNameDoesNotExists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hmile.Exception.ColumnNameDoesNotExists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised if user try to access to a not existing column in hmilerender.Renderer.Renderer</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="Hmile.Exception.ColumnNameDoesNotExists.with_traceback">
-<span class="sig-name descname"><span class="pre">with_traceback</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Hmile.Exception.ColumnNameDoesNotExists.with_traceback" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="hmile.Exception.ColumnNameDoesNotExists.with_traceback">
+<span class="sig-name descname"><span class="pre">with_traceback</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hmile.Exception.ColumnNameDoesNotExists.with_traceback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exception.with_traceback(tb) –
 set self.__traceback__ to tb and return self.</p>
 </dd></dl>

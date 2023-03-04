@@ -2,10 +2,7 @@ mplfinance
 ta
 pandas
 elasticsearch
-torch
 numpy
-tensorflow
-tensorboard
 yfinance
 ta-lib
 pandas-ta
@@ -14,6 +11,5 @@ mplfinance
 IPython
 requests
 scikit-learn
-matplotlib
 tqdm
 pyyaml

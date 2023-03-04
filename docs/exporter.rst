@@ -1,12 +1,12 @@
 Data exporter
 =============
 
-Hmile provides the ability to export financial data to csv or elasticsearch.
+hmile provides the ability to export financial data to csv or elasticsearch.
 
 CSVDataExporter
 ~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: Hmile.DataExporter.CSVDataExporter
+.. autoclass:: hmile.DataExporter.CSVDataExporter
    :members:
    :inherited-members:
 
@@ -14,8 +14,8 @@ CSVDataExporter
 
 .. code-block:: python
 
-   from Hmile.DataProvider import YahooDataProvider
-   from Hmile.DataExporter import CSVDataExporter
+   from hmile.DataProvider import YahooDataProvider
+   from hmile.DataExporter import CSVDataExporter
 
    PAIR = "BTCUSD"
    START = "2022-01-01"
@@ -36,7 +36,7 @@ CSVDataExporter
 ElasticDataExporter
 ~~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: Hmile.DataExporter.ElasticDataExporter
+.. autoclass:: hmile.DataExporter.ElasticDataExporter
    :members:
    :inherited-members:
 
@@ -44,8 +44,8 @@ ElasticDataExporter
 
 .. code-block:: python
 
-   from Hmile.DataProvider import YahooDataProvider
-   from Hmile.DataExporter import ElasticDataExporter
+   from hmile.DataProvider import YahooDataProvider
+   from hmile.DataExporter import ElasticDataExporter
 
    PAIR = "BTCUSD"
    START = "2022-01-01"
