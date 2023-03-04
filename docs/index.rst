@@ -2,7 +2,7 @@ Welcome to 8mile-render's documentation!
 ========================================
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 0
    :caption: Contents:
 
 8mile is a module to download financial data for machine learning purpose.
