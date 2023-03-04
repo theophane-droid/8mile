@@ -43,15 +43,15 @@ The module FillPolicy helps you to fill the missing dates. By default if you don
 
 FillPolicyAkima
 ~~~~~~~~~~~~~~~~~~
-.. autoclass:: Hmile.FillPolicy.FillPolicyAkima
+.. autoclass:: hmile.FillPolicy.FillPolicyAkima
    :members:
 
 **Example :**
 
 .. code-block:: python
 
-    from Hmile.FillPolicy import FillPolicyAkima
-    from Hmile.DataProvider import CSVDataProvider
+    from hmile.FillPolicy import FillPolicyAkima
+    from hmile.DataProvider import CSVDataProvider
 
     # Create a data provider
     data_provider = CSVDataProvider([PAIR], START, END, DATA_DIR, interval=INTERVAL)
@@ -66,15 +66,15 @@ The FillPolicyAkima class is based on the Akima interpolation method. So missing
 
 FillPolicyClip
 ~~~~~~~~~~~~~~~~~
-.. autoclass:: Hmile.FillPolicy.FillPolicyClip
+.. autoclass:: hmile.FillPolicy.FillPolicyClip
    :members:
 
 **Example :**
 
 .. code-block:: python
 
-    from Hmile.FillPolicy import FillPolicyClip
-    from Hmile.DataProvider import CSVDataProvider
+    from hmile.FillPolicy import FillPolicyClip
+    from hmile.DataProvider import CSVDataProvider
 
     # Create a data provider
     data_provider = CSVDataProvider([PAIR], START, END, DATA_DIR, interval=INTERVAL)
@@ -89,15 +89,15 @@ This method will just ignore if there is missing data.
 FillPolicyError
 ~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: Hmile.DataProvider.FillPolicyError
+.. autoclass:: hmile.DataProvider.FillPolicyError
    :members:
 
 **Example :**
 
 .. code-block:: python
 
-    from Hmile.FillPolicy import FillPolicyError
-    from Hmile.DataProvider import CSVDataProvider
+    from hmile.FillPolicy import FillPolicyError
+    from hmile.DataProvider import CSVDataProvider
 
     # Create a data provider
     data_provider = CSVDataProvider([PAIR], START, END, DATA_DIR, interval=INTERVAL)

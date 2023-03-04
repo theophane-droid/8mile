@@ -1,7 +1,7 @@
 import unittest
 import pandas as pd
 
-from Hmile.FillPolicy import FillPolicyAkima, FillPolicyClip, FillPolicyError
+from hmile.FillPolicy import FillPolicyAkima, FillPolicyClip, FillPolicyError
 
 
 dataframe = pd.DataFrame(

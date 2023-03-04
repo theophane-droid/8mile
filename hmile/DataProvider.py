@@ -12,10 +12,10 @@ import numpy as np
 
 from abc import ABC, abstractmethod
 
-from Hmile.Exception import (DataframeFormatException,
+from hmile.Exception import (DataframeFormatException,
                              DataProviderArgumentException,
                              DataNotAvailableException)
-from Hmile.FillPolicy import FillPolicyError
+from hmile.FillPolicy import FillPolicyAkima
 
 yahoointervalconverter = {
     'minute': '1m',
@@ -52,7 +52,7 @@ class DataProvider(ABC):
             end (str): should be > start
 
         Raises:
-            DataframeFormatException: When the dataframe does not correspond to Hmile norm
+            DataframeFormatException: When the dataframe does not correspond to hmile norm
             DataProviderArgumentException: When the argument are not correct
         """
         self.checkArguments(pairs, interval, start, end)
@@ -60,7 +60,7 @@ class DataProvider(ABC):
         self.interval = interval
         self.start_date = start
         self.end_date = end
-        self.fill_policy = FillPolicyError(self.interval)
+        self.fill_policy = FillPolicyAkima(self.interval) 
 
     def getData(self) -> Dict[str, pd.DataFrame]:
         """
@@ -77,7 +77,7 @@ class DataProvider(ABC):
             try:
                 dataframe = self._getOnePair(pair)
             except Exception as e:
-                # we first check if the exception is not a Hmile exception
+                # we first check if the exception is not a hmile exception
                 if isinstance(e, NotImplementedError):
                     raise e
                 raise DataNotAvailableException(pair, self.start_date, self.end_date)
@@ -113,9 +113,8 @@ class DataProvider(ABC):
             raise DataframeFormatException('The index of the dataframe should be monotonic increasing', dataframe)
         if not dataframe.index.is_unique:
             raise DataframeFormatException('The index of the dataframe should be unique', dataframe)
-        if not dataframe.index.inferred_freq:
+        if not dataframe.index.freq:
             dataframe = self.fill_policy(dataframe)
-            # TODO : use fill policy
         if dataframe.index.name != 'date':
             raise DataframeFormatException('The index name should be date', dataframe)
         return dataframe
@@ -160,7 +159,6 @@ class DataProvider(ABC):
         if not interval:
             raise DataProviderArgumentException('interval should not be empty')
         if interval not in yahoointervalconverter.keys():
-            print(interval)
             raise DataProviderArgumentException('interval should be in day, hour or minute')
         if not start:
             raise DataProviderArgumentException('start should not be empty')

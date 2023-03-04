@@ -3,8 +3,8 @@ from abc import abstractmethod
 
 from elasticsearch import Elasticsearch, helpers
 
-from Hmile.DataProvider import DataProvider
-from Hmile.DataTransformer import DataTransformer
+from hmile.DataProvider import DataProvider
+from hmile.DataTransformer import DataTransformer
 
 class DataExporter:
     """Export data to another format
@@ -53,7 +53,7 @@ class CSVDataExporter(DataExporter):
         """Export data to csv. The file name will be in the format {pair}-{interval}.csv
 
         Args:
-            dataprovider (Hmile.DataProvider.Dataprovider): Dataprovider to export
+            dataprovider (hmile.DataProvider.Dataprovider): Dataprovider to export
             directory (str): directory in with the csv will be saved
         """
         super().__init__(dataprovider)

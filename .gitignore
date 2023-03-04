@@ -78,7 +78,6 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# IPython
 profile_default/
 ipython_config.py
 
@@ -176,3 +175,4 @@ test.py
 models/
 .env
 *.save
+/docs/.buildinfo

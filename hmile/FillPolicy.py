@@ -3,7 +3,7 @@ from abc import abstractmethod
 import pandas as pd
 from pandas.tseries.offsets import DateOffset
 
-from Hmile.Exception import NoFillPolicySet
+from hmile.Exception import NoFillPolicySet
 
 offset_by_interval = {
     'day' : DateOffset(days=1),

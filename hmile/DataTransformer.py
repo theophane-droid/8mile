@@ -5,9 +5,8 @@ from datetime import datetime, timedelta
 import pandas as pd
 import pandas_ta as ta
 
-from Hmile.DataProvider import DataProvider, interval_to_timedelta
-from Hmile.ModelStore import ModelStore
-from Hmile.utils import merge_columns, get_number_lines
+from hmile.DataProvider import DataProvider, interval_to_timedelta
+from hmile.utils import merge_columns, get_number_lines
 
 class DataTransformer:
     """
@@ -72,7 +71,7 @@ class TaDataTransformer(DataTransformer):
         """Create a new TaDataTransformer
        
         Args:
-            dataprovider (Hmile.DataProvider.Dataprovider): Dataprovider to transform
+            dataprovider (hmile.DataProvider.Dataprovider): Dataprovider to transform
         """
         super().__init__(dataprovider)
         # set dataprovider start date to 50 interval before

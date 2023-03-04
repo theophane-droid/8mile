@@ -6,8 +6,6 @@ Python 3.x module to treat financial data for machine learning purpose. Many fea
 * download financial data from various sources
 * preprocess data
 * export data
-* plot data in tensorboard
-* store and label pytorch models
 
 ![](img/8mile.jpg)
 

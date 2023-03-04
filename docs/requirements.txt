@@ -1,2 +1,2 @@
 pandas
-torch
+yfinance

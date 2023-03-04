@@ -1,7 +1,7 @@
 import pandas as pd
 
 class ColumnNameDoesNotExists(Exception):
-    """Raised if user try to access to a not existing column in Hmilerender.Renderer.Renderer
+    """Raised if user try to access to a not existing column in hmilerender.Renderer.Renderer
     """
     def __init__(self, column_name) -> None:
         super().__init__(self)
@@ -12,7 +12,7 @@ class ColumnNameDoesNotExists(Exception):
     
 
 class DataframeFormatException(Exception):
-    """Raise an exception if the dataframe does not correspond to the Hmile specification.
+    """Raise an exception if the dataframe does not correspond to the hmile specification.
     """
     def __init__(self, msg : str, dataframe : pd.DataFrame) -> None:
         super().__init__(self)

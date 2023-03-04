@@ -25,7 +25,15 @@ import sys
 sys.path.insert(0, os.path.abspath('..'))
 sys.path.insert(0, os.path.abspath('.'))
 
-from Hmile.__version__ import __version__, __author__
+import importlib.util
+
+spec = importlib.util.spec_from_file_location("__version__", "../hmile/__version__.py")
+version_module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(version_module)
+
+__version__ = version_module.__version__
+__author__ = version_module.__author__
+
 
 project = '8miles'
 copyright = '2022, theophanedroid'
@@ -186,14 +194,9 @@ epub_exclude_files = ['search.html']
 
 
 autodoc_mock_imports = ['matplotlib',
-                        'networkx',
-                        'mplfinance',
                         'yfinance',
-                        'tensorflow',
                         'ta-lib',
                         'pandas_ta',
-                        'sklearn',
                         'requests',
                         'elasticsearch',
-                        'tqdm'
                     ]
