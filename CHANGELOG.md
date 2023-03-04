@@ -11,3 +11,4 @@
 - Updated dependency versions.
 - Set fillpolicyakima by default : this means that missing values will be filled by default
 - setup.py read the dependencies from requirements.txt
+
