@@ -5,7 +5,7 @@ from .__version__ import __version__, __author__
 from .DataProvider import YahooDataProvider as Yahooprovider
 from .DataProvider import CSVDataProvider as Csvprovider
 from .DataProvider import PolygonDataProvider as Polygonprovider
-from .DataProvider import ElasticDataExporter as Elasticprovider
+from .DataProvider import ElasticDataProvider as Elasticprovider
 from .DataExporter import CSVDataExporter as Csvexporter
 from .DataExporter import ElasticDataExporter as Elasticexporter
 from .DataTransformer import TaDataTransformer as TATransformer

@@ -6,7 +6,6 @@ import pandas as pd
 import pandas_ta as ta
 
 from hmile.DataProvider import DataProvider, interval_to_timedelta
-from hmile.ModelStore import ModelStore
 from hmile.utils import merge_columns, get_number_lines
 
 class DataTransformer:

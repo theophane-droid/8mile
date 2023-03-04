@@ -15,7 +15,7 @@ from abc import ABC, abstractmethod
 from hmile.Exception import (DataframeFormatException,
                              DataProviderArgumentException,
                              DataNotAvailableException)
-from hmile.FillPolicy import FillPolicyError
+from hmile.FillPolicy import FillPolicyAkima
 
 yahoointervalconverter = {
     'minute': '1m',
@@ -60,7 +60,7 @@ class DataProvider(ABC):
         self.interval = interval
         self.start_date = start
         self.end_date = end
-        self.fill_policy = FillPolicyError(self.interval)
+        self.fill_policy = FillPolicyAkima(self.interval) 
 
     def getData(self) -> Dict[str, pd.DataFrame]:
         """
@@ -113,9 +113,8 @@ class DataProvider(ABC):
             raise DataframeFormatException('The index of the dataframe should be monotonic increasing', dataframe)
         if not dataframe.index.is_unique:
             raise DataframeFormatException('The index of the dataframe should be unique', dataframe)
-        if not dataframe.index.inferred_freq:
+        if not dataframe.index.freq:
             dataframe = self.fill_policy(dataframe)
-            # TODO : use fill policy
         if dataframe.index.name != 'date':
             raise DataframeFormatException('The index name should be date', dataframe)
         return dataframe
@@ -160,7 +159,6 @@ class DataProvider(ABC):
         if not interval:
             raise DataProviderArgumentException('interval should not be empty')
         if interval not in yahoointervalconverter.keys():
-            print(interval)
             raise DataProviderArgumentException('interval should be in day, hour or minute')
         if not start:
             raise DataProviderArgumentException('start should not be empty')

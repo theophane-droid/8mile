@@ -1,4 +1,8 @@
 from distutils.core import setup
+
+with open('requirements.txt') as f:
+    requirements = f.read().splitlines()
+
 setup(
     name='hmile',
     version='0.4.2',
@@ -7,21 +11,7 @@ setup(
     packages=['hmile',],
     license='MIT license',
     long_description=open('README.md').read(),
-    install_requires=[
-        "mplfinance",
-        "ta",
-        "pandas",
-        "elasticsearch",
-        "numpy",
-        "yfinance",
-        "multitasking",
-        "IPython",
-        "TA-Lib",
-        "requests",
-        "scikit-learn",
-        "tqdm",
-        "pytickersymbols"
-    ],
+    install_requires=requirements,
     extras_require={
         'test': ['unittest2']
     },

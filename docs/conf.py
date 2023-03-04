@@ -186,14 +186,10 @@ epub_exclude_files = ['search.html']
 
 
 autodoc_mock_imports = ['matplotlib',
-                        'networkx',
-                        'mplfinance',
                         'yfinance',
                         'tensorflow',
                         'ta-lib',
                         'pandas_ta',
-                        'sklearn',
                         'requests',
                         'elasticsearch',
-                        'tqdm'
                     ]
