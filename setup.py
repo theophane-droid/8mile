@@ -16,7 +16,7 @@ requirements = [
 
 setup(
     name='hmile',
-    version='0.5.0',
+    version='0.5.1',
     author='theophanedroid',
     description='Python 3.x module to render financial results in tensorboard ',
     packages=['hmile',],

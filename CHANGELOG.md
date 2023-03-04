@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.1, March 2023
+- Fix setup.py
+
 ## 0.5.0, March 2023
 
 - Change of paradigm: this library should now focus on downloading and processing financial data. Any artificial intelligence capabilities must not be included in this library.
