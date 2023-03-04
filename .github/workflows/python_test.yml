@@ -13,37 +13,42 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: cache ta
+      - name: Cache ta
         id: cache_ta
-        uses: actions/cache@v3
+        uses: actions/cache@v2
         with:
           path: ~/ta_lib
-          key: ${{ runner.os }}-ta
-      - name: Download ta_lib
+          key: ${{ runner.os }}-ta-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-ta-
+      - name: Use cached ta-lib
+        if: steps.cache_ta.outputs.cache-hit == 'true'
+        run: |
+          ls -la ~/ta_lib
+      - name: Download ta-lib
         if: steps.cache_ta.outputs.cache-hit != 'true'
         run: |
           mkdir -p $HOME/ta_lib
           cd $HOME/ta_lib
           wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
       - name: Install ta-lib
+        if: steps.cache_ta.outputs.cache-hit != 'true'
         run: |
           cd $HOME/ta_lib
           tar -xzf ta-lib-0.4.0-src.tar.gz
           cd ta-lib/ && ./configure --prefix=/usr && make && sudo make install && cd ..
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-          cache: 'pip' # caching pip dependencies
+          cache: 'pip'
       - run: |
           python -m pip install --upgrade pip
           pip install flake8 pytest build tox
           pip install -r requirements.txt
       - name: Lint with flake8
         run: |
-          # stop the build if there are Python syntax errors or undefined names
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Test with pytest
         run: |
